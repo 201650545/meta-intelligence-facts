@@ -15,6 +15,15 @@
 
 协作链路固定：需求变化 → 本地执行 → 验证 → 更新本仓 → 高智力模型读本仓 → 给判断 → 落实到本地 → 再验证 → 再更新本仓。
 
+## 抓取失败的备用入口（重要）
+
+若你的网页抓取通道对本仓返回 `Cache miss` 或读不到目录，**只读这一个文件即可**，它是 7 个核心文件的完整合并副本（ASCII 文件名、根级、无中文路径）：
+
+- 网页：`https://github.com/201650545/meta-intelligence-facts/blob/main/ALL_CORE_DOCS.md`
+- raw：`https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/ALL_CORE_DOCS.md`
+
+本仓元数据在删仓重建后可能短暂显示 `empty=true / size=0`，那是 GitHub 统计滞后，**不代表仓库为空**：匿名 `contents` 与 `git/trees` 接口均可正常返回 95 个文件。
+
 ## 阅读顺序（给高智力模型）
 
 1. **`REPORT_TO_STRATEGIST.md`** ← 本轮要你看的那份，先读它
