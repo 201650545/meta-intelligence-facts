@@ -6,22 +6,60 @@
 
 你是本项目的**高智力模型／策略方**。本地执行模型负责在你电脑外落地与验证，你负责架构与判断。
 
-## 第一步：必须先读仓库
+## 第一步：必须先读到材料
 
-仓库（公开）：`https://github.com/201650545/meta-intelligence-facts`
+### 途径 A（首选）：两个根级 ASCII 单文件，合起来就是全部材料
 
-**按此顺序读完再作答，不许跳读，也不许凭仓库名或常识猜测内容：**
+```
+https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/ALL_CORE_DOCS.md
+https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/ALL_SPEC_DOCS.md
+```
 
-1. `README.md` —— 本仓定位、分工约定、协作链路
-2. `REPORT_TO_STRATEGIST.md` —— 本轮阶段汇报（8 段）
-3. `DEMAND.md` —— 长期需求，其中 **D-003 尚未定义**，需要你帮着定义
-4. `CURRENT_STATE.md` —— 三套系统各自现状
-5. `DECISIONS.md` —— **已定事项，不要重新讨论**（DEC-01 ~ DEC-10）
-6. `ISSUES.md` —— Q1 ~ Q7，你要回答的题目
-7. `30_元智能/02_SYSTEM_CORE/`、`30_元智能/03_WORKFLOWS/`、`30_元智能/05_MACHINE_PROTOCOLS/` —— 待融合的规范包
-8. `20_自适应工作流引擎/contracts/gpt-mirror-extended-review.yaml` + `docs/03-方案构想.md` —— **已验证可用的机制底座**
-9. `10_AI自成长引擎/docs/经验沉淀SOP.md` + `技能库/README.md` + `docs/04-方案_技能统一治理与浏览器能力域.md`（尤其 §十一 ~ §十四 的实测更正）
-10. `LOCAL_DRAFT_FUSION_PLAN.md` —— **本地执行模型自拟的融合草案，未经评审**
+| 文件 | 内容 | 大小 |
+|---|---|---|
+| `ALL_CORE_DOCS.md` | 治理层 7 个文件全文 + 作答要求 | 约 40 KB |
+| `ALL_SPEC_DOCS.md` | 规范层 55 个文件全文（元智能整包 43 + 下游契约/方案 + 上游 SOP/技能库/中枢配置/实测结论 + REDACTION） | 约 200 KB |
+
+读不到 `raw.githubusercontent.com` 时，换这两个等价形式（前者 302 跳转到 raw，后者是网页版）：
+
+```
+https://github.com/201650545/meta-intelligence-facts/raw/main/ALL_CORE_DOCS.md
+https://github.com/201650545/meta-intelligence-facts/blob/main/ALL_CORE_DOCS.md
+```
+
+### 途径 B（仅当 A 全失败）：直接读仓库目录树
+
+仓库（公开）：`https://github.com/201650545/meta-intelligence-facts`，共 97 个文件。
+
+**两点已知坑，别据此判定仓库为空或不可读：**
+
+1. 本仓含**中文目录名**（`30_元智能/`、`20_自适应工作流引擎/` 等）。若你的抓取通道对中文路径的 URL 编码处理有问题，逐个文件抓会失败 —— 这正是途径 A 存在的原因。
+2. 本仓的 `size` 元数据可能显示 `0`，那是 GitHub 在删仓重建后的统计滞后。判断是否为空请看 `https://api.github.com/repos/201650545/meta-intelligence-facts/git/trees/main?recursive=1`，它会返回 97 个 blob 且 `truncated=false`。
+
+按此顺序读完再作答：
+
+| # | 材料 | 在哪个包里 |
+|---|---|---|
+| 1 | `README.md` — 本仓定位、分工约定、协作链路 | CORE |
+| 2 | `REPORT_TO_STRATEGIST.md` — 本轮阶段汇报（8 段） | CORE |
+| 3 | `DEMAND.md` — 长期需求，其中 **D-003 尚未定义**，需要你帮着定义 | CORE |
+| 4 | `CURRENT_STATE.md` — 三套系统各自现状 | CORE |
+| 5 | `DECISIONS.md` — **已定事项，不要重新讨论**（DEC-01 ~ DEC-10） | CORE |
+| 6 | `ISSUES.md` — Q1 ~ Q8，你要回答的题目 | CORE |
+| 7 | `30_元智能/` 整包（`02_SYSTEM_CORE/`、`03_WORKFLOWS/`、`05_MACHINE_PROTOCOLS/`、`01_HUMAN_VIEW/`）— 待融合的规范包 | SPEC |
+| 8 | `20_自适应工作流引擎/contracts/gpt-mirror-extended-review.yaml` + `docs/03-方案构想.md` — **已验证可用的机制底座** | SPEC |
+| 9 | `10_AI自成长引擎/docs/经验沉淀SOP.md` + `技能库/README.md` + `docs/04-方案_技能统一治理与浏览器能力域.md`（尤其 §十一 ~ §十四 的实测更正）+ `技能库/_中枢/README.md` 与 `audit.config.yaml`（Q5 的现行 self_test 规范就在这里） | SPEC |
+| 10 | `LOCAL_DRAFT_FUSION_PLAN.md` — **本地执行模型自拟的融合草案，未经评审** | CORE |
+
+### 途径 C：若你判定本会话完全没有联网能力
+
+**只回复"无法访问仓库"五个字**，我会把材料分块贴给你。
+
+### 硬约束（不许违反）
+
+- 在**没读到材料之前不许作答**，也不许凭仓库名、文件名或通用常识猜测内容。
+- 若只读到 `ALL_CORE_DOCS.md` 而读不到 `ALL_SPEC_DOCS.md`，必须在回答开头写明"**仅读到治理层，规范层缺失**"，并对依赖规范层的题目（Q3 / Q4 / Q5 / Q7）直接判"信息不足"，不要用治理层的转述去替代规范层原文。
+
 
 ## 第二步：关于第 10 项的正确用法
 
@@ -33,7 +71,7 @@
 
 ## 第三步：作答要求
 
-1. **按 `ISSUES.md` 的 Q1 ~ Q7 编号逐条回答**，Q1 / Q2 / Q5 / Q6 必须给明确结论，不许"取决于情况"。
+1. **按 `ISSUES.md` 的 Q1 ~ Q8 编号逐条回答**，Q1 / Q2 / Q5 / Q6 必须给明确结论，不许"取决于情况"；Q8 必须选 A/B/C 并给判据。
 2. **每条结论必须给判据**：什么信息有资格进 State、什么必须留在原处、冲突时谁优先。
 3. **所有事实性引用必须带仓库内文件路径**（例如 `20_自适应工作流引擎/docs/03-方案构想.md §八`）。禁止引用仓库外的常识当作本项目的既定事实。
 4. **必须显式承认边界**：如果你判断某个问题**信息不足**，直接说"信息不足"并列出还需要什么，不要猜。
@@ -68,6 +106,13 @@
 **Q6** 946 条死链已定性为单一事故（hub 删 149 个技能、9 宿主链接未回收），且已实测**149 个里只有 1 个还能在任何地方找回** → 无恢复源，只能清。清理是不可逆动作。请判定授权边界：dry-run 清单后逐批执行，还是一次性执行？
 
 **Q7** 事实层的敏感面治理：现有密钥扫描器 7 条规则对本仓 **0 命中**（完全漏检内部域名/账号卡/profile/端口），本地已扩到 23 类并做类型化掩码。请判定：这套掩码是否应固化为 push 前**阻断式**闸门？哪些目录允许保留原值？
+
+### 本轮新增一问（由你上一轮报的 `Cache miss` 引出）
+
+**Q8 · 协作链路的"可读性"要不要列为 V1 验收项？**
+事实：本仓匿名实测 11 种 URL 形式全部 200、`git/trees` 返回 97 个 blob，你却读不到，同时读得到旧仓。成因在读取端（缓存优先 + 本仓刚删仓重建 + 中文目录名），不在仓库端。而 V1 的验收只问"长期需求能否不依赖用户管文件而持续运行"，**没有一条问"对方能否稳定读到事实层"** —— 可整套分工协议的前提恰恰是这条，且它这次是靠人发现的，不是靠任何检查发现的。
+→ 请判定：**(A)** 写成协议硬约束（每轮送审材料必须有根级 ASCII 单文件入口，且发送前验证对方实际读到了，我倾向）／**(B)** 只要求对方接 GitHub connector，事实层不为读取端做适配／**(C)** 按偶发处理不改协议。
+若选 A，请给出"验证对方实际读到了"的最小判据 —— **本地 `curl` 返回 200 并不等于对方读得到，本轮已证明这两件事不等价。**
 
 ### 附加一问（关于 DEMAND.md）
 

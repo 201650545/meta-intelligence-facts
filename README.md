@@ -17,12 +17,26 @@
 
 ## 抓取失败的备用入口（重要）
 
-若你的网页抓取通道对本仓返回 `Cache miss` 或读不到目录，**只读这一个文件即可**，它是 7 个核心文件的完整合并副本（ASCII 文件名、根级、无中文路径）：
+若你的网页抓取通道对本仓返回 `Cache miss`、读不到目录，或**无法处理中文路径**，请只读下面两个文件。它们是根级、纯 ASCII 文件名的合并副本，两个加起来覆盖全部阅读清单，无需再导航目录树：
 
-- 网页：`https://github.com/201650545/meta-intelligence-facts/blob/main/ALL_CORE_DOCS.md`
-- raw：`https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/ALL_CORE_DOCS.md`
+| 文件 | 内容 | 大小 |
+|---|---|---|
+| `ALL_CORE_DOCS.md` | 治理层 7 个文件（README / REPORT / DEMAND / CURRENT_STATE / DECISIONS / ISSUES / LOCAL_DRAFT_FUSION_PLAN）+ 作答要求 | 约 40 KB |
+| `ALL_SPEC_DOCS.md` | 规范层 55 个文件（`30_元智能/` 整包 43 个 + 下游契约与方案 + 上游 SOP/技能库/中枢配置/实测结论 + REDACTION） | 约 200 KB |
 
-本仓元数据在删仓重建后可能短暂显示 `empty=true / size=0`，那是 GitHub 统计滞后，**不代表仓库为空**：匿名 `contents` 与 `git/trees` 接口均可正常返回 95 个文件。
+> 大小只写约数：`ALL_CORE_DOCS.md` 内嵌了本文件，写死字节数会自指（改数字 → 副本变大 → 数字又不对）。
+> 两个副本由脚本从本仓**已掩码**文件拼接生成，改任一源文件后必须重新生成。
+
+raw 直链（把 `<F>` 换成上面任一文件名）：
+
+```
+https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/<F>
+```
+
+也可用会 302 跳转到 raw 的等价形式：`https://github.com/201650545/meta-intelligence-facts/raw/main/<F>`
+
+> 本仓元数据在删仓重建后会短暂显示 `size=0`，那是 GitHub 统计滞后，**不代表仓库为空**：匿名 `contents` 与 `git/trees` 接口均正常返回，`git/trees/main?recursive=1` 报 97 个 blob、`truncated=false`。判断本仓是否为空请看 tree 接口，不要看 `size`。
+
 
 ## 阅读顺序（给高智力模型）
 
