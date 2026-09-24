@@ -1,0 +1,8 @@
+﻿"reason","files"
+"未声明(默认)","7762"
+"声明的在范围根","580"
+"工具代装(.arkcli-managed-skills.json)","240"
+"出厂自带(.loomy-skill.json:bundled)","69"
+"用户侧(.loomy-skill.json:learned)","7"
+"自产前缀(loomy-learned-)","4"
+"用户侧(.loomy-skill.json:package)","1"

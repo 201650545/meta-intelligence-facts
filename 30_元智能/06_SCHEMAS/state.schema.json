@@ -1,0 +1,57 @@
+{
+  "type": "object",
+  "required": [
+    "demand_id",
+    "updated_at",
+    "status",
+    "phase",
+    "next_step"
+  ],
+  "properties": {
+    "demand_id": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "phase": {
+      "type": "string"
+    },
+    "strategy": {
+      "type": "string"
+    },
+    "main_issue": {
+      "type": "string"
+    },
+    "active_tasks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "active_experiments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_step": {
+      "type": "string"
+    },
+    "human_decisions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

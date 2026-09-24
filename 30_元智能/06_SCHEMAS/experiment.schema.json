@@ -1,0 +1,56 @@
+{
+  "type": "object",
+  "required": [
+    "id",
+    "demand_id",
+    "hypothesis",
+    "baseline",
+    "candidate",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "demand_id": {
+      "type": "string"
+    },
+    "hypothesis": {
+      "type": "string"
+    },
+    "baseline": {
+      "type": "string"
+    },
+    "candidate": {
+      "type": "string"
+    },
+    "metric": {
+      "type": "string"
+    },
+    "observation_window": {
+      "type": "string"
+    },
+    "risk": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "planned",
+        "running",
+        "completed",
+        "cancelled"
+      ]
+    },
+    "result": {
+      "type": "string"
+    },
+    "decision": {
+      "enum": [
+        "adopt",
+        "reject",
+        "continue",
+        ""
+      ]
+    }
+  }
+}

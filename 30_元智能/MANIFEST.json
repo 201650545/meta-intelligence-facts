@@ -1,0 +1,216 @@
+{
+  "name": "Meta Intelligence V1",
+  "version": "1.0",
+  "files": [
+    {
+      "path": "00_START_HERE/HANDOFF_TO_FLASH.md",
+      "sha256": "dbdb5b4f3095d12f298af51f8a7bd57d9c9282a8e0aea5cda1b8ae6f2365938d",
+      "bytes": 1501
+    },
+    {
+      "path": "00_START_HERE/IMPLEMENTATION_ORDER.md",
+      "sha256": "11b9caa5880bc09b946de8a41c447bd24d70fb430a5e89cf91f05a055451205c",
+      "bytes": 2049
+    },
+    {
+      "path": "00_START_HERE/README_FIRST.md",
+      "sha256": "a3fced73927e23f1101e581c3a1f572f0380018152d599170a6bbba3457bc67a",
+      "bytes": 1477
+    },
+    {
+      "path": "00_START_HERE/V1_SCOPE.md",
+      "sha256": "1c72b1b689ea2f73a337747bad5576215b2360c5ac5cb5c94982cba13cb64853",
+      "bytes": 739
+    },
+    {
+      "path": "01_HUMAN_VIEW/HOME.md",
+      "sha256": "f093bfb3973b218602f7667ad7c301701fe04ce4b2b6ccb55b7e2dc9fe62171b",
+      "bytes": 1148
+    },
+    {
+      "path": "01_HUMAN_VIEW/HUMAN_VIEW_COMPONENTS.md",
+      "sha256": "dcb4a5b474f6f2846b4f16abe8f2ab875d6bba5e168d755750b4918809b8318c",
+      "bytes": 1074
+    },
+    {
+      "path": "01_HUMAN_VIEW/HUMAN_VIEW_STANDARD.md",
+      "sha256": "2fb36c73b9b1a3bbf3275c037307281828b8d1f1b99d6b056a65329b6401fc2c",
+      "bytes": 1179
+    },
+    {
+      "path": "01_HUMAN_VIEW/VISUAL_LANGUAGE.md",
+      "sha256": "7222d066d4ff62e6f2820e3c4a6048b3651ef8bf5cb8f0e65bc5c3088e761970",
+      "bytes": 1045
+    },
+    {
+      "path": "02_SYSTEM_CORE/DEMAND_MODEL.md",
+      "sha256": "5bddcffd9480d34c538c0cb8acf969f85b45627057a75e4e90fff4837070c1fd",
+      "bytes": 998
+    },
+    {
+      "path": "02_SYSTEM_CORE/META_INTELLIGENCE_V1.md",
+      "sha256": "c66804aa2607e555826b2b7d3a4ddf50c1a3b0ab9bfaff96bc4debae0f6c6d4e",
+      "bytes": 1134
+    },
+    {
+      "path": "02_SYSTEM_CORE/MODEL_ROUTING.md",
+      "sha256": "8114ffc847b3f7a21f0e55f954c3eba3e4751c5138212698ff61043332bbddd3",
+      "bytes": 778
+    },
+    {
+      "path": "02_SYSTEM_CORE/PRODUCT_DECISION_STANDARD.md",
+      "sha256": "e5acc1938b00712e9568c6e92817f03d6b7bd59b9791d0e73095a02c61ab6f7c",
+      "bytes": 1231
+    },
+    {
+      "path": "02_SYSTEM_CORE/STATE_MODEL.md",
+      "sha256": "90f7bb8e6a6d9c7f147e45fe53ab6901ce8629ca8b41989ff24e2557188c917b",
+      "bytes": 855
+    },
+    {
+      "path": "03_WORKFLOWS/ARCHIVE_RETRIEVAL.md",
+      "sha256": "5b8f933986dffe0905737c56ff2f03563739b69cd4ff5fb3eb72526e6ea6a7e4",
+      "bytes": 585
+    },
+    {
+      "path": "03_WORKFLOWS/EXPERIMENT_LIFECYCLE.md",
+      "sha256": "49f711525a81d096614a4e4105a70dbbeb26409aff459cce078507c1d2c38307",
+      "bytes": 536
+    },
+    {
+      "path": "03_WORKFLOWS/EXTERNAL_TECH_CHANGE.md",
+      "sha256": "6518af71adc76c5e68f6e48a883b868fb4bf2fd6241cbd2b2f83d5dd1ace353b",
+      "bytes": 706
+    },
+    {
+      "path": "03_WORKFLOWS/INTERNAL_OPTIMIZATION.md",
+      "sha256": "25b503ca339aec361379868954710838c6fc75746098edfe16106feafe8bac65",
+      "bytes": 549
+    },
+    {
+      "path": "03_WORKFLOWS/MAIN_LOOP.md",
+      "sha256": "fa02da6934f1c557c76da3e36df77602d3ac486b659135bfa01201a6d4e788bc",
+      "bytes": 987
+    },
+    {
+      "path": "03_WORKFLOWS/TASK_LIFECYCLE.md",
+      "sha256": "bd855a9fc4e5eaf531097bee4a51c48cf0a1f88856c76bf372bc7f2b6cc9133b",
+      "bytes": 589
+    },
+    {
+      "path": "04_TEMPLATES/decision.md",
+      "sha256": "e7118702c0456ea68b620a98cf1f0276ceb6e22bee008c3ec6cdc4352a78d11c",
+      "bytes": 243
+    },
+    {
+      "path": "04_TEMPLATES/demand.md",
+      "sha256": "7c0ee3275e54105dd26ca4e9e05e8b86d17a09a13b89373532776ede2d243f73",
+      "bytes": 345
+    },
+    {
+      "path": "04_TEMPLATES/experiment.md",
+      "sha256": "95d06b915dbf614010a502a54c46284e2073ff3337c94f2770b34556f0180d45",
+      "bytes": 341
+    },
+    {
+      "path": "04_TEMPLATES/review.md",
+      "sha256": "824146ec261f6d72176dd0194c9f1d0ac42238c2a582f467cb56a7481b8cdca2",
+      "bytes": 312
+    },
+    {
+      "path": "04_TEMPLATES/state.md",
+      "sha256": "d63aa7413e8e658ed2924292e1eb8f3288aacb501fda78c952a8ee7290dc11cb",
+      "bytes": 499
+    },
+    {
+      "path": "04_TEMPLATES/task.md",
+      "sha256": "4ddda099e90905491b8474b002b849a2b251ec12d4134280288c28970fcdb0a3",
+      "bytes": 274
+    },
+    {
+      "path": "05_MACHINE_PROTOCOLS/CHANGE_CONTROL.md",
+      "sha256": "0f6bbbe4ed6af09ed122ccce84bf09ca101270f3fa9de88694671968688d78e9",
+      "bytes": 706
+    },
+    {
+      "path": "05_MACHINE_PROTOCOLS/FLASH_AGENT_MASTER_INSTRUCTION.md",
+      "sha256": "67ce296c920235a816b7dc8716153b9fdad307a03604045fdcb4c3e93c655431",
+      "bytes": 1772
+    },
+    {
+      "path": "05_MACHINE_PROTOCOLS/OBSIDIAN_RENDERING_PROTOCOL.md",
+      "sha256": "4e8959c461bff3c052ac75ad4e3693664c4c620ea7136b7447dbe4c018d0138c",
+      "bytes": 849
+    },
+    {
+      "path": "05_MACHINE_PROTOCOLS/REPORT_TO_HIGH_INTELLIGENCE.md",
+      "sha256": "c69953e304bf415e63638a0b2d239a81eadcc479d883cf9705d63c60db4dec19",
+      "bytes": 1092
+    },
+    {
+      "path": "06_SCHEMAS/demand.schema.json",
+      "sha256": "6dfee2edccadbf57ea0bc66c0c59ad6b1582b0a1ee113f7555ee90116f704499",
+      "bytes": 764
+    },
+    {
+      "path": "06_SCHEMAS/experiment.schema.json",
+      "sha256": "e20e172793479a5adb801adbedc7acf4d6430ada4f38aeeb85f9dab253640fa1",
+      "bytes": 830
+    },
+    {
+      "path": "06_SCHEMAS/state.schema.json",
+      "sha256": "b4b09c34701981af56a07ea34f07a53eafae9a66cb3dd90f7a721d385e2371f0",
+      "bytes": 891
+    },
+    {
+      "path": "06_SCHEMAS/task.schema.json",
+      "sha256": "04078810bc4e5f42928c53c769803b37d20541347527f3e7832ab3a00822b0ca",
+      "bytes": 653
+    },
+    {
+      "path": "07_EXAMPLES/EXAMPLE_DASHBOARD.md",
+      "sha256": "36f0d9f1e16adf626b24dee924d64cc710c193217f9b67a6ecc33eb5e4ad98c6",
+      "bytes": 739
+    },
+    {
+      "path": "07_EXAMPLES/EXAMPLE_DEMAND_INFORMATION.md",
+      "sha256": "dd6b129647b579a254ebddfda2d1cda30a8cdd6ab3f87c09b2f28ae816099a77",
+      "bytes": 755
+    },
+    {
+      "path": "07_EXAMPLES/EXAMPLE_REPORT_TO_HIGH_INTELLIGENCE.md",
+      "sha256": "cc4f1c9452e558244cbba020d6bba1d2d3349e97531964aa77dc90e42768079e",
+      "bytes": 762
+    },
+    {
+      "path": "08_ARCHIVE_RULES/ARCHIVE_POLICY.md",
+      "sha256": "7678132dc5f87394945c79987734a7e39f2272982d38373504ce9af47f2256a1",
+      "bytes": 574
+    },
+    {
+      "path": "08_ARCHIVE_RULES/COMPRESSION_POLICY.md",
+      "sha256": "2462dfdca9bc6ca7b3f90c2f7ef042203e6b39d50366b0f09b6e9d70ef8d1fc5",
+      "bytes": 437
+    },
+    {
+      "path": "08_ARCHIVE_RULES/INDEX_POLICY.md",
+      "sha256": "350d693c7866ed35c09d0f3d05bbcbdc7eb5b07b7181576f6cd63f466e543929",
+      "bytes": 276
+    },
+    {
+      "path": "09_OBSIDIAN_ASSETS/INSTALL_UI.md",
+      "sha256": "c45324ca82ca49fcc53a4541aa5d127a4b95cf5ef7db6d74aa0e63e72e479694",
+      "bytes": 752
+    },
+    {
+      "path": "09_OBSIDIAN_ASSETS/meta-intelligence.css",
+      "sha256": "1ee8cfa92579c4a55aadafa49e82d52169b489ff8fd95655e48db3baa23efa10",
+      "bytes": 917
+    },
+    {
+      "path": "VERSION.md",
+      "sha256": "45f013b806e7ef74d55621069943d230bc1acb1b620c61ade9588f80dd53d116",
+      "bytes": 294
+    }
+  ]
+}

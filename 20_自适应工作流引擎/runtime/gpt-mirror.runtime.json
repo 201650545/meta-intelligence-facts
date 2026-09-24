@@ -1,0 +1,83 @@
+﻿{
+    "probed_at":  "2026-09-24T08:30:47+08:00",
+    "contract":  "D:\\Work\\自适应工作流引擎\\contracts\\gpt-mirror-extended-review.yaml",
+    "contract_version":  "1",
+    "workflow_id":  "gpt-mirror-extended-review",
+    "probe":  "P1_http_only",
+    "browser_opened":  false,
+    "readonly":  true,
+    "elapsed_ms":  5847,
+    "probe_self_test":  "pass",
+    "self_test_detail":  {
+                             "required_fields_ok":  true,
+                             "contract_ok":  true,
+                             "network_reachable":  true,
+                             "notes":  [
+
+                                       ]
+                         },
+    "carid_discovery":  {
+                            "method":  "explicit_list",
+                            "candidates":  [
+                                               "CARD-23",
+                                               "CARD-49",
+                                               "CARD-11"
+                                           ],
+                            "active":  2
+                        },
+    "account_pool":  [
+                         {
+                             "url":  "https://<POOL_HOST>/?utm_source=hidden-ncn",
+                             "ok":  true,
+                             "status":  200,
+                             "via":  "proxy",
+                             "kind":  "ok",
+                             "bytes":  1,
+                             "health_regex_matched":  false,
+                             "attempts":  [
+                                              {
+                                                  "via":  "proxy",
+                                                  "ok":  true,
+                                                  "status":  200,
+                                                  "kind":  null,
+                                                  "error":  null
+                                              }
+                                          ]
+                         }
+                     ],
+    "active_card":  [
+                        {
+                            "card_id":  "CARD-23",
+                            "reachable":  true,
+                            "status":  200,
+                            "kind":  "ok",
+                            "via":  "proxy",
+                            "healthy":  true,
+                            "label":  "GPT-5 ㉓",
+                            "raw":  "{\"color\":\"green\",\"label\":\"GPT-5 ㉓\",\"labelColor\":\"purple\",\"message\":\"空闲\",\"schemaVersion\":1,\"badge\":\"PLUS\",\"isHealthy\":true}",
+                            "parse_error":  null
+                        },
+                        {
+                            "card_id":  "CARD-49",
+                            "reachable":  true,
+                            "status":  200,
+                            "kind":  "ok",
+                            "via":  "proxy",
+                            "healthy":  false,
+                            "label":  "受限 ㊾",
+                            "raw":  "{\"color\":\"gray\",\"label\":\"受限 ㊾\",\"message\":\"Plus失效\",\"schemaVersion\":1,\"badge\":\"\",\"isHealthy\":false,\"isFree\":true}",
+                            "parse_error":  null
+                        },
+                        {
+                            "card_id":  "CARD-11",
+                            "reachable":  true,
+                            "status":  200,
+                            "kind":  "ok",
+                            "via":  "proxy",
+                            "healthy":  true,
+                            "label":  "GPT-5 ⑪",
+                            "raw":  "{\"color\":\"green\",\"label\":\"GPT-5 ⑪\",\"labelColor\":\"purple\",\"message\":\"空闲\",\"schemaVersion\":1,\"badge\":\"PLUS\",\"isHealthy\":true}",
+                            "parse_error":  null
+                        }
+                    ]
+}

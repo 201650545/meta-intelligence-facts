@@ -1,0 +1,53 @@
+/* Meta Intelligence V1 — optional Obsidian human-view styling */
+.meta-dashboard {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.meta-dashboard table {
+  width: 100%;
+}
+
+.meta-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin: 12px 0 20px;
+}
+
+.meta-kpi {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: var(--background-secondary);
+}
+
+.meta-kpi strong {
+  display: block;
+  font-size: 0.82em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.meta-kpi span {
+  font-size: 1.08em;
+  font-weight: 600;
+}
+
+.meta-now-next {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.meta-muted {
+  color: var(--text-muted);
+  font-size: 0.9em;
+}
+
+@media (max-width: 600px) {
+  .meta-kpi-grid,
+  .meta-now-next {
+    grid-template-columns: 1fr;
+  }
+}

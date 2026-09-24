@@ -1,0 +1,52 @@
+{
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "statement",
+    "status",
+    "version"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "statement": {
+      "type": "string"
+    },
+    "why": {
+      "type": "string"
+    },
+    "success_state": {
+      "type": "string"
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "preferences": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "enum": [
+        "active",
+        "paused",
+        "retired"
+      ]
+    },
+    "version": {
+      "type": "string"
+    },
+    "changed_at": {
+      "type": "string"
+    }
+  }
+}

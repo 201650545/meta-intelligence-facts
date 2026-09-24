@@ -1,0 +1,267 @@
+# ============================================================
+# 契约（声明态真源 · 唯一）：GPT 镜像站 Extended 送审
+# ------------------------------------------------------------
+# 铁律（照搬 ai-platform docs/design/AI基础设施/00-AI基础设施-总览.md）：
+#   1. 声明态与运行态分离：本文件只写「期望与依赖」，绝不写当前健康 / 当前文案 / pid
+#   2. 探针只读：runtime/*.json 与 drift 投影只由 probe 产出，禁止手改
+#   3. 执行体不硬编码：runners 与 skill 正文内的域名 / 选择器 / 菜单文案
+#      一律读自本文件的 conditions.*，出现字面量即算违规
+#   4. 载体中立：本契约不绑定 Loomy skill / n8n / orchestrator，执行壳可替换
+# 创建：2026-09-19（A1 阶段）｜决策 D1=契约中立+skill 起步｜D4=旧脚本只标注不原地改
+# ============================================================
+
+contract_version: 1
+workflow_id: gpt-mirror-extended-review
+display_name: GPT 镜像站 Extended 送审
+
+owner_skill: loomy-learned-gpt-mirror-extended-review
+# skill 存放与安装（2026-09-19 郭老师口径：项目产出的 skill 不进程序技能目录，统一存 AI自成长引擎 技能库）
+skill_home: D:\Work\AI自成长引擎\技能库\loomy-learned-gpt-mirror-extended-review\SKILL.md   # ← 当前实际位置（草稿，不生效）
+skill_install_to: D:\记忆\_Skills\          # 程序运行时加载的目录；安装即改变 Agent 真实行为，需人工点头（D3=等 A2 探针跑通再装）
+skill_index: D:\Work\AI自成长引擎\技能库\README.md
+
+superseded_runners:                          # 已被本契约取代/待取代的旧执行体
+  - path: D:\Work\AI平台\docs\runbooks\scripts\evalB_ext.js
+    status: annotated_broken                 # D4：只加失效标注，不原地改 ai-platform 执行真源
+    broken_at: 2026-09-15
+    annotated_at: 2026-09-19
+    reason: 三处硬编码断言（pill 就绪正则 / 菜单项匹配 / ==='Extended'）全断裂，会给出假信号
+    replacement: D:\Work\自适应工作流引擎\runners\evalB_ext_adaptive.js   # A2 阶段创建
+  - path: D:\Work\AI平台\docs\runbooks\scripts\evalA_jump.js
+    status: active_with_fallback
+    note: 取 .n-card[0] 兜底；卡号轮换属 info 级，由 active_card 探针回填
+
+source_assets:                               # 知识出处（可回溯，禁止在本文件重写正文）
+  operations_truth: D:\Work\AI平台\docs\runbooks\GPT镜像站送审流程.md
+  handoff: D:\Work\AI平台\docs\runbooks\GPT镜像站一键交接文档（给执行Agent）.md
+  memory:
+    - D:\记忆\调度大脑记忆\流程\workflow_ai_<POOL_NAME>_open.md
+    - D:\记忆\调度大脑记忆\流程\workflow_gpt_repo_sync.md
+    - D:\记忆\调度大脑记忆\反馈\feedback_gpt_mirror_subagent_flow.md
+    - D:\记忆\调度大脑记忆\反馈\feedback_gpt_mirror_account_switch.md
+    - D:\记忆\调度大脑记忆\反馈\feedback_gpt_rounds_discipline.md
+    - D:\记忆\调度大脑记忆\反馈\feedback_mirror_send_speed.md
+    - D:\记忆\调度大脑记忆\反馈\feedback_mirror_chat_history.md
+    - D:\记忆\调度大脑记忆\反馈\feedback_gpt_context_github.md
+    - D:\记忆\调度大脑记忆\反馈\feedback_fork_forbidden.md
+    - D:\记忆\调度大脑记忆\教训\error_lessons.md
+  inventory: D:\Work\自适应工作流引擎\docs\02-镜像站试点盘点.md
+
+baseline:                                    # 回归对照：自愈后性能不得显著劣化
+  metric: 零到可发问耗时(s)
+  value: 9.6
+  tolerance: "+50%"                          # 上限 14.4s
+  history: [13.9, 9.6, 14.0]
+  reference: D:\Work\AI平台\docs\runbooks\测试任务-镜像零到Extended计时.md
+
+# ------------------------------------------------------------
+# conditions：外部依赖条件（探针核对对象）
+#   每项必须给 probe 方式 + on_fail 级别；会漂的一律给候选集，不给单值
+# ------------------------------------------------------------
+conditions:
+
+  account_pool:
+    probe: http_get                          # P1 层，零打扰，不碰浏览器
+    urls:
+      - https://<POOL_HOST>/?utm_source=hidden-ncn
+    proxy: http://127.0.0.1:7890
+    health_regex: '(账号池|GPT-5|n-card)'
+    on_fail: break                           # 池不可达 = 熔断，不启动浏览器
+    dead_history: [<POOL_HOST_LEGACY>, <CARD-23.MIRROR_LEGACY_HOST>]   # 仅记录，不再探测
+
+  active_card:
+    probe: account_health_badge              # ★ 非 UI 免费探针：后端未随前端改版迁移（2026-08-27 已验证）
+    endpoint: "https://<MIRROR_HEALTH_API>/endpoint?carid={card_id}"
+    proxy: http://127.0.0.1:7890
+    expect: "isHealthy == true"
+    min_active: 1
+    on_fail: break
+    card_discovery:
+      ui_fallback_selector: ".n-card span"   # 仅 P2 层需要看 UI 时使用
+      ui_text_prefix: "GPT-5"
+      active_marker: 绿色圆点
+      skip_marker: [灰, 红]                  # 受限卡直接跳过别点（提速要点）
+    card_id_discovery:                       # ★ 探针如何取得 carid —— 写在契约里，探针内不得出现字面量卡号
+      primary:
+        method: html_regex                   # 从账号池页面 HTML 直接提取（不开浏览器）
+        source: same_as_account_pool
+        patterns:
+          - 'carid=(vip-[0-9A-Za-z]+)'
+          - '"(vip-[0-9]{1,3})"'
+          - "'(vip-[0-9]{1,3})'"
+      fallback:
+        method: enumerate                    # 页面提不到时的兜底：有限枚举，绝不无上限刷接口
+        prefix: vip-
+        range: [1, 30]
+        max_probes: 12                       # 最多探 12 个即止
+      on_discovery_fail: warn                # 两条路都拿不到 → warn（不熔断，可能是本机无外网）
+      explicit_list:                         # 2026-09-24 新增：记忆真源中的历史活跃卡号，供探针优先验证
+        cards: "[CARD-23, CARD-49, CARD-11]"
+        source: D:\记忆\调度大脑记忆\流程\workflow_gpt_repo_sync.md（CARD-49 直连记录）· feedback_gpt_mirror_subagent_flow.md（CARD-23 实测）· 项目/归档/project_ai_gateway_完整详细记录.md
+        note: 历史活跃 ≠ 当前活跃——此处仅为候选输入，实测结果才是事实
+    on_switch: 点右上角「切换账号」换活跃卡，不卡死在受限账号
+
+  membership_expiry:                         # ★ 已知未来故障，必须登记（D7 已落实提前 14 天提醒）
+    probe: static_date
+    value: 2026-10-28
+    warn_before_days: 14
+    on_fail: break                           # 到期后全池受限 → 熔断并停止烧轮次
+    reminder_task: 镜像站会员到期提醒（2026-10-28）   # Loomy 定时任务，2026-10-14 09:00 触发
+
+  reasoning_mode:                            # ★ 2026-09-15 断裂点（旧脚本三处硬编码全在此域）
+    probe: dom_text_set                      # P2 层，只读 DOM 文本指纹，不点击不发送不切模式
+    pill_selector: "button.__composer-pill"
+    pill_ready_regex: '^(Model|Auto|Thinking|Extended)$'   # 放宽为集合，覆盖文案漂移（Model=hydration 未完成，点必扑空）
+    item_selector: '[role=menuitemradio]'
+    match: regex_fuzzy                       # 容许空格 / 圆点 / 大小写变体
+    candidates:                              # A2 参数化自愈靠这个；weight 越高越优先
+      - {label: "Thinking• Extended", weight: 100, note: "2026-09-15 前"}
+      - {label: "Thinking• Standard", weight: 60,  note: "2026-09-15 后现存"}
+      - {label: "GPT-5.6 Luna",       weight: 40,  note: "2026-09-15 后现存"}
+    exclude_labels: ["Auto", "Configure..."]
+    resolved_label: null                     # ← 探针回填；执行体只读这里，禁止字面量比对
+    retry_click_max: 3                       # 菜单打开自旋重试上限
+    click_method: synthetic_pointer_sequence # 原生 click 与键盘 ArrowDown 打不开 Radix 菜单
+    pointer_sequence: [pointerover, pointermove, pointerenter, pointerdown, pointerup, mousedown, mouseup, native_click]
+    on_fail: warn                            # 候选集未覆盖 → 出 A3 重定位草稿，暂停并报人
+
+  composer:
+    probe: dom_fingerprint
+    variants:                                # 新旧对话页 composer 不同，且 fill 有实测缺陷
+      - {page: 新对话页, selector: "textarea[placeholder='Ask anything']", fill: native_value_setter_plus_input_event}
+      - {page: 历史对话页, selector: "contenteditable", fill: base64_atob_execCommand_insertText,
+         avoid: "wcDTda_fallbackTextarea（0×0，注进去无效）"}
+    known_defect: "opencli fill 对多段中文只填第一段（实测 814 字符仅进 112）→ 大段文本必须走 base64 路径"
+    send_selector: "[data-testid=send-button]"   # 有文本才渲染
+    stop_selector: "[data-testid=stop-button]"
+    note: 合成 Enter 不提交；多标签操作必先 tab select 钉死
+    on_fail: break
+
+  opencli_session:
+    probe: process_alive
+    profile: LOCAL_BROWSER_PROFILE
+    daemon_port: <LOCAL_DAEMON_PORT>
+    browser: 日常 Chrome（共享，非新实例）
+    lease: single_tenant                     # 单租户占用纪律
+    tab_policy:
+      reuse_first: true                      # 先 tab list，有镜像站页就 tab select 复用
+      never_close_others: true               # 绝不占用/关闭别人的标签
+      probe_uses_own_tab: true
+      empty_list_but_user_has_page: 请用户把该页切前台再 bind，不要 tab new
+    on_fail: break
+
+  answer_channel:
+    probe: dom_count
+    selector: "[data-message-author-role=assistant]"
+    trust_level: untrusted                   # ★ 教训⑤：镜像站不渲染该节点，asstN 常为 0 属正常
+    poll_interval_s: 15
+    page_auto_refresh: false                 # ★ 教训②：DOM 不自动更新，需真实状态时必须刷新页面
+    refresh_side_effect: resets_reasoning_mode   # ★ 教训④：刷新会重置档位 → 刷新后必须重走 reasoning_mode
+    streaming_normal: "streaming:true len:0 属正常，出了流式字就别喊停；深度问题总时长可达 15 分钟"
+    asset_fetch:
+      long_text: 页面内读取，注意单条回复有长度上限（长文稿会被硬截断，特征：停在表格/句子中间且 DOM 长度不再增长）
+      large_file: "fetch → arrayBuffer → window.__buf → 按 30000 字节分块（3 的倍数，规避 base64 跨块填充）逐段 b64decode"
+      large_file_pitfall: 整段拼接 base64 必报 Incorrect padding
+      image: "Download this image → Chrome 落 Downloads 为 .tmp，实为完整 PNG，复制改名即可"
+      reusable_script: D:\Work\课程思政教学竞赛\6-上课要用的素材\课件和教具\opencli_scripts\_dl_theme2.py
+      image_chinese: 图像模型可直接渲染中文（旧规「中文必糊、提示词禁文字」已作废）
+
+  windows_arg_pitfalls:                      # opencli.cmd 是批处理，命令串会再过一遍 cmd 解析
+    probe: none                              # 非外部条件，属实现约束，随执行体一起校验
+    rules:
+      - 多行 JS 传参会炸（SyntaxError）→ tr -d '\n' 压成单行，或写入临时文件后读成单行字符串再传
+      - JS 字符串带 & 会炸（URL 的 &fn=&cd=&ts=&sig= 被 cmd 当命令分隔）→ URL 先 base64，JS 内 atob + decodeURIComponent(escape()) 还原；Python 侧 subprocess.run(..., shell=False)
+      - 大文件取回见 answer_channel.asset_fetch.large_file
+
+# ------------------------------------------------------------
+# gates：闸门。校验点不过 → 不许产出结论
+# ------------------------------------------------------------
+gates:
+  - id: mode_gate
+    priority: highest                        # 发问前最后一个动作必须是本断言通过
+    assert: "runtime.reasoning_mode.resolved_label != null"
+    reject: [Auto, Configure..., null]
+    note: 刷新 / 回历史 / 换窗口都会重置，没有「刚才切过」这种想当然；Auto 档提问横竖白烧一轮
+    on_violate: silent-risk
+
+  - id: foreground_supervision
+    assert: "not background_task"
+    note: 镜像站回复一律主会话前台监督，禁止 run_in_background 轮询（教训①，看不见的黑箱必留残次品）
+    on_violate: break
+
+  - id: no_fork
+    assert: "not fork_subagent"
+    note: fork 无实时指令流会靠猜，曾编造「用户指示」
+    on_violate: break
+
+  - id: turn_budget
+    assert: "window_turns <= 24 and task_turns <= 3 and conversation_turns <= 40"
+    source: D:\Work\AI平台\resource-ops\docs\操作手册\01_镜像站GPT操作手册.md §9.3   # ★ 数值断言必须标 source
+    note: 每 3 轮必须彻底解决一个任务；GPT 反问算同窗口；同一对话 ≤40 轮才新开
+    revision: 2026-09-18 用户修订 12 → 24（原 12 出自记忆库 feedback_gpt_rounds_discipline.md，已于 2026-09-20 同步改为 24）
+    caveat: 24 轮不是免死金牌——GPT 出现遗忘 / 混淆早期约定 / 答非所问时，不等满 24 轮，立即走「要总结 → 带总结新开」
+    on_violate: break
+
+  - id: no_overlap_send
+    assert: "previous_turn_finished == true"
+    note: 上一轮没结束绝不发下一轮（会打断）
+    on_violate: break
+
+  - id: history_budget
+    assert: "chat_history_count <= 10"
+    action_on_violate: 自动删末尾至剩 10
+    note: 2026-09-04 从 ≤30 收紧为 ≤10
+    on_violate: info
+
+  - id: context_pushed
+    assert: "github_context_pushed == true and prompt_lists_file_paths == true"
+    note: 上下文先 push GitHub 让 GPT 强读（git -c http.proxy=http://127.0.0.1:7890 push）；提示词精简，长提示词响应慢易中断
+    on_violate: warn
+
+  - id: shared_tab
+    assert: "own_tab_only == true"
+    on_violate: break
+
+  - id: secret_guard
+    assert: "no_secret_in_output == true"
+    note: 任何 secret / 凭证值不回显、不入仓、不进输出；financial-security-plan 永不公开
+    on_violate: break
+
+  - id: review_gate
+    assert: "review_passed or no_code_change"
+    note: 评审未过 → 零代码改动；方案拍板后才动仓库
+    on_violate: break
+
+  - id: subagent_handoff
+    assert: "handoff_prompt_embeds_gates == true and session_tab_preserved == true"
+    note: 子 Agent 是全新会话读不到记忆，派发词必须显式写入 mode_gate；执行完保留绑定 tab 与会话，绝不因拉新子 Agent 重跑全流程；从打开到发送应在 1 分钟内到位
+    on_violate: warn
+
+# ------------------------------------------------------------
+# self_heal：分级自愈（对应总览 A1~A4）
+# ------------------------------------------------------------
+self_heal:
+  L1_param: true           # A2：候选集内自动回填 resolved_* → info 级，不单独打扰，周报汇总
+  L2_relocate: dry_run     # A3：选择器语义重定位只出草稿 → warn 级，暂停并报人
+  L3_restructure: false    # A4：流程重构一律人工 → 明确排除
+  escalate_after: 3        # 同一 condition 30 天内自愈 ≥3 次 → 强制升 warn（防自愈掩盖真问题）
+  circuit_break_policy:
+    no_retry_on: [membership_expired, no_active_card, pool_unreachable, opencli_dead]
+    reason: 这些情况重试只会烧账号额度与轮次
+
+# ------------------------------------------------------------
+# probe：调度与产物
+# ------------------------------------------------------------
+probe:
+  layers:
+    P1: {script: probes/probe_gpt_mirror.ps1,   channel: http_only,   schedule: daily_0830, opens_browser: false}
+    P2: {script: probes/probe_gpt_mirror_ui.js, channel: dom_readonly, schedule: pre_execution, opens_browser: true}
+  self_test_required: true      # 每次运行记录 probe_self_test，用于区分「站点变了」与「探针自己坏了」
+  readonly: true                # 探针禁止修改被测站点任何状态
+  output:
+    runtime: runtime/gpt-mirror.runtime.json
+    drift: runtime/gpt-mirror.drift.json
+    manual_edit: forbidden
+
+updated_at: 2026-09-19
+status: verified    # 2026-09-24 复探（exit 0）：break 已解除——explicit_list(CARD-23/49/11, source=记忆真源) + 断言求值器初值 bug 修复后 active=1/3（CARD-11「GPT-5 ⑪」活跃 PLUS；CARD-23 黄色受限态 isHealthy=false；CARD-49 真 Plus 失效）；残余 warn=池页纯 GET 1 字节（SPA 壳，HTML 发现路径对该页永久无效，卡号一律走 explicit_list）；会员余 33 天。历史：09-23 首跑 break=1 系断言求值器 $actual 初值 bug 所致假信号

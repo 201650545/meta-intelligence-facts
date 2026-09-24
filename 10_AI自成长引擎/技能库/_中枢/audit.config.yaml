@@ -1,0 +1,178 @@
+# =====================================================================
+#  技能中枢 · P0 只读体检器配置（机器真源 · 声明态）
+# ---------------------------------------------------------------------
+#  对应方案 : D:\Work\AI自成长引擎\docs\04-方案_技能统一治理与浏览器能力域_20260924.md
+#  消费脚本 : scripts\audit_skill_census.ps1
+#  铁律     : 脚本内不得出现任何硬编码的扫描根 / 正则 / 阈值 / 哨兵，
+#             全部从本文件读取（照搬自适应工作流引擎「零字面量」纪律）
+#
+#  注意     : 本文件的值会随机器变化。**改判据前先跑 smoke 配置**。
+# =====================================================================
+config_version: 1
+owner_plan: D:\Work\AI自成长引擎\docs\04-方案_技能统一治理与浏览器能力域_20260924.md
+output_prefix: skill-census
+
+# ---------------------------------------------------------------------
+# 一、扫描范围（path|depth 形式，与 2026-09-24 首轮 bash find 保持同口径）
+#     不跟随 reparse point（symlink/junction），故 Loomy 运行时目录不计入
+#     source: 2026-09-24 find 普查 = 8594 份
+# ---------------------------------------------------------------------
+scan:
+  roots:
+    - D:\|9
+    - C:\Users\郭永涛\|10
+    - C:\Users\Public\Loomy\|8
+  exclude_path_regex: node_modules|\.git\\|\.pnpm-store|\$RECYCLE\.BIN|System Volume Information
+  skill_file_name: SKILL.md
+
+# ---------------------------------------------------------------------
+# 二、A / B / C 分类判据（方案 §五）
+#     A = 程序自带，只登记不碰；C = 宿主链接层；B = 其余待判
+# ---------------------------------------------------------------------
+classify:
+  a_class_path_regex: '\\(resources|marketplace|skills-marketplace|connectors-marketplace|plugins|external_plugins|design-templates|_official|template-backups|builtin|cache|web-template|node_modules|open-design)(\\|$)'
+  c_class_path_regex: '^C:\\Users\\[^\\]+\\[^\\]*\.[^\\]+\\'
+  # 所有权标记优先于路径猜测：技能目录内出现下列文件 ⇒ 判为程序管理资产（A 类）。
+  # 依据：Loomy 会给每个内置技能写 .loomy-skill.json（含 sourceType: bundled/package/learned），
+  # 这是"该文件归程序所有、更新会覆盖"的直接证据，比按路径段猜可靠。
+  owned_marker_files:
+    - .loomy-skill.json
+  b_class_known_dirs:
+    - D:\OfficeAce\office-claw-skills
+    - D:\游戏\08-AI配置与技能
+    - C:\Users\郭永涛\skills
+  true_source_dirs:
+    - D:\Work\AI自成长引擎\技能库
+
+# ---------------------------------------------------------------------
+# 三、链接层宿主清单（体检器逐个枚举深度 1 的子项，判链接/实体与目标是否存在）
+#     source: 2026-09-24 实测 351 条断链
+# ---------------------------------------------------------------------
+link_hosts:
+  - C:\Users\郭永涛\.trae\skills
+  - C:\Users\郭永涛\.trae-cn\skills
+  - C:\Users\郭永涛\.trae-local\skills
+  - C:\Users\郭永涛\.codebuddy\skills
+  - C:\Users\郭永涛\.claude\skills
+  - C:\Users\郭永涛\.qoder-cn\skills
+  - C:\Users\郭永涛\.qoder\skills
+  - C:\Users\郭永涛\.qoderworkcn\skills
+  - C:\Users\郭永涛\.iflow\skills
+  - C:\Users\郭永涛\.kiro\skills
+  - C:\Users\郭永涛\.qwen\skills
+  - C:\Users\郭永涛\.codex\skills
+  - C:\Users\郭永涛\.box-agent\skills
+  - C:\Users\郭永涛\.agents\skills
+  - C:\Users\郭永涛\.cc-switch\skills
+  - C:\Users\郭永涛\.workbuddy\skills
+  - C:\Users\郭永涛\.workbuddy-ai\skills
+  - C:\Users\郭永涛\.config\agents\skills
+  - C:\Users\郭永涛\.config\opencode\skills
+
+# ---------------------------------------------------------------------
+# 四、自检哨兵 —— 用于区分「机器真变了」与「探针自己坏了」
+#     任一不成立 → probe_self_test=fail → 退出码 3，本次结果不可采信
+# ---------------------------------------------------------------------
+self_test:
+  min_skill_files_total: 5000
+  min_a_class: 3000
+  min_b_class: 400
+  min_c_class: 500
+  min_dup_clusters: 800
+  min_hashed_files: 3000
+  max_frontmatter_missing_rate: 0.35
+  min_broken_links: 100
+  sentinel_broken_link: C:\Users\郭永涛\.trae\skills\ad-creative
+  sentinel_source: 2026-09-24 find -type l ! -exec test -e 实测样本
+  sentinel_dup_name: none
+  sentinel_dup_min_copies: 0
+
+# ---------------------------------------------------------------------
+# 五、阈值与级别（方案 §八 P0 验收口径）
+# ---------------------------------------------------------------------
+levels:
+  broken_links_warn: 50
+  broken_links_break: 200
+  divergent_clusters_warn: 20
+  divergent_clusters_break: 150
+  empty_existing_root: break
+  true_source_required: break
+
+# ---------------------------------------------------------------------
+# 六、治理范围（政策层 · 2026-09-24 用户裁定 · 由投影器消费，不进普查）
+#     规则一句话：只管**用户侧资产** —— 你自己写的、主动装的、下载的、
+#     以及你用的工具代装的；**程序出厂自带的整体退出范围**，只登记不治理。
+#
+#     判据优先级（顺序即语义，不可调换）：
+#       1 出厂标记 → out  （硬下限：程序自带的即使落在 in_roots 内也排除）
+#       2 自产标记 → in
+#       3 工具代装 → in    （从技能目录向上找托管清单，命中其登记名才算）
+#       4 声明根   → in    （你手工增补的用户资产根）
+#       5 其余     → default（未声明不猜，只登记，不进治理清单）
+#     第 5 条故意保守：宁可漏判，也不把程序资产误纳进来后遭误删。
+#     本层是**政策叠加**，放在投影器而非普查脚本里 —— 改范围只需重跑几秒，
+#     不必重跑 6 分钟的磁盘扫描。
+# ---------------------------------------------------------------------
+scope:
+  default: out
+
+  # 1) 出厂标记：读该文件内的 sourceType 字段
+  bundled_marker_files:
+    - .loomy-skill.json
+  bundled_marker_values:
+    - bundled
+  # 2) 同一标记文件中代表用户侧的取值
+  owned_marker_values:
+    - package
+    - learned
+  # 自产兜底：Loomy 有 3 个较新的 learned 技能漏写 .loomy-skill.json，靠前缀认
+  self_produced_prefixes:
+    - loomy-learned-
+  # 3) 工具代装托管清单（JSON 的 skills 键下按技能名登记）
+  managed_tool_markers:
+    - .arkcli-managed-skills.json
+  marker_search_depth: 4
+
+  # 4) 你主动装的 / 自己写的资产根（手工维护，越准越好）
+  in_roots:
+    - C:\Users\郭永涛\.agents\skills
+    - C:\Users\郭永涛\skills
+    - C:\Users\郭永涛\skills_backup
+    - C:\Users\郭永涛\.claude\skills_backup_20260829
+    - D:\OfficeAce\office-claw-skills
+    - D:\游戏\08-AI配置与技能
+    - D:\Work\AI自成长引擎\技能库
+
+  # 自检区间：偏离即说明判据写坏或环境大变 → exit 3 拒发结论
+  self_test_min_in: 300
+  self_test_min_out: 6000
+  # 哨兵全部实测存在（2026-09-24），各自覆盖一条判定路径
+  sentinel_out_path: C:\Users\Public\Loomy\c3773183a592\opencode\skills\pdf
+  sentinel_out_note: 走「出厂标记」判 out（Loomy 内置 pdf，sourceType=bundled）
+  sentinel_in_path: C:\Users\Public\Loomy\c3773183a592\opencode\skills\loomy-learned-agent-role-handover-doc
+  sentinel_in_note: 走「自产前缀兜底」判 in（该目录漏写 .loomy-skill.json）
+  sentinel_in_path2: C:\Users\郭永涛\.agents\skills\agent-browser
+  sentinel_in2_note: 走「声明根」判 in
+
+# ---------------------------------------------------------------------
+# 七、投影阈值（project_governance_surface.ps1 消费）
+# ---------------------------------------------------------------------
+governance:
+  min_actionable_clusters: 20
+  sentinel_actionable_id: skill-creator
+  actionable_break: 60
+
+# ---------------------------------------------------------------------
+# 八、死链枚举（P0.5 · enumerate_broken_links.ps1 消费 · 只读）
+#     双实现交叉验证：普查器用「ReparsePoint 属性 + 活性探针」判定断链，
+#     本枚举器改用「cmd dir /AL 解析出记录的目标路径」。
+#     两者总数必须一致，否则说明其中一条实现坏了 → exit 3，不出清单。
+# ---------------------------------------------------------------------
+broken_links:
+  expected_total: 946
+  expected_total_source: 2026-09-24 全量普查 skill-census-03-link-health.csv 逐宿主合计
+  tolerance: 0
+  census_link_health_csv: runtime\skill-census-03-link-health.csv
+  # 安全红线：本枚举器只读。真正的删除动作须另写，且只允许用 rmdir 语义
+  # （删链接本身），严禁 Remove-Item -Recurse —— 那会顺着链接删进目标内容。
+  forbid_recursive_delete: true

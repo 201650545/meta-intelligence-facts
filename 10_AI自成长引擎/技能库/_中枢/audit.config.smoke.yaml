@@ -1,0 +1,61 @@
+# =====================================================================
+#  技能中枢 · 冒烟配置（只验管道，不出全量结论）
+# ---------------------------------------------------------------------
+#  用途：先证明「枚举 / 分类 / 哈希 / 分叉判定 / 断链」五条链路本身没坏，
+#        再跑全量 audit.config.yaml。对应技能库 README §四 第 3 步 dry-run。
+#
+#  扫描根为什么选 .workbuddy + .workbuddy-ai：
+#    2026-09-24 实测这是同一产品的两份安装（1900 份 / 1688 份），
+#    必然产生大量同名簇 → 才能真正把哈希与分叉判定这条路跑到位；
+#    同时二者都含 marketplace/plugins 段 → A 类判据也被覆盖。
+#    换别的根（如 .agents + D:\Work）两棵树之间几乎不重名，等于没测。
+#
+#  与全量配置的差别只有：扫描根、各类下限、输出前缀、阈值放宽
+#  断链哨兵不降级：.trae 的已知断链必须检出，否则同样 exit 3
+# =====================================================================
+config_version: 1
+owner_plan: D:\Work\AI自成长引擎\docs\04-方案_技能统一治理与浏览器能力域_20260924.md
+output_prefix: skill-census-smoke
+
+scan:
+  roots:
+    - C:\Users\郭永涛\.workbuddy\|4
+    - C:\Users\郭永涛\.workbuddy-ai\|4
+  exclude_path_regex: node_modules|\.git\\|\.pnpm-store|\$RECYCLE\.BIN|System Volume Information
+  skill_file_name: SKILL.md
+
+classify:
+  a_class_path_regex: '\\(resources|marketplace|skills-marketplace|connectors-marketplace|plugins|external_plugins|design-templates|_official|template-backups|builtin|cache|web-template|node_modules|open-design)(\\|$)'
+  c_class_path_regex: '^C:\\Users\\[^\\]+\\[^\\]*\.[^\\]+\\'
+  b_class_known_dirs:
+    - D:\OfficeAce\office-claw-skills
+  true_source_dirs:
+    - D:\Work\AI自成长引擎\技能库
+
+link_hosts:
+  - C:\Users\郭永涛\.trae\skills
+  - C:\Users\郭永涛\.agents\skills
+
+self_test:
+  min_skill_files_total: 200
+  min_a_class: 100
+  min_b_class: 0
+  min_c_class: 1
+  min_dup_clusters: 50
+  min_hashed_files: 150
+  max_frontmatter_missing_rate: 0.60
+  min_broken_links: 100
+  sentinel_broken_link: C:\Users\郭永涛\.trae\skills\ad-creative
+  sentinel_source: 2026-09-24 find -type l ! -exec test -e 实测样本
+  sentinel_dup_name: none
+  sentinel_dup_min_copies: 0
+
+# 冒烟阶段只验管道，不做级别断言（阈值全部调到不可达）；
+# 真实阈值断言由全量配置负责，断链能力由 self_test 哨兵负责
+levels:
+  broken_links_warn: 999999
+  broken_links_break: 999999
+  divergent_clusters_warn: 999999
+  divergent_clusters_break: 999999
+  empty_existing_root: break
+  true_source_required: skip

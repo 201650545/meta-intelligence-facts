@@ -1,0 +1,41 @@
+﻿{
+    "probed_at":  "2026-09-24T08:30:47+08:00",
+    "contract_version":  "1",
+    "probe_self_test":  "pass",
+    "self_test_notes":  [
+
+                        ],
+    "browser_opened":  false,
+    "items":  [
+                  {
+                      "condition":  "account_pool",
+                      "level":  "warn",
+                      "note":  "页面可达但未匹配健康特征 (账号池|GPT-5|n-card) —— 前端可能已改版（2026-08-27 曾整体迁移过）",
+                      "actual":  "status=200 bytes=1",
+                      "action":  "verify_ui_and_update_contract"
+                  },
+                  {
+                      "condition":  "active_card",
+                      "level":  "info",
+                      "expected":  "min_active=1",
+                      "actual":  "active=2 / probed=3",
+                      "labels":  "GPT-5 ㉓, GPT-5 ⑪",
+                      "action":  "none"
+                  },
+                  {
+                      "condition":  "membership_expiry",
+                      "level":  "info",
+                      "expected":  "\u003e 14 天",
+                      "actual":  "33 天",
+                      "expiry":  "2026-10-28",
+                      "note":  "未进入预警窗口，仅记录倒计时",
+                      "action":  "none"
+                  }
+              ],
+    "summary":  {
+                    "info":  2,
+                    "warn":  1,
+                    "break":  0,
+                    "silent_risk":  0
+                }
+}

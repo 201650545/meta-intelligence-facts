@@ -1,0 +1,36 @@
+id: ai-self-growth-engine
+name: AI 自成长引擎
+type: infra
+status: active
+stage: idea          # 构想中，尚无代码实现
+visibility: private
+
+local_path: D:\Work\AI自成长引擎\
+aliases:
+  - 经验自沉淀
+  - auto-skill-distiller
+  - 自成长 Agent
+
+sources:
+  overview: docs/00-项目总览.md
+  tasks: docs/01-任务看板.md
+  origin: docs/02-原始想法记录.md
+  design: docs/03-方案构想.md
+  skill_library: 技能库/README.md            # 项目产出的 skill 统一暂存处（不加载不触发）
+  handoff: 双引擎立项收口交接_给执行Agent_20260919.md
+
+handoff:
+  at: 2026-09-19
+  doc: D:\Work\AI自成长引擎\双引擎立项收口交接_给执行Agent_20260919.md
+  status: pending_execution    # 断链修复 L1~L10 + 口径同步 U1~U4 + 登记 R1~R3 待执行 Agent 完成
+
+handbook:
+  version: v1.0
+  overrides: null
+
+# 尚未建 repo（见 docs/01-任务看板.md D6）；M0 验收通过后再登记 workspace-index/projects.yaml
+repo: null
+milestone: M0-纸面闭环
+
+created_at: 2026-09-19
+updated_at: 2026-09-19

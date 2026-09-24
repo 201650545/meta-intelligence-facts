@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "required": [
+    "id",
+    "demand_id",
+    "status",
+    "why",
+    "done_when"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "demand_id": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "queued",
+        "active",
+        "blocked",
+        "completed",
+        "failed",
+        "cancelled",
+        "superseded"
+      ]
+    },
+    "why": {
+      "type": "string"
+    },
+    "expected_result": {
+      "type": "string"
+    },
+    "done_when": {
+      "type": "string"
+    },
+    "verification": {
+      "type": "string"
+    },
+    "result": {
+      "type": "string"
+    }
+  }
+}

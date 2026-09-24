@@ -1,0 +1,50 @@
+id: adaptive-workflow-engine
+name: 自适应工作流引擎
+type: infra
+status: active
+stage: A1-进行中    # 契约已落盘；P1 探针待首跑
+visibility: private
+
+decisions:
+  D1_carrier: 契约中立 + skill 起步，预留 n8n / orchestrator 接口（2026-09-19）
+  D2_n8n: 现在不装，A6 再评估（2026-09-19）
+  D3_skill_install: 等 A2 探针跑通再装（2026-09-19）
+  D4_legacy_script: 旧 evalB_ext.js 只加失效标注、不原地改（已执行 2026-09-19）
+  D7_membership_reminder: 已建 Loomy 定时任务，2026-10-14 09:00 触发（已执行 2026-09-19）
+  D5_runtime_git: 待定
+  D6_probe_schedule: 待定
+  D8_second_pilot: 待定
+
+sources:
+  overview: docs/00-项目总览.md
+  tasks: docs/01-任务看板.md
+  pilot_inventory: docs/02-镜像站试点盘点.md
+  design: docs/03-方案构想.md
+  contract: contracts/gpt-mirror-extended-review.yaml
+  skill_home: D:\Work\AI自成长引擎\技能库\loomy-learned-gpt-mirror-extended-review\SKILL.md
+  skill_index: D:\Work\AI自成长引擎\技能库\README.md
+
+handbook:
+  version: v1.0
+  overrides: null
+
+pattern_source: D:\Work\AI平台\docs\design\AI基础设施\00-AI基础设施-总览.md   # 声明态/只读探测/drift 三件套
+
+sibling_project:
+  id: ai-self-growth-engine
+  local_path: D:\Work\AI自成长引擎\
+  relation: 上游沉淀方（记忆→资产）；本项目为下游运行方（资产→可运行+自愈）
+
+pilot:
+  name: GPT 镜像站 Extended 送审
+  contract: contracts/gpt-mirror-extended-review.yaml     # A1 阶段创建
+  baseline_metric: 零到可发问耗时 9.6s（tolerance +50%）
+  known_risks:
+    - "evalB_ext.js 三处硬编码断言于 2026-09-15 后断裂（假信号，待 D4 处置）"
+    - "镜像站会员 2026-10-28 到期，当前无人登记（待 D7）"
+
+repo: null
+milestone: A1-契约已落盘，待P1探针首跑
+
+created_at: 2026-09-19
+updated_at: 2026-09-19
