@@ -1,5 +1,28 @@
 # CHANGELOG
 
+## 2026-09-25（深夜之三）· 融合阶段 1 落地：元智能控制平面建立
+
+### 做了什么
+
+用户批准"最小可逆动作"后，新建 `D:\Work\元智能\`（独立 git，本地提交 `dd493a8`，**无远端**）：
+
+- `project.yaml` —— 三套系统的组件注册表（路径 / 类型 / SSOT 入口 / 判活 sentinel / owner），结构照 `VERDICTS.md` 第 3 轮 (b)。
+- `runners/check_components.mjs` —— 唯一脚本：读注册表 → 逐组件判活 → 写 `runtime/source-health.json` → **回读校验** → 输出 `input_fingerprint`。
+- `machine\demands\`、`generated-staging\` 建空目录，阶段 2 才用。
+
+**旧文件一个都没搬、没改名、没删；用户入口没切。** 回滚 = 删掉这个目录。
+
+### 结果
+
+- 三个组件判活全部 `ALIVE`，`input_fingerprint 5319af36a90f…`。
+- **先验证了它能判死**：把一条 sentinel 结构串改坏 → 正确输出 `DEAD growth structure_mismatch` 且退出码 1；还原后指纹回到原值 —— 同一输入必得同一指纹，确定性成立。
+- 判活落地前逐个核过它给的 sentinel 字符串在真文件里确实存在（6 条全命中），没有照抄一个跑不通的注册表。
+
+### 刻意没做（DEC-18 的可后补清单）
+
+`state_dirty` 事件总线、10 分钟 watchdog、独立 `schemas\` 与 `adapters\` 目录、完整 `input_hash` 规则。过渡期靠"执行 Agent 每次收尾必须生成一次并回读产物"兜。
+
+
 ## 2026-09-25（深夜之二）· 融合物理形态裁定入库；本仓角色降为投影
 
 ### 做了什么
