@@ -48,7 +48,7 @@
 
 ## 五、下一步
 
-0. **融合阶段 2 已完成**（2026-09-25 深夜）：Demand 真源迁至 `D:Work元智能machinedemands`，生成链 `check_components → build_state` 跑通，确定性、升版传播、fail-closed 三条均已实测。下一步阶段 3：给两个看板与现存 Task 回填 `demand_id`。
+0. **融合阶段 3a 已完成**（2026-09-26）：两个看板 34 条目逐条判定，13 条无法归属被归因到 Demand 集合缺口；外部裁定新增 **D-004**、允许 `scope: local`、授权控制平面自持 `machineTASKS.yaml`。首页已能派生「下一步 / 活动任务 / 阻断项」。**CT-04（写回两个看板）仍未执行** —— 那两个文件在 `D:/Work` 里未跟踪、没有回滚基线。（2026-09-26）：见下条。（2026-09-25 深夜）：Demand 真源迁至 `D:Work元智能machinedemands`，生成链 `check_components → build_state` 跑通，确定性、升版传播、fail-closed 三条均已实测。下一步阶段 3：给两个看板与现存 Task 回填 `demand_id`。
 1. **融合阶段 1 已完成**（2026-09-25 深夜）：`D:Work元智能` 控制平面建立，三组件注册 + 判活 + 回读校验跑通，旧文件未动。下一步是阶段 2 —— Demand 真源迁入 `machinedemands`、生成脚本产出 State 与首页。
 
 1. 高智力模型给出三套系统的融合判断（本轮请求，见 `ISSUES.md`）。**材料以对话附件提供** —— 它的抓取层不回源，发 URL 无效（见 §六）。回答第一行须原样复述本轮交付号 `FACTS-DELIVERY-<提交前 8 位>`，否则判定没读到材料。
