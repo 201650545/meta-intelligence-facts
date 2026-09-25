@@ -1,0 +1,5 @@
+readability canary
+repo: meta-intelligence-facts
+purpose: connectivity probe only
+nonce: 1790309910
+This file contains no project content.
