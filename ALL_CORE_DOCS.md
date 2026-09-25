@@ -1,4 +1,4 @@
-【交付号】FACTS-DELIVERY-5e54fe4b   （= 生成本包时的基线提交号，每轮重新生成都会变）
+【交付号】FACTS-DELIVERY-a9cde390   （= 生成本包时的基线提交号，每轮重新生成都会变）
 【粘贴说明】这是 meta-intelligence-facts 仓库的第一个材料包：治理层 7 个文件的完整内容，按阅读顺序拼接。
 配套第二个包 ALL_SPEC_DOCS.md（规范层 55 个文件）。两个包合起来覆盖全部阅读清单。
 读取方式：直接访问本仓 raw URL（公开）。失败按《作答要求》第 0 条重试，最多 3 次、间隔 15 秒。
@@ -57,7 +57,8 @@ https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/ALL_SPE
 3. `CURRENT_STATE.md` — 三套系统现在各自到哪
 4. `ISSUES.md` — 需要你判断的问题（带编号，回复编号即可）
 5. `DECISIONS.md` — 已定事项，**不必重新讨论**
-6. `CHANGELOG.md` — 本阶段实际改了什么、为什么、结果如何
+6. `VERDICTS.md` — 外部裁定的**逐字原文**存档（上面所有摘要的出处）
+7. `CHANGELOG.md` — 本阶段实际改了什么、为什么、结果如何
 
 ## 被融合的三套系统在哪
 
@@ -342,17 +343,17 @@ https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/ALL_SPE
 
 | # | 裁定要点 | 入库位置 |
 |---|---|---|
-| Q1 | 单一 **Current State 语义对象** + 多原生真源 + 单向生成；Markdown 与 Obsidian 都只是投影 | `CHANGELOG.md` 2026-09-25 深夜条 |
+| Q1 | 单一 **Current State 语义对象** + 多原生真源 + 单向生成；Markdown 与 Obsidian 都只是投影 | `VERDICTS.md` §Q1 |
 | Q2 | Demand **归元智能层持有**，上下游只持 `demand_id` 指针 | **DEC-13** |
-| Q3 | Human View 只治理"用户入口"，不合并、不改写两个技术看板；看板降为 L3 证据层 | `CHANGELOG.md` 同上 |
+| Q3 | Human View 只治理"用户入口"，不合并、不改写两个技术看板；看板降为 L3 证据层 | `VERDICTS.md` §Q3 |
 | Q4 | 自动产物先进隔离候选区；任何改变运行时能力/正式技能库的晋升必须人审 | **DEC-14** |
 | Q5 | 判定可信度**进 V1 完成条件**，`self_test` 失败 fail-closed | **DEC-15** |
-| Q6 | dry-run 清单 + 回滚清单，人工批准**该固定批次**后执行；清单与实际不符即停 | `CHANGELOG.md` 同上 |
-| Q7 | 固化为阻断式 pre-push 闸门，但须先修掉"整行白名单跳过"盲区；顺序固定：改完 → 重生成副本 → 全仓扫 → 检查扫描器自身 → 全绿才 push | `CHANGELOG.md` 同上 |
+| Q6 | dry-run 清单 + 回滚清单，人工批准**该固定批次**后执行；清单与实际不符即停 | `VERDICTS.md` §Q6 |
+| Q7 | 固化为阻断式 pre-push 闸门，但须先修掉"整行白名单跳过"盲区；顺序固定：改完 → 重生成副本 → 全仓扫 → 检查扫描器自身 → 全绿才 push | `VERDICTS.md` §Q7 |
 | Q8 | "抓取层不回源"的判定被本轮实测推翻；改为只设闸门：三项回读凭证 + 每条 URL 最多 3 次重试 + 三连败即阻断作答 | **DEC-08 v2 / DEC-11 / DEC-12** |
 | D-003 | 已定义（statement / success_state / constraints / recheck_on），不与 D-001、D-002 重叠 | `DEMAND.md` D-003 v1 |
 
-**下一轮题目待本地执行后新增。** 以下 Q1~Q8 正文保留作题目原貌；其中 Q8 关于"抓取层不回源"的前提**已被推翻**，只当实验记录读。
+**裁定原文逐字存档在 `VERDICTS.md` 第 1 轮**（本表是对它的转述，冲突以存档为准）。**下一轮题目待本地执行后新增。** 以下 Q1~Q8 正文保留作题目原貌；其中 Q8 关于"抓取层不回源"的前提**已被推翻**，只当实验记录读。
 
 ---
 
@@ -579,7 +580,7 @@ Loomy 自学的 `loomy-learned-*` 先进 `技能库\_inbox_learned\`，投影器
 
 ########## 作答要求（务必遵守） ##########
 0. 回答的**第一行**必须原样输出本轮三项回读凭证，用竖线分隔：
-   FACTS-DELIVERY-5e54fe4b | CORE-TAIL-A83F8867 | SPEC-TAIL-A36D96BD
+   FACTS-DELIVERY-a9cde390 | CORE-TAIL-1E51203E | SPEC-TAIL-FFDE8F0C
    CORE_TAIL 在本包最后一行，SPEC_TAIL 在第二个包的最后一行。三项缺任意一项即判"材料未完整送达"，本轮不要作答，只回这六个字并说明缺哪项。
    这是送达闸门，替代"我 push 了 = 你拿到了"这个错误等式；不许转述、不许凭上一轮记忆。
    每个链接最多试 3 次、间隔 15 秒；3 次仍失败就照抄工具返回的报错原文，不要概括成中文。
@@ -596,4 +597,4 @@ Loomy 自学的 `loomy-learned-*` 先进 `技能库\_inbox_learned\`，投影器
 9. 输出用中文，结构化，能表格化就不写长段落。你的结论需要可执行：给判据、给优先级、给"什么情况下这个结论作废"。
 
 
-【本包尾凭证】CORE-TAIL-A83F8867
+【本包尾凭证】CORE-TAIL-1E51203E

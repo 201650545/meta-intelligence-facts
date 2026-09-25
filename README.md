@@ -47,7 +47,8 @@ https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/ALL_SPE
 3. `CURRENT_STATE.md` — 三套系统现在各自到哪
 4. `ISSUES.md` — 需要你判断的问题（带编号，回复编号即可）
 5. `DECISIONS.md` — 已定事项，**不必重新讨论**
-6. `CHANGELOG.md` — 本阶段实际改了什么、为什么、结果如何
+6. `VERDICTS.md` — 外部裁定的**逐字原文**存档（上面所有摘要的出处）
+7. `CHANGELOG.md` — 本阶段实际改了什么、为什么、结果如何
 
 ## 被融合的三套系统在哪
 

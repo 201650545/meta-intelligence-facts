@@ -12,7 +12,8 @@
 2. **D-003 定义完成**，`DEMAND.md` 由 draft v0 升为 active v1（statement / success_state / constraints / recheck_on 四段齐），并显式声明与 D-001、D-002 不重叠。
 3. **本地草案降级**：`LOCAL_DRAFT_FUSION_PLAN.md` 顶部新增"评审结论"，登记三处被驳回点（Demand 归属、State 不等于 Markdown、"只有第 1 步要写代码"过于乐观 + 观察窗不充分）。
 4. **送达闸门实现**：`build_core_bundle.js` 每轮生成 `FACTS-DELIVERY-*`（基线提交号）+ `CORE-TAIL-*` + 随机 `SPEC-TAIL-*`，尾部凭证写进两个包的**末行**，随机值只存本地 `.delivery_nonces.json`（不入库）。`build_spec_bundle.js` 从该文件取 SPEC 尾凭证。作答要求第 0 条与 `PROMPT` 硬约束同步改为"三项缺一即判未送达"。
-5. **可达性一节全部重写**（`CURRENT_STATE` §六、`README`、`REPORT` §0/§3/§5、`ISSUES` Q8）：**只记现象与探针账目，不再记机制**；承载维持 GitHub raw URL 不变，导出仓、Pages、connector 一个都没建。
+5. **裁定原文补存档**：新增 `VERDICTS.md`，按轮次逐字保存高智力模型原文。此前只入库了转述结论，没有原始出处 —— 摘要一旦与原文冲突就无从复核。头部记录送达凭证与题目状态，末尾记录本地调整点（补了一条它未覆盖的 CDN 滞后判据）。
+6. **可达性一节全部重写**（`CURRENT_STATE` §六、`README`、`REPORT` §0/§3/§5、`ISSUES` Q8）：**只记现象与探针账目，不再记机制**；承载维持 GitHub raw URL 不变，导出仓、Pages、connector 一个都没建。
 
 ### 结果与教训
 
