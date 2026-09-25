@@ -510,3 +510,49 @@ Demand 台账真源在哪	D:\Work\元智能\machine\demands\；事实层和 Obsi
 谁触发生成	元智能事件机制；所有权威写入器发 state_dirty，生成后必须回读校验；10 分钟 watchdog 只负责发现漏触发
 
 因此，这一轮我对 LOCAL_DRAFT_ENTRY_LAYOUT.md 的总裁定是：“三引擎原地不动”保留；“另建统一项目”保留；但这个新项目不能只是 Obsidian 入口壳。它必须升级为整个融合系统的机器控制平面，Human View 只是它的一个 generated 输出。
+
+---
+
+## 第 3 轮 · 2026-09-25 深夜 · 控制平面的第一版范围（a~d）
+
+**读取事故记录（重要）**：本轮提取脚本连续两次报 `LOW_REPLY / 空回复`，我差点按 SOP 上报「实例退化」。真实原因是**长对话里离屏的 assistant 节点被 React 虚拟化清空 innerText** —— 滚到底后同一节点立即读出 1433 字带表格的完整回答。修复落在共享脚本 `ai-hub-memory/scripts/gpt_wait_extract.mjs`（探测与提取前先滚到底，ab446fe），不是手工捞回这一轮数据。
+
+**送达核对**：本轮明确禁止访问链接、只凭对话内已读材料作答，故不再要求回读凭证（三项凭证已在第 2 轮验证过）。
+
+### 正文（逐字）
+
+(a)
+第一版必须有：project.yaml、Demand 真源、单一生成脚本、State+首页生成、失败显式失效、生成后回读、确定性输入指纹。可后补：state_dirty、10 分钟 watchdog、独立 schemas/、adapters/。完整 input_hash 规则可缓，先用排序后的输入文件 SHA-256。你提的“Agent 收尾生成+回读”够，前提是所有写真源的程序都执行它；否则立刻补 watchdog。
+(b)
+YAML
+components:
+- id: growth
+  path: D:\Work\AI自成长引擎
+  type: experience
+  ssot: docs\01-任务看板.md
+  sentinel: {file: docs\01-任务看板.md, open: true, contains: ["类型: 任务看板","# 01 · 任务看板"]}
+  owner: growth
+  last_verified: null
+- id: workflow
+  path: D:\Work\自适应工作流引擎
+  type: execution
+  ssot: contracts\gpt-mirror-extended-review.yaml
+  sentinel: {file: contracts\gpt-mirror-extended-review.yaml, open: true, contains: ["workflow_id: gpt-mirror-extended-review","gates:","status: verified"]}
+  owner: workflow
+  last_verified: null
+- id: facts
+  path: D:\meta-intelligence-facts
+  type: projection
+  ssot: null
+  sentinel: {file: README.md, open: true, contains: ["# 元智能事实层","只读投影副本"]}
+  owner: meta-intelligence
+  last_verified: null
+判活必须实际 OpenRead 文件并验内容；打开失败、为空、结构不符都判死，禁止用 Test-Path 代替。
+(c)
+进入生成事务：由本地真源生成事实层投影、生成 CORE/SPEC、跑掩码扫描；扫描失败即阻断。git commit/push 由 Agent 执行，仍保留人工批准发布。首页分开显示“本地状态”和“外部送审状态”：投影旧→外部投影过期；push 失败→外部发布失败；两者都阻断 GPT 正式裁定，但不否定本地 State。
+(d)
+文件	真源位置	谁写	是否投影
+CURRENT_STATE.md	无独立真源；由 generated/state/*.json 生成	生成脚本	是
+DECISIONS.md	D:\Work\元智能\machine\DECISIONS.md	Agent 按已确认裁定追加	是
+ISSUES.md	D:\Work\元智能\machine\ISSUES.md	Agent 维护	是
+CHANGELOG.md	D:\Work\元智能\machine\CHANGELOG.md	Agent 在验证成功后追加	是
