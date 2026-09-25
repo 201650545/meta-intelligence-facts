@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 2026-09-25（深夜之四）· 融合阶段 2：Demand 真源迁出本仓，生成链跑通
+
+### 做了什么
+
+- `D:\Work\元智能\machine\demands\D-001~D-003.yaml` 建立，**Demand 的可写原件从此不在本仓**。本仓 `DEMAND.md` 顶部已加指针，性质变为投影。
+- 新增生成器 `runners/build_state.mjs`：输入 = 三份 Demand + `runtime/source-health.json` + 本仓 `DECISIONS/CHANGELOG/ISSUES`；输出 = `generated/state/*.json` → `CURRENT_STATE.md` → `human/00_首页.md`。只读输入、单向生成，不回写任何原生真源。
+- `project.yaml` 压平成"一行一键值 + 内联数组"，解析器抽成 `runners/registry.mjs` 共用；判活脚本改用同一读取器后指纹不变（`5319af36…`），说明重构没改语义。
+
+### 三条验证（都做了实测，不是"应该能跑"）
+
+| 验证 | 做法 | 结果 |
+|---|---|---|
+| 确定性 | 连续生成两次比 `input_hash` | 相同（`c70f9e98…`）；哈希刻意排除运行时刻，只取语义字段 |
+| Demand 升版传播 | D-003 `version` 1→2 再改回 | 哈希变、首页 `state_id` 变 `D-003@2`；还原后哈希复原 |
+| fail-closed | 改坏一个组件判活串后生成 | 三份 State 全 `unconfirmed`，首页顶部变"当前状态：不可确认"，旧内容折进"上次已验证快照（不得当作现状）" |
+
+### 没做的事
+
+`active_tasks` / `next_step` 现在明写 `null` 并附原因（阶段 3 未给 Task 回填 `demand_id`），**没有编内容填格子**。事件总线、watchdog、schemas/adapters 独立目录仍按 DEC-18 推迟。
+
+
 ## 2026-09-25（深夜之三）· 融合阶段 1 落地：元智能控制平面建立
 
 ### 做了什么
