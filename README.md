@@ -35,7 +35,9 @@ https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/<F>
 
 也可用会 302 跳转到 raw 的等价形式：`https://github.com/201650545/meta-intelligence-facts/raw/main/<F>`
 
-> 本仓元数据在删仓重建后会短暂显示 `size=0`，那是 GitHub 统计滞后，**不代表仓库为空**：匿名 `contents` 与 `git/trees` 接口均正常返回，`git/trees/main?recursive=1` 报 97 个 blob、`truncated=false`。判断本仓是否为空请看 tree 接口，不要看 `size`。
+> 本仓元数据在删仓重建后会短暂显示 `size=0`，那是 GitHub 统计滞后，**不代表仓库为空**：匿名 `contents` 与 `git/trees` 接口均正常返回，`git/trees/main?recursive=1` 报 97 个 blob、`truncated=false`。判断本仓是否为空请看 tree 接口，不要看 `size`。（`size` 已于 2026-09-25 自愈为 343。）
+>
+> **但"本地实测全 200"不等于"对方读得到"。** 截至 2026-09-25，高智力模型对本仓的两个 URL 仍返回 `Cache miss`，而对另一个仓的未缓存文件读取成功 —— 故障已收窄到"本仓或本请求"，未定论。判据与后续动作见 `CURRENT_STATE.md` §六、`REPORT_TO_STRATEGIST.md` §0。
 
 
 ## 阅读顺序（给高智力模型）

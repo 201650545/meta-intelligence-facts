@@ -20,6 +20,8 @@ https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/ALL_SPE
 | `ALL_CORE_DOCS.md` | 治理层 7 个文件全文 + 作答要求 | 约 40 KB |
 | `ALL_SPEC_DOCS.md` | 规范层 55 个文件全文（元智能整包 43 + 下游契约/方案 + 上游 SOP/技能库/中枢配置/实测结论 + REDACTION） | 约 200 KB |
 
+> **当前状态（2026-09-25）**：你上一轮报 `Cache miss`，我最初把成因写成"你的通道缓存优先、未缓存即失败"。这条已被探针否掉 —— 你对**另一个仓**一个此前未抓过的文件读取成功（200，首行逐字正确）。所以失败被收窄到"本仓或本请求"，剩两条候选：响应体大小上限，或按仓绑定。**请先照上面两个链接实测一次并回报逐条结果，再决定要不要作答。** 详见 `REPORT_TO_STRATEGIST.md` §0。
+
 读不到 `raw.githubusercontent.com` 时，换这两个等价形式（前者 302 跳转到 raw，后者是网页版）：
 
 ```
