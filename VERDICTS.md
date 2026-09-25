@@ -210,3 +210,303 @@ Human View 的规范定位是"人类认知压缩层"，首页只保留会改变�
 1. 裁定 (b) 要求的三项回读凭证已实现（`build_core_bundle.js` 每轮随机生成，CORE/SPEC 末行各一枚，随机值不入库）。
 2. 裁定 (a)(c) 与 DEC-11/12 一致；本地另补一条它未覆盖的情形：**首行 `delivery_id` 命中的是上一轮而尾凭证不符时判为 CDN 滞后读到旧版本**，等 10 分钟重跑同一链接，不重发材料也不换承载。
 3. 采纳 Q2→DEC-13、Q4→DEC-14、Q5→DEC-15、Q8→DEC-08 v2/DEC-11/DEC-12；D-003 四段照录入 `DEMAND.md` v1。Q1/Q3/Q6/Q7 的结论暂不入 DECISIONS（属方案层边界，等实施时再定版）。
+---
+
+## 第 2 轮 · 2026-09-25 深夜 · 融合后的物理形态（N1~N6）
+
+**送达核对**：三项回读凭证全部正确输出 —— `FACTS-DELIVERY-82b21118 | CORE-TAIL-F99DB63B | SPEC-TAIL-D9BEAB4D`。尾凭证命中说明两个包（46 KB / 200 KB）都是**整包**读到的，这是该机制第一次真正发挥作用。
+
+**提问方式**：本轮起由本地执行模型通过 opencli 直接在镜像站会话里对话（Extended 档位，发问前核对 pill；长中文走 base64 + `insertText` 注入，775 字符零截断）。同一对话窗口、同一标签页续问。
+
+**题目**：`ISSUES.md` 第 2 轮 N1~N6；基线 `LOCAL_DRAFT_ENTRY_LAYOUT.md` v0.1。
+
+### 正文（逐字）
+
+FACTS-DELIVERY-82b21118 | CORE-TAIL-F99DB63B | SPEC-TAIL-D9BEAB4D
+
+N1｜入口与执行层的物理边界
+
+裁定：不并仓、不搬三套执行系统。新建一个真正的“元智能控制项目”，把三套系统注册成它的组件。基线“原地不动”是对的，但把新项目设计成单纯的 需求/状态/证据 Obsidian 入口库是错的。
+
+原因很明确：D-003 已定“元智能只拥有跨系统语义，不吞并各系统执行真源”，并要求任一子系统可以替换而不改变 Demand 语义；规范同时明确目录、模型、Agent、程序都只是可替换实现，用户不负责文件结构。
+GitHub
++1
+
+物理结构应改为：
+
+D:\Work\元智能\                    ← 唯一“项目根”，机器控制平面
+│
+├─ project.yaml                   ← 三组件注册表；机器维护
+│
+├─ machine\
+│  ├─ demands\                    ← Demand 唯一真源
+│  │  ├─ D-001.yaml
+│  │  ├─ D-002.yaml
+│  │  └─ D-003.yaml
+│  ├─ schemas\                    ← Demand / State 等 schema
+│  ├─ adapters\                   ← 读取三套原生系统
+│  └─ generator\                  ← State / Human View 生成器
+│
+├─ generated\                     ← 全部只读、可删可重建
+│  ├─ state\
+│  │  ├─ D-001.json
+│  │  ├─ D-002.json
+│  │  └─ D-003.json
+│  ├─ CURRENT_STATE.md
+│  ├─ evidence\
+│  │  ├─ 自成长.md
+│  │  ├─ 工作流.md
+│  │  └─ 规范.md
+│  └─ human\
+│     ├─ 00_首页.md
+│     └─ demands\
+│
+└─ runtime\
+   ├─ build-status.json
+   └─ source-health.json
+
+三套组件仍在：
+
+D:\Work\AI自成长引擎\
+D:\Work\自适应工作流引擎\
+D:\meta-intelligence-facts\
+
+project.yaml 注册它们的路径、类型、SSOT 入口和健康探针；它不是内容副本，更不是 junction 树。
+
+所以“一个项目”的含义定死为：一个控制平面、一个 Demand 命名空间、一条生成链、一张 Human View；不是一个 Git 仓、不是一个物理目录树。 如果真把三套仓库搬进一个 monorepo，会为了文件形态统一而破坏“执行真源独立、实现可替换”的既定边界，而且当前机器已经有过大规模链接失效事故。基线也记录了三个执行区目前各有自己的物理位置和 Git。
+GitHub
+
+判据： 用户从 D:\Work\元智能\ 进入后，不需要知道另外三个根目录；机器能由 project.yaml 定位全部原生真源；三套系统仍能各自独立运行和替换。
+
+作废条件： 如果未来三个执行系统已经实际共享同一发布周期、同一依赖图、同一权限边界，并且迁为 monorepo 能被实验证明降低长期维护成本且不破坏任何原生 SSOT，再重审。不满足这些条件，不并仓。
+
+N3｜Demand 台账真源放哪里
+
+裁定：Demand 真源放 D:\Work\元智能\machine\demands\。既不放公开事实层，也不把 Obsidian 页面当真源。
+
+这是本轮最需要纠正基线的地方。
+
+当前事实层 README 已明确：公开事实仓是三套本地原始文件的只读投影副本，唯一真源仍在本地。因此把 Demand 真源放 D:\meta-intelligence-facts\ 会与仓库自身契约冲突。
+GitHub
+ DEC-13 又明确规定 Demand 由元智能层持有、上下游只持 demand_id。
+GitHub
+
+因此物理落点就是：
+
+D:\Work\元智能\machine\demands\D-xxx.yaml
+
+数据方向固定为：
+
+machine\demands\        ← 唯一可写真源
+       │
+       ├──→ generated\human\...          Obsidian 投影
+       └──→ meta-intelligence-facts      已掩码共享投影
+
+不采用指针作为 Obsidian Demand 页面。 Obsidian 面向用户的是 Demand Interface，而且规范要求机器原始信息在进入 Obsidian 前压缩、合并、重写；这天然要求“生成投影”，而非把机器真源裸露给人。
+GitHub
+
+对基线“不确定点 2”的明确表态
+
+选本地元智能项目真源；公开事实层与 Obsidian 都是生成投影。 基线倾向的“事实层真源”我否决。
+
+判据： 修改一个 Demand，只允许一个写入口；任何一次扫描发现同一 D-xxx 在两个位置都可被独立编辑，即判架构违规。
+
+作废条件： 只有事实层未来不再是公开/掩码投影，而正式升级成本地元智能机器层自己的 canonical repository，且原本地 Demand 存储同时被撤销，才可以迁真源；不能双持。
+
+N4｜生成器契约
+
+裁定：不能直接“若干 Markdown → CURRENT_STATE.md → 首页”。中间必须先生成一个可校验的 Current State 语义对象，Markdown 和 Human View 都从它单向渲染。
+
+这与上一轮 Q1 一致，也符合 State 规范：每个 Demand 必须有一份 Current State，它是“现在的最小真实描述”，并有明确的强制更新事件。
+GitHub
+
+输入
+输入	权威范围
+machine\demands\D-xxx.yaml	Demand 身份、版本、statement、success_state、constraints
+两套原生任务/执行记录	Task 生命周期与执行结果
+runtime/*.drift.json / 探针	实际运行态、漂移、能力证据
+Experiment 原生记录	假设、基线、状态、结果
+DECISIONS / VERDICTS	已正式决定的策略与治理结论
+component manifest	原生真源位置与可读性
+
+Task 必须关联 Demand；规范的 task schema 本身把 demand_id 列为必需字段。
+GitHub
+
+Canonical State 字段
+
+至少固定为：
+
+类别	字段
+身份	demand_id, demand_version
+当前态	status, phase, strategy, capabilities
+问题	main_issue, risks
+活动工作	active_tasks, active_experiments
+行动	next_step, human_decisions
+变化	recent_changes, updated_at
+完整性	validity, source_snapshot, input_hash, conflicts
+
+前十一类业务字段来自既有 State Model；现有 schema 已要求 demand_id / updated_at / status / phase / next_step 并定义活动任务、实验、风险和人工决定等结构。
+GitHub
++1
+
+确定性要求
+
+同一份输入快照必须生成同一个语义结果。 具体执行规则：
+
+input_hash 由所有实际参与推导的 canonical 输入内容计算；数组固定排序；同字段只有一个预先登记的 owner；不能让 LLM 临场决定“哪份看起来更新”；updated_at 取导致 State 变化的最新权威事件时间，不能用“这次脚本几点运行”破坏确定性。
+
+生成链固定：
+
+原生真源
+  ↓ adapters
+Typed Facts
+  ↓ validate + resolve
+Current State JSON
+  ↓
+  ├─ CURRENT_STATE.md
+  ├─ 00_首页.md
+  └─ Demand 详情页 / Evidence Index
+生成失败时首页显示什么
+
+fail-closed。旧首页不得继续伪装成现状。
+
+生成失败后，机器原子替换首页顶部为：
+
+当前状态：不可确认
+原因：状态生成失败 / 原生事实不可读 / 权威事实冲突
+最后一次已验证状态：<时间>
+本次失败：<时间>
+需要你决定：无（除非确实存在人工决策）
+
+旧的最后成功内容可以放在折叠的“上次已验证快照”里，但不得继续显示为“当前状态”。规范本来就禁止保留过期下一步，并要求 Human View 精确呈现状态。
+GitHub
++1
+
+“视图与真源冲突”的可执行判据
+
+满足任一项即 validity=invalid：
+
+检查	判定
+当前输入重新计算的 input_hash ≠ State 内 input_hash	State 过期
+State 的 state_id/input_hash ≠ 首页内嵌值	首页过期
+一个字段收到两个不同的同级权威值	原生事实冲突，禁止猜
+active Task/Experiment 不存在，或其 demand_id 不一致	State 无效
+schema/self-test 失败	State 无效
+component 真源不可读	受影响 Demand 状态不可确认
+
+绝不允许“选一个比较像真的值继续展示”。
+
+判据： 任意生成产物都能回答“我由哪一组输入、哪个 Demand 版本生成”；删除整个 generated\ 后能够从真源完整再生。
+
+作废条件： 如果未来 State 不再是派生对象而被正式裁定为独立可写真源，则整套生成契约要重审；在当前 DEC/Q1 下不能这样做。
+
+N5｜谁触发重生成
+
+裁定：唯一正常触发机制是“机器事件触发”，不是人工按钮，也不是定时生成。Agent 每次完成一次会改变权威事实的事务，必须发 state_dirty；探针、Decision、Demand 修改等非 Agent 变化同样由对应写入器发同一个事件。
+
+也就是说，不把“记得跑脚本”交给任何人，也不把“每隔十分钟重做一遍所有东西”当主机制。
+
+现有规范本身已经规定：Demand 修改、Task 终止、Experiment 出结果、策略变化、新重要异常、关键 Decision 等事件之后必须重建 State；主循环最后也是 Update State + Human View。
+GitHub
++1
+
+事务完成定义应变成：
+
+写原生真源
+→ emit state_dirty(demand_id)
+→ 生成 State
+→ schema/self_test
+→ 渲染 Human View
+→ 重新读取产物
+→ 核验 input_hash / state_id
+→ 才允许本次事务标记 DONE
+
+这解决“脚本成功 ≠ 页面已经新”的问题：成功判据不是 generator exit code 0，而是重新读取落盘页面后，里面的 state_id/input_hash 与刚生成的 State 完全一致。
+
+另设一个 10 分钟 watchdog，只负责发现漏触发，不负责替代事件机制。它比较“原生输入最新 hash”和“最后成功 render hash”。一旦不同超过 10 分钟，立即把首页降级成“状态不可确认”，并向本地执行 Agent 建故障 Task；只有故障涉及架构冲突或连续不能自动恢复时才升级高智力模型。这样与草案提出的“Demand 升版后十分钟内联动完成”可以直接机器化。
+GitHub
+
+对基线“不确定点 3”的明确表态
+
+选事件触发，由元智能控制项目负责；不选手动，不选定时作为生成机制。
+
+判据： 用户完全不执行生成命令；任何规定的 State 更新事件发生后，10 分钟内 State 与首页要么更新成功，要么首页明确变成“不可确认”，不存在静默旧页面。
+
+作废条件： 如果所有原生系统未来统一迁入一个支持原子事务/订阅的数据库，可把 state_dirty 改成数据库 CDC 等实现；但“写事实后自动触发、最终回读验证”的责任不作废。
+
+N2｜证据指针的活性
+
+裁定：不要 junction/symlink。证据层改成机器生成的索引页。
+
+这是对基线“不确定点 1”的明确回答：生成索引页，不用文件系统链接，也不复制正文。
+
+当前项目已经实测过链接判活的坑：junction 断掉后，简单 Test-Path 仍可能给出错误存活结果，DEC-06 已要求必须使用真正穿过链接的活性探针。
+GitHub
+ 在这里再造一层 junction，只会重新引入一种没有业务价值的故障模式。
+
+generated\evidence\自成长.md 等页面应从 project.yaml 生成，内容只包括组件身份、职责、当前健康、最后验证时间、关键原生对象索引；L3 才可显示实际路径。Human View 默认本来也禁止展示文件路径。
+GitHub
+
+活性责任
+项目	裁定
+责任主体	元智能项目的 component-health checker
+强制检查	每次 State build 前
+周期检查	每 10 分钟
+判活方式	实际打开组件的已登记 sentinel/SSOT 文件并验证预期结构；不能只判断目录存在
+失败记录	runtime/source-health.json
+页面响应	受影响 Demand 立即标“状态不可确认”，不继续展示旧现状
+报给谁	先自动创建本地故障 Task 给执行 Agent；只有需要人工决策才进首页 Decision Queue
+
+所以即使 Obsidian 完全不跟随 symlink 的搜索、反链和图谱，架构也不受影响——我们根本不依赖它跟随。
+
+判据： 删除或改名任一已注册组件的关键 SSOT，最长 10 分钟内必然出现机器故障状态；用户无需检查链接。
+
+作废条件： 如果未来 Obsidian/文件系统提供经过本机实测、可可靠索引并自动管理生命周期的虚拟挂载，而且它显著降低维护成本，再评估；在当前 946 条死链背景下不采用。
+
+N6｜迁移顺序与红线
+
+第一步最小可逆动作：只创建新的 D:\Work\元智能\ 控制项目和 project.yaml，接入现有系统为只读输入，在 generated-staging\ 做旁路生成。此时不移动、不重命名、不删除任何旧文件，也不切换用户入口。
+
+这是最小风险动作，因为规范也要求先实现最小闭环，并明确“不因一次失败扩大架构”。
+GitHub
++1
+
+迁移顺序定为：
+
+阶段	必须完成后才进下一步
+1. 注册	project.yaml 能定位三系统，并通过 health check
+2. Demand	在 machine\demands\ 建 D-001~D-003 真源；事实仓/Obsidian 只生成
+3. 关联	给所有现存 Task/Experiment 补 demand_id
+4. 旁路	生成 State + 首页，但旧入口不动
+5. 实测	做一次真实 Demand version 变化，完整传播 Task/Experiment → State → Human View
+6. 切入口	通过后才让新的 00_首页.md 成为默认入口
+7. 去旧写口	最后才停止旧的重复 State/Human View 写入，留下只读兼容期
+demand_id：要不要回填
+
+要。
+
+所有非终止 Task、所有正在进行/可继续的 Experiment 在切换入口前必须有 demand_id；否则系统无法满足“Task 必须明确服务于某个 Demand”的规范，也无法实现 D-003 要求的 Demand → State → Task/Experiment 确定链路。
+GitHub
++1
+
+历史终止记录也应自动批量回填；不能可靠归属的历史项进入 unresolved-migration 队列，不允许执行模型凭猜测绑定。活动项存在一个无法归属，就阻断正式切换。
+
+绝对不许动
+
+本轮迁移中：现有两个执行引擎根路径不搬；各子库 .git 结构不合并；正式技能库物理位置不搬；下游契约/探针 SSOT 不迁；事实层仓不升格为本地写真源；不批量创建 junction；不让生成器反向修改任何原生执行事实。这与 D-003 的“不吞并执行真源”和草案记载的现状边界一致。
+GitHub
++1
+
+直接回滚信号
+
+出现以下任一类即撤掉新入口、回到原有系统继续运行：产生第二份可写 Demand；生成器修改了原生真源；活动 Task/Experiment 无法唯一绑定 Demand；一次真实 Demand 升版超过 10 分钟既没有新页面也没有明确故障页；生成后的首页与 State input_hash/state_id 不一致；接入新项目造成既有 Git/技能解析/探针失效；同一 State 字段存在不可自动消解的同级权威冲突。
+
+回滚简单的前提，就是前五阶段不搬旧目录：撤掉默认入口和新控制项目即可，执行系统本身未被破坏。
+
+对基线三个“不确定点”的最终定案
+问题	裁定
+指针还是生成索引页	生成索引页；禁止 junction/symlink 作为证据层结构
+Demand 台账真源在哪	D:\Work\元智能\machine\demands\；事实层和 Obsidian 均为投影
+谁触发生成	元智能事件机制；所有权威写入器发 state_dirty，生成后必须回读校验；10 分钟 watchdog 只负责发现漏触发
+
+因此，这一轮我对 LOCAL_DRAFT_ENTRY_LAYOUT.md 的总裁定是：“三引擎原地不动”保留；“另建统一项目”保留；但这个新项目不能只是 Obsidian 入口壳。它必须升级为整个融合系统的机器控制平面，Human View 只是它的一个 generated 输出。
