@@ -1,4 +1,4 @@
-【交付号】FACTS-DELIVERY-a8d6a079   （= 生成本包时的基线提交号，每轮重新生成都会变）
+【交付号】FACTS-DELIVERY-e4cf7200   （= 生成本包时的基线提交号，每轮重新生成都会变）
 【粘贴说明】这是 meta-intelligence-facts 仓库的第一个材料包：治理层 7 个文件的完整内容，按阅读顺序拼接。
 配套第二个包 ALL_SPEC_DOCS.md（规范层 55 个文件）。两个包合起来覆盖全部阅读清单。
 读取方式：直接访问本仓 raw URL（公开）。失败按《作答要求》第 0 条重试，最多 3 次、间隔 15 秒。
@@ -358,6 +358,7 @@ https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/ALL_SPE
 | DEC-24 | 迁移期双写的机器判据：**machine 永远胜，公开层绝不反向合并**。每个投影登记 `source / source_sha256 / projection_sha256 / generator_version / build_id`；每次收尾与每次 pre-push 执行"读源算哈希 → 临时目录重渲染 → 比对期望与实际投影"，两条件任一失败即 exit 非 0 并禁止打包 push。不一致时先把异常版本复制到 `runtime/divergence/<时间戳>/` 留证，再用 machine 真源覆盖 | 2026-09-26 | 高智力模型裁定（第 5 轮 P3）。这套比对还能区分两类错误：源变了投影没变=投影陈旧；源没变而实际≠重渲染=公开层被手改 | 公开仓被正式升格为 canonical 并同时撤销 machine 原件，才允许反转权威方向；当前架构下绝不双向同步 |
 | DEC-25 | **第一版不加 manifest**（文件数/字节数/SHA-256）。触发条件：出现一次可复现案例——三项本轮 nonce 全匹配，但中间内容缺失、串包或与本地 bundle 不一致。届时加独立 manifest，仍不替代三个 nonce | 2026-09-26 | 高智力模型裁定（第 5 轮 P5）。现在加只能覆盖一个尚未出现过的中段损坏故障模式，违反"不因假设性风险增加维护复杂度" | 发布或抓取通道自身提供可在接收侧核验的端到端内容哈希时，无需自建 |
 | DEC-26 | **EXPERIMENTS 纳入 State 输入**。每份实验按既有 schema 补可解析字段（`id / demand_id / hypothesis / baseline / candidate / status`）；`planned|running` 进 `active_experiments`，`completed|cancelled` 不进，其结果进 `recent_changes`。语义固定：**`[]` 表示机器确认当前无活动实验，`null` 表示生成器不知道**，二者不得混用 | 2026-09-26 | 高智力模型裁定（第 5 轮 P4）。今天已真实产出两份实验，规范把 Experiment 定为 V1 一等对象且 State 明确含"当前实验"，继续写 null 等于用"不知道"冒充"没有" | 实验不再是一等运行对象且生命周期被另一正式对象完全取代，才移出输入；当前 V1 规范下不能省 |
+| DEC-27 | 事件覆盖判据固定：State 必须记录 `changed_inputs` 与 `change_kind`，能区分本次变化来自 demand / task / decision / 实验 / 组件健康；归因不出来即视为生成器缺陷，不得当作"无变化" | 2026-09-26 | CT-12 实测：只改 `TASKS.yaml` 时归因精确为 `["tasks/TASKS.yaml"]`、kind 为 `task`，D-003 活动任务由 5 变 4、下一步自动换成 CT-05。DEC-22 要求两类事件都过，本条覆盖 Task 与 Decision 两类 | 若输入集合扩张到无法穷举哈希（例如新增未登记的真源），必须先扩登记再谈归因 |
 | DEC-15 | **判定可信度进入 V1 完成条件**：会写 State、触发动作或出正式结论的判定器须有正负样本哨兵、数值范围与合计不变量、至少一种独立交叉验证；`self_test` 失败一律 fail-closed | 2026-09-25 | 规范主循环本就要求"结果可靠吗"；实测已出现"结构完整但语义错误"的产出 | 明确只作草稿、不进 State/Decision/动作的输出可降到非阻断验证 |
 
 
@@ -723,7 +724,7 @@ D:\Work\元智能\                 ← 唯一入口，新项目，独立 git
 
 ########## 作答要求（务必遵守） ##########
 0. 回答的**第一行**必须原样输出本轮三项回读凭证，用竖线分隔：
-   FACTS-DELIVERY-a8d6a079 | CORE-TAIL-0653E209 | SPEC-TAIL-240A42EB
+   FACTS-DELIVERY-e4cf7200 | CORE-TAIL-ADE5914D | SPEC-TAIL-E62A160D
    CORE_TAIL 在本包最后一行，SPEC_TAIL 在第二个包的最后一行。三项缺任意一项即判"材料未完整送达"，本轮不要作答，只回这六个字并说明缺哪项。
    这是送达闸门，替代"我 push 了 = 你拿到了"这个错误等式；不许转述、不许凭上一轮记忆。
    每个链接最多试 3 次、间隔 15 秒；3 次仍失败就照抄工具返回的报错原文，不要概括成中文。
@@ -740,4 +741,4 @@ D:\Work\元智能\                 ← 唯一入口，新项目，独立 git
 9. 输出用中文，结构化，能表格化就不写长段落。你的结论需要可执行：给判据、给优先级、给"什么情况下这个结论作废"。
 
 
-【本包尾凭证】CORE-TAIL-0653E209
+【本包尾凭证】CORE-TAIL-ADE5914D
