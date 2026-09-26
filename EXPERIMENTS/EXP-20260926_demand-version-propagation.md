@@ -1,5 +1,10 @@
 # EXP-20260926_demand-version-propagation
 
+exp_id: EXP-20260926_demand-version-propagation
+demand_id: D-003
+status: completed
+
+
 - **hypothesis**：改一次 Demand 的版本，十分钟内"受影响 Task 被重新判断 → State 重生成 → 首页更新"三处自动成立；若不成立，说明"三套系统变成一个项目"只是叠了层皮。
 - **baseline**：升版前 `generated/state/D-002.json` 为 `demand_version: 1`、`input_hash: 5e7980d3991d`、活动任务 8 项、`task_recheck_required: 0`；首页无待重判行。此前该链路从未被真实触发过，只有阶段 2 的一次哈希对比（那只能证明确定性，证明不了传播）。
 - **candidate**：`runners/build_state.mjs` 读上一份 State 快照比对版本，变化即把该 Demand 下全部活动任务列入待重判，并同步渲染进首页与 `CURRENT_STATE.md`；另落一份追加式队列 `machine/recheck_queue.md`。

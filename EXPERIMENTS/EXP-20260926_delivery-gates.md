@@ -1,5 +1,10 @@
 # EXP-20260926_delivery-gates
 
+exp_id: EXP-20260926_delivery-gates
+demand_id: D-002
+status: completed
+
+
 - **hypothesis**：把"送达判据 = 三项回读凭证齐"从文档里的话变成一段可执行校验后，凭证缺失的送审轮次会被机器阻断，而不是靠人记得去看首页第一行。
 - **baseline**：当前契约 `contracts/gpt-mirror-extended-review.yaml` 有 8 conditions / 11 gates，**没有任何一条关于"材料是否真被读到"**；送审 skill 有 11 条闸门 + 10 条禁止事项，同样没有。今天的实际后果：同一链路上一整天的故障全靠人手工做对照实验定位，且我连错五次因果。
 - **candidate**：新增 `runners/verify_delivery.mjs`，输入对方回答原文 + 本地 `.delivery_nonces.json`，输出 pass/fail 与缺失项；契约与 skill 各加一条 `delivery_readback` 闸门，规定"三项缺一即判未送达、阻断正式作答"。

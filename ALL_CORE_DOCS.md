@@ -1,4 +1,4 @@
-【交付号】FACTS-DELIVERY-d37c770b   （= 生成本包时的基线提交号，每轮重新生成都会变）
+【交付号】FACTS-DELIVERY-a8d6a079   （= 生成本包时的基线提交号，每轮重新生成都会变）
 【粘贴说明】这是 meta-intelligence-facts 仓库的第一个材料包：治理层 7 个文件的完整内容，按阅读顺序拼接。
 配套第二个包 ALL_SPEC_DOCS.md（规范层 55 个文件）。两个包合起来覆盖全部阅读清单。
 读取方式：直接访问本仓 raw URL（公开）。失败按《作答要求》第 0 条重试，最多 3 次、间隔 15 秒。
@@ -280,7 +280,7 @@ https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/ALL_SPE
 
 ## 五、下一步
 
-0. **融合阶段 3a 已完成**（2026-09-26）：两个看板 34 条目逐条判定，13 条无法归属被归因到 Demand 集合缺口；外部裁定新增 **D-004**、允许 `scope: local`、授权控制平面自持 `machineTASKS.yaml`。首页已能派生「下一步 / 活动任务 / 阻断项」。**CT-04 与 CT-09 已完成**：两个看板先建 git 基线（b7d37b4），再各追加一节机器可读 `task_bindings`（35 条，表格本体未动，删除行数 0）。首页已能派生跨系统活动任务：D-001 2／D-002 8／D-003 5／D-004 10。**CT-11 已完成**：送达判据成为可执行校验 `verify_delivery.mjs`（自检 4/4 + 真实产物正负例），契约 v1→v2 加两条闸门（标 `verified_at: null` 待下一轮真实送审确认），skill 与看板 T11/T14 同步补判据。**CT-06 已实测通过**（D-002 v1→v2，五项判据全中、耗时 <1 秒，见 `EXPERIMENTS/EXP-20260926_demand-version-propagation.md`），并因此补上追加式重判队列 —— 原先标记会在下次构建归零，等于信号闪一下就没了。（2026-09-26）：见下条。（2026-09-25 深夜）：Demand 真源迁至 `D:Work元智能machinedemands`，生成链 `check_components → build_state` 跑通，确定性、升版传播、fail-closed 三条均已实测。下一步阶段 3：给两个看板与现存 Task 回填 `demand_id`。
+0. **融合阶段 3a 已完成**（2026-09-26）：两个看板 34 条目逐条判定，13 条无法归属被归因到 Demand 集合缺口；外部裁定新增 **D-004**、允许 `scope: local`、授权控制平面自持 `machineTASKS.yaml`。首页已能派生「下一步 / 活动任务 / 阻断项」。**CT-04 与 CT-09 已完成**：两个看板先建 git 基线（b7d37b4），再各追加一节机器可读 `task_bindings`（35 条，表格本体未动，删除行数 0）。首页已能派生跨系统活动任务：D-001 2／D-002 8／D-003 5／D-004 10。**第 5 轮（阶段 6~7 收口）裁定已入库**：DEC-22~26；`delivery_readback` 首次真实通过并转正，`fetch_retry_budget` 保持未验证；EXPERIMENTS 已纳入 State 输入（`[]` 与 `null` 语义定死）；入口切换真实前置是 3 项阻断（CT-07/CT-12/CT-13）。此前 **CT-11 已完成**：送达判据成为可执行校验 `verify_delivery.mjs`（自检 4/4 + 真实产物正负例），契约 v1→v2 加两条闸门（标 `verified_at: null` 待下一轮真实送审确认），skill 与看板 T11/T14 同步补判据。**CT-06 已实测通过**（D-002 v1→v2，五项判据全中、耗时 <1 秒，见 `EXPERIMENTS/EXP-20260926_demand-version-propagation.md`），并因此补上追加式重判队列 —— 原先标记会在下次构建归零，等于信号闪一下就没了。（2026-09-26）：见下条。（2026-09-25 深夜）：Demand 真源迁至 `D:Work元智能machinedemands`，生成链 `check_components → build_state` 跑通，确定性、升版传播、fail-closed 三条均已实测。下一步阶段 3：给两个看板与现存 Task 回填 `demand_id`。
 1. **融合阶段 1 已完成**（2026-09-25 深夜）：`D:Work元智能` 控制平面建立，三组件注册 + 判活 + 回读校验跑通，旧文件未动。下一步是阶段 2 —— Demand 真源迁入 `machinedemands`、生成脚本产出 State 与首页。
 
 1. 高智力模型给出三套系统的融合判断（本轮请求，见 `ISSUES.md`）。**材料以对话附件提供** —— 它的抓取层不回源，发 URL 无效（见 §六）。回答第一行须原样复述本轮交付号 `FACTS-DELIVERY-<提交前 8 位>`，否则判定没读到材料。
@@ -353,6 +353,11 @@ https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/ALL_SPE
 | DEC-19 | 新增 **D-004「经验资产的质量与可复用性」**，不并入 D-001 | 2026-09-26 | 高智力模型裁定（第 4 轮）。上游九条核心任务无处归属，暴露的是 Demand 集合缺一块，不是判定失误；塞进 D-001 会把「治理」与「质量」混成垃圾桶。边界判据：问「这条经验对不对、有用吗、可复用吗」归 D-004；问「这份资产唯一吗、可控吗、可追踪吗」归 D-001 | 只有 D-001 正式升版并把经验质量纳入自己的独立 success_state、且 D-004 不再有独立生命周期与指标时，才合并 |
 | DEC-20 | Task 归属规则修正：`demand_id` **只允许真实 Demand ID**；系统内部建设改用 `scope: local` + `system_id` + `demand_id: null`。局部 Task 不进任何 Demand 的 `active_tasks`，只有真正阻塞时才以 `blocking_dependency` 出现 | 2026-09-26 | 高智力模型裁定（第 4 轮）。「所有 Task 必须挂 Demand」是过强约束，硬挂等于逼执行模型伪造归属 —— 那正是 946 死链式的静默污染 | 一旦某 local 任务开始改变跨系统契约、用户级能力或某 Demand 的成功条件，必须转 global 并绑真实 Demand |
 | DEC-21 | 控制平面自持原生 Task 台账 `D:\Work\元智能\machine\TASKS.yaml`（阶段 3~7 等，绑 D-003/D-004），**不把两个引擎看板的条目抄进来** | 2026-09-26 | 高智力模型裁定（第 4 轮）。判据：谁实际拥有执行与完成判定，谁持有该 Task 的原生记录。不违反「不新增第五份可写状态真源」—— 它不是第二份 Current State，也不复制他系统 Task；违规的是把下游 Task 抄一份形成双写 | 若未来建立全系统唯一 Task 服务并完成迁移、旧台账退役，则并入；在此之前不跨系统借看板 |
+| DEC-22 | 切默认入口的前置条件固定为四项：CT-05（普通 Task/Decision 变化也要走通 State→首页）、T15/T16 退出 active blocker、State 已知缺口消失（见 DEC-26）、切换与回滚脚本实测通过。**切换不移除任何旧路径**：`Home.md` 原地改成生成的兼容入口并指向新首页，Obsidian 默认打开文件指向新首页 | 2026-09-26 | 高智力模型裁定（第 5 轮 P1）。规范只要求 Obsidian 有一个默认 Human View，没要求物理移动旧页面；移动才会制造断链 | 切换后出现旧链接失效、首页比 State 旧、生成失败仍展示正常状态、或任一 active 全局 Task 无可靠归属 → 立即 rollback |
+| DEC-23 | 去旧写口顺序固定 **CHANGELOG → DEMAND → DECISIONS → ISSUES**（ISSUES 最后）。生成频率分两层：Agent 收尾刷 machine 并重生成四份投影；**准备送审时无条件再生成一次**，再出 CORE/SPEC、掩码扫描、freshness 校验，全过才允许 commit/push | 2026-09-26 | 高智力模型裁定（第 5 轮 P2）。ISSUES 是外部模型的实时输入，生成时机错一轮就会让它回答旧问题；CHANGELOG 只是已发生事项，迁移错误即时影响最小 | 某文件存在 machine 原件未承载、而公开旧文件独有的有效事实 → 停止迁移，先把事实迁回 machine，不许靠继续双写解决 |
+| DEC-24 | 迁移期双写的机器判据：**machine 永远胜，公开层绝不反向合并**。每个投影登记 `source / source_sha256 / projection_sha256 / generator_version / build_id`；每次收尾与每次 pre-push 执行"读源算哈希 → 临时目录重渲染 → 比对期望与实际投影"，两条件任一失败即 exit 非 0 并禁止打包 push。不一致时先把异常版本复制到 `runtime/divergence/<时间戳>/` 留证，再用 machine 真源覆盖 | 2026-09-26 | 高智力模型裁定（第 5 轮 P3）。这套比对还能区分两类错误：源变了投影没变=投影陈旧；源没变而实际≠重渲染=公开层被手改 | 公开仓被正式升格为 canonical 并同时撤销 machine 原件，才允许反转权威方向；当前架构下绝不双向同步 |
+| DEC-25 | **第一版不加 manifest**（文件数/字节数/SHA-256）。触发条件：出现一次可复现案例——三项本轮 nonce 全匹配，但中间内容缺失、串包或与本地 bundle 不一致。届时加独立 manifest，仍不替代三个 nonce | 2026-09-26 | 高智力模型裁定（第 5 轮 P5）。现在加只能覆盖一个尚未出现过的中段损坏故障模式，违反"不因假设性风险增加维护复杂度" | 发布或抓取通道自身提供可在接收侧核验的端到端内容哈希时，无需自建 |
+| DEC-26 | **EXPERIMENTS 纳入 State 输入**。每份实验按既有 schema 补可解析字段（`id / demand_id / hypothesis / baseline / candidate / status`）；`planned|running` 进 `active_experiments`，`completed|cancelled` 不进，其结果进 `recent_changes`。语义固定：**`[]` 表示机器确认当前无活动实验，`null` 表示生成器不知道**，二者不得混用 | 2026-09-26 | 高智力模型裁定（第 5 轮 P4）。今天已真实产出两份实验，规范把 Experiment 定为 V1 一等对象且 State 明确含"当前实验"，继续写 null 等于用"不知道"冒充"没有" | 实验不再是一等运行对象且生命周期被另一正式对象完全取代，才移出输入；当前 V1 规范下不能省 |
 | DEC-15 | **判定可信度进入 V1 完成条件**：会写 State、触发动作或出正式结论的判定器须有正负样本哨兵、数值范围与合计不变量、至少一种独立交叉验证；`self_test` 失败一律 fail-closed | 2026-09-25 | 规范主循环本就要求"结果可靠吗"；实测已出现"结构完整但语义错误"的产出 | 明确只作草稿、不进 State/Decision/动作的输出可降到非阻断验证 |
 
 
@@ -718,7 +723,7 @@ D:\Work\元智能\                 ← 唯一入口，新项目，独立 git
 
 ########## 作答要求（务必遵守） ##########
 0. 回答的**第一行**必须原样输出本轮三项回读凭证，用竖线分隔：
-   FACTS-DELIVERY-d37c770b | CORE-TAIL-A223C18B | SPEC-TAIL-EB683A9C
+   FACTS-DELIVERY-a8d6a079 | CORE-TAIL-0653E209 | SPEC-TAIL-240A42EB
    CORE_TAIL 在本包最后一行，SPEC_TAIL 在第二个包的最后一行。三项缺任意一项即判"材料未完整送达"，本轮不要作答，只回这六个字并说明缺哪项。
    这是送达闸门，替代"我 push 了 = 你拿到了"这个错误等式；不许转述、不许凭上一轮记忆。
    每个链接最多试 3 次、间隔 15 秒；3 次仍失败就照抄工具返回的报错原文，不要概括成中文。
@@ -735,4 +740,4 @@ D:\Work\元智能\                 ← 唯一入口，新项目，独立 git
 9. 输出用中文，结构化，能表格化就不写长段落。你的结论需要可执行：给判据、给优先级、给"什么情况下这个结论作废"。
 
 
-【本包尾凭证】CORE-TAIL-A223C18B
+【本包尾凭证】CORE-TAIL-0653E209

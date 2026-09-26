@@ -643,3 +643,182 @@ C 类 T15/T16 → 继续 unresolved / blocked
 控制平面阶段 3~7 → 写入控制平面 TASKS.yaml，绑定 D-003
 
 最终只要仍有活动且应该属于全局目标、但无法确定 Demand 的任务，入口切换就继续阻断。
+
+---
+
+## 第 5 轮 · 2026-09-26 · 阶段 6~7 收口（P1~P5）
+
+**送达核对（本文件是 `delivery_readback` 闸门的第一次真实判定）**：`verify_delivery.mjs` 对本轮回答判 **pass**，三项凭证齐 —— `FACTS-DELIVERY-d37c770b | CORE-TAIL-A223C18B | SPEC-TAIL-EB683A9C`。高智力模型在 P5 中据此认可该闸门首次真实通过。
+
+**读取侧第三次缺陷（本轮实际踩到，值得留档）**：提取脚本连续把**上一轮**的回答当成本轮读出来（"取最长非空节点"的旧修法在新一轮更短时会抓错），随后又出现最新消息节点读到 0 字 —— 因为滚动只滚了容器、没把最新消息滚进视口。两处都已修（`66ef5f1` 之后再次修改）：改为"从末尾取第一个非空节点"，并把滚动改成"最后一条 assistant 消息 scrollIntoView + 点页面自带的跳到最新按钮"。**校验器在这两次误读中都判了 fail 并拒绝采信**，这正是它存在的意义：错的是我读，不是它答。
+
+### 正文（逐字）
+
+FACTS-DELIVERY-d37c770b | CORE-TAIL-A223C18B | SPEC-TAIL-EB683A9C
+
+P1｜切默认入口
+
+结论：现在还不能直接切；CT-05 必须补完，但不需要“跑几天”。T15/T16 不必解决业务方向，只需退出 active blocker。
+
+切换前同时满足：
+
+CT-05 事件覆盖通过：至少验证一次普通 Task/Decision 变化 → State → Human View；Demand 升版链路已由 CT-06 覆盖。两类都必须生成成功、回读成功、source fingerprint 一致。规范要求 Task、Demand、Decision 等关键变化后刷新 State/Human View。
+GitHub
++1
+
+T15/T16 明确冻结：继续留 unresolved-migration，但必须是非 active 状态，不得进入 D-003 active_tasks。此前 DEC-20 已规定不能伪造 Demand 归属。
+GitHub
+
+已知 State 缺口消失：尤其 P4 的真实 Experiment 已存在时，active_experiments 不能继续靠 null 冒充“没有实验”。
+
+新首页生成、回读、旧入口兼容、回滚脚本四项全部实测通过。
+
+切换方法：不要移动或删除旧路径。 保留现有 Home.md 路径，把它改成生成的兼容入口，内容只指向/嵌入新的 元智能/00_首页.md；Obsidian 默认打开文件改成新首页。所有现在指向 Home.md 的链接因此继续有效，旧子库页面暂时也原地保留。规范只要求 Obsidian 有一个默认 Human View，并未要求物理移动旧页面。
+GitHub
+
+切换前保存：
+
+runtime/cutover/<build_id>/
+  Home.md
+  obsidian-startup-config
+  cutover.json
+
+实现一个：
+
+cutover.ps1 -Apply
+cutover.ps1 -Rollback <build_id>
+
+-Rollback 一次恢复旧 Home.md 和默认打开配置；控制平面、State、生成物全部不删。
+
+判据： 用户沿任何旧入口都不会遇到断链；新入口显示的 build_id/source_fingerprint 与刚回读的 State 相同；T15/T16 不再是 active blocker。
+
+作废条件： 切换后出现旧链接失效、首页比 State 旧、生成失败仍展示正常状态，或任何 active 全局 Task 无可靠归属，立即一键 rollback。
+
+P2｜去旧写口的顺序
+
+顺序定为：CHANGELOG → DEMAND → DECISIONS → ISSUES。ISSUES 最后。
+
+原因：CHANGELOG 是已发生事项的记录，迁移错误即时影响最小；DEMAND/DECISIONS 是长期语义和治理约束；ISSUES 是当前送给高智力模型的实时问题输入，如果生成时机错一轮，会直接让外部模型回答旧问题，所以必须等整条发布 freshness gate 已经实测后再撤掉它的旧写口。控制平面作为这些文件的 machine 真源、公开仓仅作投影已经由 DEC-16 定案。
+GitHub
+
+生成频率不是“每天”或“push 前二选一”，而是两层：
+
+每次 Agent 收尾
+→ refresh machine state
+→ 重生成四份投影
+
+每次准备送审
+→ 无条件再生成一次
+→ CORE/SPEC
+→ 掩码扫描
+→ freshness 校验
+→ 才允许 commit/push
+
+发布前必须重新计算当前 machine 输入指纹，并要求：
+
+projection.source_fingerprint == current_machine_fingerprint
+bundle.build_id == projection.build_id
+
+任一不等即阻断。这样不存在“本轮 machine 已改，但拿昨天投影生成送审包”的窗口。DEC-17 已规定生成事务到 CORE/SPEC + 扫描为止，扫描失败必须阻断。
+GitHub
+
+判据： 每撤掉一个旧写口，生成器必须能从 machine 原件独立重建该文件，并通过 P3 的精确校验；否则不迁下一份。
+
+作废条件： 某文件存在 machine 原件没有承载、而公开旧文件独有的有效事实，立即停止迁移；先把事实迁回 machine 真源，不能靠继续双写解决。
+
+P3｜迁移期双写的机器判据
+
+结论：machine 永远胜；公开事实层绝不反向合并。每个投影执行“源哈希 + 重渲染字节比对”。
+
+给每个投影登记：
+
+YAML
+source: machine/ISSUES.md
+source_sha256: ...
+projection_sha256: ...
+generator_version: ...
+build_id: ...
+
+每次 Agent 收尾以及每次 pre-push都执行：
+
+1. 读 machine 原件，算 source_sha256
+2. 在临时目录重新 render
+3. 算 expected_projection_sha256
+4. 读取事实层现有文件，算 actual_projection_sha256
+5. 要求：
+   manifest.source_sha256 == 当前源 hash
+   expected_projection_sha256 == actual_projection_sha256
+
+两个条件任一失败即 exit != 0，禁止打包和 push。
+
+这还能区分两类错误：
+
+source hash 已变、投影没变 → 投影陈旧
+
+source hash 没变、实际投影 ≠ 重新 render → 事实层被手改
+
+发现不一致时：先把事实层异常版本复制到本地 runtime/divergence/<timestamp>/ 留证，然后用 machine 真源重新生成覆盖；禁止把差异 merge 回 machine。DEC-16 已明确 machine 是语义真源、公开仓是生成投影。
+GitHub
+
+多久检查：不按时间。 每次 machine 写事务收尾一次 + 每次 pre-push 强制一次。只要发现第一个能够写真源却绕过收尾流程的程序，按 DEC-18 立即补 10 分钟 watchdog。
+GitHub
+
+判据： 四个公开文件全部能由 machine 原件重新渲染成完全相同结果；任意手改一字符，下一次检查必须稳定失败。
+
+作废条件： 若公开仓未来被正式升格为 canonical 真源并同时撤销 machine 对应原件，才允许反转权威方向；当前架构下绝不双向同步。
+
+P5｜送达闸门要不要现在加 manifest
+
+结论：现在不加；等第一次出现“本轮三项凭证全部正确，但包内内容仍被证明不完整/错误”时再加。
+
+本轮三项凭证已经实际证明：CORE 首部、CORE 尾部、SPEC 尾部都来自当前交付，因此 CT-11 的 delivery_readback 可以把本轮登记为首次真实通过。现有规则也明确三项凭证是当前正式送达判据。
+GitHub
++1
+
+现在增加“文件数 + 字节数 + SHA-256”只能覆盖一个尚未出现过的中段损坏故障模式，而第一版原则要求不因假设性风险增加维护复杂度。
+GitHub
+
+加 manifest 的触发判据： 发生一次可复现案例——三项本轮 nonce 全匹配，但模型读到的中间内容缺失、串包或与本地 bundle 不一致。届时加独立 manifest，记录两个 bundle 的字节数、SHA-256、源文件清单/数量；仍不替代三个 nonce。
+
+作废条件： 如果发布/抓取通道以后直接提供经过验证的端到端内容哈希，并能在接收侧核验，则无需自建 manifest。
+
+P4｜active_experiments 字段缺口
+
+结论：现在就把 EXPERIMENTS 纳入生成输入。不是继续承认派生不出来。
+
+理由不是“规范里有这个字段”这么简单，而是今天已经真的产生两份 Experiment。规范把 Experiment 定义为 V1 一等对象，State 明确包含“当前实验”，而现有 experiment schema 已经定义了足够的机器字段。
+GitHub
++1
+
+不要新造总表。把每份 Experiment 按已有 schema 补成可解析结构，至少：
+
+YAML
+id:
+demand_id:
+hypothesis:
+baseline:
+candidate:
+status: planned|running|completed|cancelled
+
+这些正是现有 schema 的 required 字段。
+GitHub
+
+生成规则：
+
+status = planned / running
+→ 进入该 Demand.active_experiments
+
+status = completed / cancelled
+→ 不进入 active_experiments
+→ 结果可进入 recent_changes / Archive
+
+因此没有活动实验时输出：
+
+JSON
+"active_experiments": []
+
+而不是 null。null 表示“生成器不知道”，[] 才表示“机器确认目前没有活动实验”。
+
+判据： 只要存在一个非终止 Experiment，或者 Experiment 的结果会改变 strategy / next_step / Decision，就必须成为结构化 State 输入。当前已经满足。
+
+作废条件： 如果将来 Experiment 不再是一等运行对象，且其生命周期被另一正式对象完全取代，才移出 State 输入；在当前 V1 规范下不能省略。
