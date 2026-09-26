@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## 2026-09-27（之二）· CT-13 落地：入口切换机制找到了真凭据，回滚已往返实测
+
+### 机制不是猜的
+
+`app.json` 里只有 `promptDelete`，说明"默认打开哪个文件"从来不是这台机器的设置项。从 `D:\obsidian\resources\obsidian.asar` 里读到 `openBehavior").startsWith("file:")` —— Obsidian 的 vault 配置支持 `openBehavior: "file:<相对路径>"`，值域里另有 `"daily"`，默认空串表示沿用上次打开的页。这就是 DEC-22 要的"默认打开新首页"，且它是纯文件写、可字节还原，不用装插件、不用碰 `workspace.json`。
+
+### 实现了什么
+
+`元智能/runners/cutover.ps1 -Apply|-Rollback <build_id>|-Status|-SelfTest`（PowerShell 只做接口，逻辑在 `cutover.mjs`，避免 PS5.1 写 UTF-8 BOM 打坏 app.json）。Apply 做两件事：调生成器把 `Home.md` 写成兼容入口（新增 `--entry` 参数，正文仍 100% 生成、人写内容依然为 0），再把 `openBehavior` 指到 canonical 首页；两件都回读校验，任一不过**当场自动回滚**。切换前把 `Home.md` 与 `app.json` 原样存进 `runtime/cutover/<build_id>/`，回滚按哈希比对还原，备份自身哈希不符就拒绝回滚。
+
+### 实测到哪一步（这条必须说清）
+
+- **已过**：沙箱 apply→rollback 往返，两件文件字节级还原；`Home.md` 真件哈希全程未变（`e69811880829e062`）；Obsidian 正在运行时 Apply 被前置闸门拦下，退出码 2；`--rollback` 不带 id 不再把 `--latest` 当 build_id（写的时候就错了，测出来才改）。
+- **未过**：**在线 Apply 一次没跑过** —— Obsidian 正在运行，脚本按设计拒绝。所以 DEC-22 第四项前置"切换与回滚脚本实测通过"仍**不成立**，CT-07 不能开始。CT-13 状态记为 `进行中`，不记完成。
+
+### 顺手修掉一个恒真的自检
+
+`build_home_projection.mjs` 原来的 `idempotent` 是 `again === proposed`，而 `again` 与 `proposed` 是同一段拼接的两次书写 —— 它永远为真，抓不到任何东西。改成把输出重新喂回 `render()`，要求一字不变；并给 `home-projection.json` 补了真实的 `proposed_sha256`（原来是 `长度:长度` 的假哈希）。这是 T4 那一问在本地被自己命中的一次。
+
+
 ## 2026-09-27（之一）· 00:20 自查：送达闸门被自己的《作答要求》旁路了
 
 ### 缺陷
