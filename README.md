@@ -26,7 +26,7 @@ https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/ALL_COR
 https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/ALL_SPEC_DOCS.md
 ```
 
-前者是治理层 7 个文件（约 46 KB），后者是规范层 55 个文件（约 200 KB），合起来就是全部阅读清单。两个副本由脚本从本仓**已掩码**文件拼接生成，改任一源文件后必须用 `build_core_bundle.js` / `build_spec_bundle.js` 重新生成。
+前者是治理层 8 个文件（约 46 KB），后者是规范层 55 个文件（约 200 KB），合起来就是全部阅读清单。两个副本由控制平面的正典打包器 `元智能/runners/build_bundles.mjs` 从本仓**已掩码**文件拼接生成，改任一源文件后必须用它重新生成（见 DEC-33）。
 
 **但这个通道会间歇失败，且机制未知。** 实测：同一条 URL 可在数小时内每次返回 `Cache miss`，之后某个时刻起首次即 200；成败与仓库、内容、体积（139 B～200 KB 两端都出现过两种结果）、中文路径、`main` 还是 SHA、新会话还是会话延续、这条 URL 此前有没有被请求过 —— **统统无关**。完整探针账目见 `CURRENT_STATE.md` §六。那一天我给出过五条因果（缓存优先 / size 滞后 / 按仓绑定 / 按内容判定 / 需异步预热），全部被后续实测否掉，所以这里不写机制，只写闸门：
 
@@ -34,7 +34,7 @@ https://raw.githubusercontent.com/201650545/meta-intelligence-facts/main/ALL_SPE
 |---|---|
 | 重试 | 每条 URL 最多 3 次、间隔 15 秒；三连败即判该材料"未送达"，阻断作答，不换承载 |
 | 送达确认 | 对方回答第一行须原样输出**三项凭证**：`FACTS-DELIVERY-*`（CORE 首行）+ `CORE-TAIL-*`（CORE 末行）+ `SPEC-TAIL-*`（SPEC 末行）。缺任一项 = 材料未完整送达，本轮不作答 |
-| 凭证生成 | 每轮由 `build_core_bundle.js` 随机生成，只存本地 `.delivery_nonces.json`（不入库）。没读到材料就写不出凭证 |
+| 凭证生成 | 每轮由正典打包器 `元智能/runners/build_bundles.mjs` 随机生成，只存本地 `runtime/delivery_nonces.json`（不入库）。没读到材料就写不出凭证 |
 | 换承载 | 只有当某替代承载在连续 3 个交付轮次全部通过、而 raw 在其中 ≥2 轮触发三连败，才迁移默认承载；否则保持 raw |
 
 > 大小只写约数：`ALL_CORE_DOCS.md` 内嵌了本文件，写死字节数会自指（改数字 → 副本变大 → 数字又不对）。

@@ -1,5 +1,54 @@
 # CHANGELOG
 
+## 2026-09-27（之三）· CT-13 在线实测通过；工具链定位、归档与正典裁定
+
+### CT-13 在线实测：Apply / Rollback 真跑过两次
+
+用户关掉 Obsidian 之后真跑，两次都留下四个数（存 `runtime/cutover/<build_id>/cutover.json`；哈希均为 sha256 前 16 位）：
+
+| 轮次 | build_id | Apply 前 `Home.md` | Apply 后 `Home.md` / `app.json` | Rollback 后 |
+|---|---|---|---|---|
+| 1 | `202609270339-321B` | `6cac83171c0fda34` | `3e2d5ee9dda6a962` / `aaf57f0c748f5bab` | 回到 `6cac83171c0fda34` / `9048a6fc08496ddd` |
+| 2 | `202609270349-BFB3` | `6b6c2a61cfa39dcc` | `3e2d5ee9dda6a962` / `aaf57f0c748f5bab` | 回到 `6b6c2a61cfa39dcc` / `9048a6fc08496ddd` |
+
+`app.json` 的 `9048a6fc08496ddd` 就是原状（正文只有 `{"promptDelete": false}`）。
+
+第二轮的 Apply 前基线不再是第一轮的 `6cac…`：这中间 `Home.md` 被整页生成器重写过一遍（见下一节），所以回滚目标是**它当下的字节**。计划里写死"回滚后应回到 `6cac83171c0fda34`"是第一轮的期望值；两轮实测的回滚校验都是按"切换前存档的哈希"比对，不是按计划里的常量。
+
+两次的生成器日志同一组数：`rows=12 盘上表内=12 lost=无 drift=true 手写行=0 未替换占位=无 entry=true applied=true`；盘上复跑 `--check` exit 0（`Home.md 逐行等于生成结果（入口态），人工写入为 0`）；回滚 exit 0 且两处字节级还原（`openBehavior=""`）。canonical 首页 `元智能/generated/human/00_首页.md` = `437ef15fa9fb5fc9`，6435 B，两轮相同。
+
+### 首页整页交给生成器（DEC-30 落地）+ 一道防手写闸门
+
+骨架搬进控制平面（`machine/home_template.md`），`D:\Work\Home.md` 整页重画，人工直接写入的内容为 0。`--check` 是纯只读闸门，排在所有写盘动作**之前**；`--apply` 校验未过就拒绝写盘（实测：手改一行后报 `仍差 1/2 行`、exit 1、文件未动）；`cutover.mjs --apply` 的前置里也接了这道闸门（未过 exit 2，连切换都不开始）。
+
+顺带修掉一个真故障：迁移后的入口态比 HEAD 的产物**少一个空行**（入口横幅字面量末尾缺 `\n`）。证明方式是把 HEAD 的生成器逐字节取到临时文件、在临时副本上跑，得到 `48c6722e424a58d2`，与在线实测的哈希一致；`Compare-Object` 显示两版只差 `> **Work** = 手头工作（9 个子库）…` 这一行。取文件时踩到一个坑：PowerShell 的 `1>文件` 重定向会把 `git show` 的 UTF-8 写成非法字节，只能 `cmd /c "git show HEAD:<路径> > 文件"`。
+
+同一条路径上还落实了一条用户裁定：**「9 个子库」这句计数整句删掉，以后不再写计数**。改的是模板与生成器，不是页面本身 —— 于是 CT-13 又在线上真跑了一遍（上表第二轮），因为入口证据必须对得上当前生成器。
+
+### 仓外工具链：定位、归档、一次 EOL 事故
+
+事实层文档一直点名的 `build_core_bundle.js` / `build_spec_bundle.js` / `stage_facts.js` / `redact_facts.js` / `scan_facts.js` 都不在仓里。本轮找到原件：`C:\Users\郭永涛\Documents\Qoder\2026-09-24\5ff0f6a1\`（编辑器临时工作目录，无版本控制）。三条独立证据：脚本 mtime 与提交 `a96911c` 的说明对得上；同目录的凭证文件与 `runtime/delivery_nonces.json` 逐字节相同；两个副本包首行的交付号等于凭证里的 TOKEN。
+
+原件已归档到控制平面 `machine/discovered/qoder-5ff0f6a1/`（61 件 + `PROVENANCE.md` + `SHA256SUMS`）。归档当场炸出一件事故：仓库 `core.autocrlf=true`，克隆后 63 件证据的哈希全废。已用 `.gitattributes` 对 `machine/discovered/**`、`machine/bundle_templates/**`、`machine/home_template.md` 钉 `-text`，再用 fresh clone 复算 63/63 通过。另发现一份 `.delivery_nonces.json` 混进了归档目录（凭证不该入库），已删除并把它的哈希记进 `PROVENANCE.md` §五。
+
+**正典裁定（DEC-33）**：重建的 `元智能/runners/build_bundles.mjs` 是唯一正典，仓外原件只作证据、不再执行。本轮据此改掉文档里仍指着旧脚本的地方：`README.md` 两处（"必须用 `build_core_bundle.js` / `build_spec_bundle.js` 重新生成"、"凭证生成"一行）、`CURRENT_STATE.md` §六 的送达判据一行。`DECISIONS.md` 的 DEC-11 是历史裁定，不重写正文，只在句末加指针。
+
+**顺带修掉正典打包器自己的一个诊断缺陷**：`--audit` / `--verify` 报"第一处分歧"时把两侧的内容标反了 —— `firstDiff(a, b)` 返回的 `built` / `shipped` 与两个调用点的语义相反（行号、以及"一致 / 不一致"的结论都是对的，只有两侧内容贴反）。这条要紧，是因为 `--verify` 是送达闸门里唯一的字节比对诊断，标反会把人引向错误的一侧排查。本轮改正 `build_bundles.mjs`，并补了一条正样本自检（"第一处分歧的两侧标注不串位"，对旧代码必失败）把语义钉住：`--self-test` 6/6 PASS。顺带记下本轮重建的实测数：`--audit` 6 个文件对不上（正好是 5 个改过的治理层文件 + 1 个规范层看板副本），`--apply` 后 `--verify` 两个包都 `IDENTICAL`。
+
+### 顺带修掉的文档口径与字面错误
+
+- **治理层是 8 个文件，不是 7**：`README.md` 与 SPEC 包序言都写 7 —— 而 CORE 的第一件就是 `README.md` 自己。实际 8 件：`README / REPORT_TO_STRATEGIST / DEMAND / CURRENT_STATE / DECISIONS / ISSUES / LOCAL_DRAFT_FUSION_PLAN / LOCAL_DRAFT_ENTRY_LAYOUT`。两处都改成 8（`bundle_templates/spec_prologue.txt` 一并改，SPEC 包字节因此变化）。
+- **掩码阶段吃掉反斜杠**：`DEMAND.md` 首行的原件路径成了 `D:Work元智能machinedemandsD-00x.yaml`，`CURRENT_STATE.md` §五 有两处同样，在交付包里肉眼可见（`ALL_CORE_DOCS.md:171`、`:283-284`）。本轮按真源写回三处；吃反斜杠的脚本本体仍不在仓里，重跑掩码会再坏一遍 —— 记进 `ISSUES.md`，属 CT-08 原料。
+- **`DEMAND.md` 的成功条件一条没动**：逐条核对 D-001~D-004，本轮没有一条被触及，故不写"需求变化"（不制造假变更）。
+
+### 本轮新发现：事实层里的看板副本既不完整也不新
+
+本仓的 `20_自适应工作流引擎/docs/01-任务看板.md` 是 112 行，真板 `D:\Work\自适应工作流引擎\docs\01-任务看板.md` 是 203 行：文末机器可读台账（`scope` / `demand_id` / `blocked` / `frozen`）整段不在投影里，T11 行也比真板少一句 `delivery_readback` 判据 —— 也就是说，交付包里的这份看板既不是真板的完整掩码版、也不是当下版本。复制 + 掩码这一步由仓外脚本做，本轮不迁移（CT-08 原料）。
+
+本轮只做最小同步：**T15/T16 两行在真板与本仓副本里都改成「已冻结」**（冻结裁定见 DEC-32），原阻塞事实照旧保留（D8 未定 / D1 已定先不选型）。真板文末本来就已有 `frozen: true` / `frozen_on: 2026-09-27` / `frozen_reason` 三字段，本轮核实无误 —— 之前担心的"冻结只写在控制平面、真板没落"是**误判**。
+
+真板属别仓：本轮只改盘上内容，**不在 `D:\Work` 提交**（那里的提交是用户的）。
+
 ## 2026-09-27（之二）· CT-13 落地：入口切换机制找到了真凭据，回滚已往返实测
 
 ### 机制不是猜的
