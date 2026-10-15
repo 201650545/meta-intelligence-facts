@@ -1,7 +1,7 @@
 # =====================================================================
 #  技能中枢 · P0 只读体检器配置（机器真源 · 声明态）
 # ---------------------------------------------------------------------
-#  对应方案 : D:\Work\AI自成长引擎\docs\04-方案_技能统一治理与浏览器能力域_20260924.md
+#  对应方案 : D:\Work\元智能\10_AI自成长引擎\docs\04-方案_技能统一治理与浏览器能力域_20260924.md
 #  消费脚本 : scripts\audit_skill_census.ps1
 #  铁律     : 脚本内不得出现任何硬编码的扫描根 / 正则 / 阈值 / 哨兵，
 #             全部从本文件读取（照搬自适应工作流引擎「零字面量」纪律）
@@ -9,7 +9,7 @@
 #  注意     : 本文件的值会随机器变化。**改判据前先跑 smoke 配置**。
 # =====================================================================
 config_version: 1
-owner_plan: D:\Work\AI自成长引擎\docs\04-方案_技能统一治理与浏览器能力域_20260924.md
+owner_plan: D:\Work\元智能\10_AI自成长引擎\docs\04-方案_技能统一治理与浏览器能力域_20260924.md
 output_prefix: skill-census
 
 # ---------------------------------------------------------------------
@@ -20,8 +20,8 @@ output_prefix: skill-census
 scan:
   roots:
     - D:\|9
-    - C:\Users\郭永涛\|10
-    - C:\Users\Public\Loomy\|8
+    - <HOME>\|10
+    - <HOME>\Loomy\|8
   exclude_path_regex: node_modules|\.git\\|\.pnpm-store|\$RECYCLE\.BIN|System Volume Information
   skill_file_name: SKILL.md
 
@@ -40,34 +40,34 @@ classify:
   b_class_known_dirs:
     - D:\OfficeAce\office-claw-skills
     - D:\游戏\08-AI配置与技能
-    - C:\Users\郭永涛\skills
+    - <HOME>\skills
   true_source_dirs:
-    - D:\Work\AI自成长引擎\技能库
+    - D:\Work\元智能\10_AI自成长引擎\技能库
 
 # ---------------------------------------------------------------------
 # 三、链接层宿主清单（体检器逐个枚举深度 1 的子项，判链接/实体与目标是否存在）
 #     source: 2026-09-24 实测 351 条断链
 # ---------------------------------------------------------------------
 link_hosts:
-  - C:\Users\郭永涛\.trae\skills
-  - C:\Users\郭永涛\.trae-cn\skills
-  - C:\Users\郭永涛\.trae-local\skills
-  - C:\Users\郭永涛\.codebuddy\skills
-  - C:\Users\郭永涛\.claude\skills
-  - C:\Users\郭永涛\.qoder-cn\skills
-  - C:\Users\郭永涛\.qoder\skills
-  - C:\Users\郭永涛\.qoderworkcn\skills
-  - C:\Users\郭永涛\.iflow\skills
-  - C:\Users\郭永涛\.kiro\skills
-  - C:\Users\郭永涛\.qwen\skills
-  - C:\Users\郭永涛\.codex\skills
-  - C:\Users\郭永涛\.box-agent\skills
-  - C:\Users\郭永涛\.agents\skills
-  - C:\Users\郭永涛\.cc-switch\skills
-  - C:\Users\郭永涛\.workbuddy\skills
-  - C:\Users\郭永涛\.workbuddy-ai\skills
-  - C:\Users\郭永涛\.config\agents\skills
-  - C:\Users\郭永涛\.config\opencode\skills
+  - <HOME>\.trae\skills
+  - <HOME>\.trae-cn\skills
+  - <HOME>\.trae-local\skills
+  - <HOME>\.codebuddy\skills
+  - <HOME>\.claude\skills
+  - <HOME>\.qoder-cn\skills
+  - <HOME>\.qoder\skills
+  - <HOME>\.qoderworkcn\skills
+  - <HOME>\.iflow\skills
+  - <HOME>\.kiro\skills
+  - <HOME>\.qwen\skills
+  - <HOME>\.codex\skills
+  - <HOME>\.box-agent\skills
+  - <HOME>\.agents\skills
+  - <HOME>\.cc-switch\skills
+  - <HOME>\.workbuddy\skills
+  - <HOME>\.workbuddy-ai\skills
+  - <HOME>\.config\agents\skills
+  - <HOME>\.config\opencode\skills
 
 # ---------------------------------------------------------------------
 # 四、自检哨兵 —— 用于区分「机器真变了」与「探针自己坏了」
@@ -82,7 +82,7 @@ self_test:
   min_hashed_files: 3000
   max_frontmatter_missing_rate: 0.35
   min_broken_links: 100
-  sentinel_broken_link: C:\Users\郭永涛\.trae\skills\ad-creative
+  sentinel_broken_link: <HOME>\.trae\skills\ad-creative
   sentinel_source: 2026-09-24 find -type l ! -exec test -e 实测样本
   sentinel_dup_name: none
   sentinel_dup_min_copies: 0
@@ -135,23 +135,23 @@ scope:
 
   # 4) 你主动装的 / 自己写的资产根（手工维护，越准越好）
   in_roots:
-    - C:\Users\郭永涛\.agents\skills
-    - C:\Users\郭永涛\skills
-    - C:\Users\郭永涛\skills_backup
-    - C:\Users\郭永涛\.claude\skills_backup_20260829
+    - <HOME>\.agents\skills
+    - <HOME>\skills
+    - <HOME>\skills_backup
+    - <HOME>\.claude\skills_backup_20260829
     - D:\OfficeAce\office-claw-skills
     - D:\游戏\08-AI配置与技能
-    - D:\Work\AI自成长引擎\技能库
+    - D:\Work\元智能\10_AI自成长引擎\技能库
 
   # 自检区间：偏离即说明判据写坏或环境大变 → exit 3 拒发结论
   self_test_min_in: 300
   self_test_min_out: 6000
   # 哨兵全部实测存在（2026-09-24），各自覆盖一条判定路径
-  sentinel_out_path: C:\Users\Public\Loomy\c3773183a592\opencode\skills\pdf
+  sentinel_out_path: <HOME>\Loomy\c3773183a592\opencode\skills\pdf
   sentinel_out_note: 走「出厂标记」判 out（Loomy 内置 pdf，sourceType=bundled）
-  sentinel_in_path: C:\Users\Public\Loomy\c3773183a592\opencode\skills\loomy-learned-agent-role-handover-doc
+  sentinel_in_path: <HOME>\Loomy\c3773183a592\opencode\skills\loomy-learned-agent-role-handover-doc
   sentinel_in_note: 走「自产前缀兜底」判 in（该目录漏写 .loomy-skill.json）
-  sentinel_in_path2: C:\Users\郭永涛\.agents\skills\agent-browser
+  sentinel_in_path2: <HOME>\.agents\skills\agent-browser
   sentinel_in2_note: 走「声明根」判 in
 
 # ---------------------------------------------------------------------

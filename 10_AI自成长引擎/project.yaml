@@ -5,7 +5,7 @@ status: active
 stage: idea          # 构想中，尚无代码实现
 visibility: private
 
-local_path: D:\Work\AI自成长引擎\
+local_path: D:\Work\元智能\10_AI自成长引擎\
 aliases:
   - 经验自沉淀
   - auto-skill-distiller
@@ -21,7 +21,7 @@ sources:
 
 handoff:
   at: 2026-09-19
-  doc: D:\Work\AI自成长引擎\双引擎立项收口交接_给执行Agent_20260919.md
+  doc: D:\Work\元智能\10_AI自成长引擎\双引擎立项收口交接_给执行Agent_20260919.md
   status: pending_execution    # 断链修复 L1~L10 + 口径同步 U1~U4 + 登记 R1~R3 待执行 Agent 完成
 
 handbook:
@@ -34,3 +34,10 @@ milestone: M0-纸面闭环
 
 created_at: 2026-09-19
 updated_at: 2026-09-19
+
+# R1 步骤4/R7§4（2026-10-08）：机器层身份登记块。三键固定；形态与可达由 authority-check 判据7 管，存在性由 check-conformance 管。
+fusion:
+  authority_ref: machine/demands/D-003.yaml
+  contract_binding: machine/spec_binding.yaml#experience
+  projection_of: 30_元智能/02_SYSTEM_CORE/META_INTELLIGENCE_V1.md
+

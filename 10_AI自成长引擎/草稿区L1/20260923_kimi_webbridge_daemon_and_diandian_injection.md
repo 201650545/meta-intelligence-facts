@@ -16,3 +16,5 @@
   - 在 HyperOS 上未切换英文输入法即执行 `adb shell input text hello`，被搜狗/百度输入法识别为 `eh'llo` 并停留在候选词框。
 - **适用范围**：小红书点赞分析子项目 / Kimi WebBridge 浏览器自动化 / 全局 Windows
 - **记录时间**：2026-09-23
+- **产物意图**：method
+- **固定运行绑定**：无

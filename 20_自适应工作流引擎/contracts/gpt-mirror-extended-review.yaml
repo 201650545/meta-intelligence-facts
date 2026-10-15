@@ -1,5 +1,5 @@
 # ============================================================
-# 契约（声明态真源 · 唯一）：GPT 镜像站 Extended 送审
+# 契约（声明态真源 · 唯一）：GPT 镜像站深度送审（Chat 标签 / ChatGPT 6 Sol / 顶档 High）
 # ------------------------------------------------------------
 # 铁律（照搬 ai-platform docs/design/AI基础设施/00-AI基础设施-总览.md）：
 #   1. 声明态与运行态分离：本文件只写「期望与依赖」，绝不写当前健康 / 当前文案 / pid
@@ -10,30 +10,31 @@
 # 创建：2026-09-19（A1 阶段）｜决策 D1=契约中立+skill 起步｜D4=旧脚本只标注不原地改
 # ============================================================
 
-contract_version: 1
+contract_version: 5                        # v5（2026-10-11）：郭老师明令**默认必须用 ChatGPT 6 Sol + High** ⇒ 把「模型」写进 mode_gate（required_model=ChatGPT 6 Sol，镜像站显示名 "6"）。v4（2026-10-11）：Work 不可用 ⇒ 目标改回 Chat + 顶档 High。v3（2026-10-10）：站点换新版 ChatGPT UI —— 新增 mode_toggle（Chat|Work），reasoning_mode 整体重写
+                                           # v2（2026-09-26）：新增 delivery_readback 与 fetch_retry_budget 两条闸门
 workflow_id: gpt-mirror-extended-review
-display_name: GPT 镜像站 Extended 送审
+display_name: GPT 镜像站深度送审（Chat 标签 / ChatGPT 6 Sol / 顶档 High）
 
-owner_skill: loomy-learned-gpt-mirror-extended-review
+owner_skill: gpt-mirror-extended-review          # 真源身份（我们的命名空间）；装进 Loomy 时才换成宿主形态 loomy-learned-gpt-mirror-extended-review，映射见 10_AI自成长引擎/技能库/naming.yaml
 # skill 存放与安装（2026-09-19 郭老师口径：项目产出的 skill 不进程序技能目录，统一存 AI自成长引擎 技能库）
-skill_home: D:\Work\AI自成长引擎\技能库\loomy-learned-gpt-mirror-extended-review\SKILL.md   # ← 当前实际位置（草稿，不生效）
-skill_install_to: D:\记忆\_Skills\          # 程序运行时加载的目录；安装即改变 Agent 真实行为，需人工点头（D3=等 A2 探针跑通再装）
-skill_index: D:\Work\AI自成长引擎\技能库\README.md
+skill_home: skill://gpt-mirror-extended-review   # 2026-10-08 R7 批次0b：跨树绝对路径迁逻辑 URI（resolver 登记处=10_AI自成长引擎/技能库/*/SKILL.md；真源=10_AI自成长引擎/技能库/gpt-mirror-extended-review/SKILL.md，「草稿不生效」语义不变。skill_index 指向技能库 README，该对象无 URI scheme 等价物，保留 legacy 路径由 resolve-uri 双轨报告显式跟踪）
+skill_install_to: <HOME>\Loomy\c3773183a592\opencode\skills\          # 程序运行时加载的目录；安装即改变 Agent 真实行为，需人工点头（D3=等 A2 探针跑通再装）
+skill_index: D:\Work\元智能\10_AI自成长引擎\技能库\README.md
 
 superseded_runners:                          # 已被本契约取代/待取代的旧执行体
-  - path: D:\Work\AI平台\docs\runbooks\scripts\evalB_ext.js
+  - path: D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\scripts\evalB_ext.js
     status: annotated_broken                 # D4：只加失效标注，不原地改 ai-platform 执行真源
     broken_at: 2026-09-15
     annotated_at: 2026-09-19
     reason: 三处硬编码断言（pill 就绪正则 / 菜单项匹配 / ==='Extended'）全断裂，会给出假信号
-    replacement: D:\Work\自适应工作流引擎\runners\evalB_ext_adaptive.js   # A2 阶段创建
-  - path: D:\Work\AI平台\docs\runbooks\scripts\evalA_jump.js
+    replacement: D:\Work\元智能\20_自适应工作流引擎\runners\evalB_ext_adaptive.js   # A2 阶段创建
+  - path: D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\scripts\evalA_jump.js
     status: active_with_fallback
     note: 取 .n-card[0] 兜底；卡号轮换属 info 级，由 active_card 探针回填
 
 source_assets:                               # 知识出处（可回溯，禁止在本文件重写正文）
-  operations_truth: D:\Work\AI平台\docs\runbooks\GPT镜像站送审流程.md
-  handoff: D:\Work\AI平台\docs\runbooks\GPT镜像站一键交接文档（给执行Agent）.md
+  operations_truth: D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\GPT镜像站送审流程.md
+  handoff: D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\GPT镜像站一键交接文档（给执行Agent）.md
   memory:
     - D:\记忆\调度大脑记忆\流程\workflow_ai_<POOL_NAME>_open.md
     - D:\记忆\调度大脑记忆\流程\workflow_gpt_repo_sync.md
@@ -45,14 +46,14 @@ source_assets:                               # 知识出处（可回溯，禁止
     - D:\记忆\调度大脑记忆\反馈\feedback_gpt_context_github.md
     - D:\记忆\调度大脑记忆\反馈\feedback_fork_forbidden.md
     - D:\记忆\调度大脑记忆\教训\error_lessons.md
-  inventory: D:\Work\自适应工作流引擎\docs\02-镜像站试点盘点.md
+  inventory: D:\Work\元智能\20_自适应工作流引擎\docs\02-镜像站试点盘点.md
 
 baseline:                                    # 回归对照：自愈后性能不得显著劣化
   metric: 零到可发问耗时(s)
   value: 9.6
   tolerance: "+50%"                          # 上限 14.4s
   history: [13.9, 9.6, 14.0]
-  reference: D:\Work\AI平台\docs\runbooks\测试任务-镜像零到Extended计时.md
+  reference: D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\测试任务-镜像零到Extended计时.md
 
 # ------------------------------------------------------------
 # conditions：外部依赖条件（探针核对对象）
@@ -61,12 +62,27 @@ baseline:                                    # 回归对照：自愈后性能不
 conditions:
 
   account_pool:
-    probe: http_get                          # P1 层，零打扰，不碰浏览器
-    urls:
+    # 2026-10-09 郭老师裁定：本条移出 P1，改标 none。
+    # 根因（实测）：P1 探针是**匿名 GET**（无 Cookie/无登录态），而健康特征
+    #   '(账号池|GPT-5|n-card)' 只出现在**登录后**的页面里 ⇒ 永远匹配不上，
+    #   返回 1 字节 → 每天误报"前端可能已改版"。站点本身没问题：同契约的
+    #   active_card（后端 account_health_badge，非 UI）实测正常，且郭老师与
+    #   其他 Agent 用 opencli 走已登录 Chrome 打开一切正常。
+    # 2026-10-12 落地 P2 探针：opencli 自建标签读取 panelAccountList 额度与状态，巡检完毕自动关闭
+    probe: probes/probe_gpt_mirror_limits.js
+    layer: P2
+    probe_uses_own_tab: true
+    urls:                                     # 以下保留：建 P2 时直接用（只读，不点击不发送）
       - https://<POOL_HOST>/?utm_source=hidden-ncn
     proxy: http://127.0.0.1:7890
     health_regex: '(账号池|GPT-5|n-card)'
-    on_fail: break                           # 池不可达 = 熔断，不启动浏览器
+    sibling_entries:                          # 2026-10-10 实测：该页已从"单一 ChatGPT 池"升级为多模型门户
+      - {label: "ChatGPT Plus镜像", in_use: true}
+      - {label: "Claude 镜像站",    in_use: false}
+      - {label: "DeepSeek R1",      in_use: false}
+      - {label: "Gemini Pro镜像",   in_use: false}
+      - {label: "Grok 镜像站",      in_use: false}
+    on_fail: break                           # 建 P2 时的失败动作；当前生效的熔断保护见 active_card（同为 break）
     dead_history: [<POOL_HOST_LEGACY>, <CARD-23.MIRROR_LEGACY_HOST>]   # 仅记录，不再探测
 
   active_card:
@@ -79,8 +95,10 @@ conditions:
     card_discovery:
       ui_fallback_selector: ".n-card span"   # 仅 P2 层需要看 UI 时使用
       ui_text_prefix: "GPT-5"
-      active_marker: 绿色圆点
+      ui_badge_prefix: "Plus"                # 2026-10-10：卡片 span 顺序 = ["Plus","GPT-5 ⑪"]，徽章 span 在前；按 /^GPT-5/ 找 span 仍命中
+      active_marker: 活跃（黄点）             # 2026-10-10 实测是黄点，非旧记的"绿点"；颜色以现场为准，勿写死
       skip_marker: [灰, 红]                  # 受限卡直接跳过别点（提速要点）
+      badges_seen: [PLUS, PROLITE]           # 2026-10-10 实测新增 PROLITE 档（CARD-31/27/32/30），其余 13 张为 PLUS；当日 17 张全 isHealthy=true
     card_id_discovery:                       # ★ 探针如何取得 carid —— 写在契约里，探针内不得出现字面量卡号
       primary:
         method: html_regex                   # 从账号池页面 HTML 直接提取（不开浏览器）
@@ -103,34 +121,90 @@ conditions:
 
   membership_expiry:                         # ★ 已知未来故障，必须登记（D7 已落实提前 14 天提醒）
     probe: static_date
-    value: 2026-10-28
+    value: 2026-10-29                       # 2026-10-10 实测：账号池页底部「会员有效期至：2026-10-29」（原记 10-28，差 1 天）
     warn_before_days: 14
     on_fail: break                           # 到期后全池受限 → 熔断并停止烧轮次
     reminder_task: 镜像站会员到期提醒（2026-10-28）   # Loomy 定时任务，2026-10-14 09:00 触发
+                                                     # ⚠️ 任务名里仍带旧日期 10-28 —— 那是 Loomy 侧的既有任务标识（未改名，避免动到外部对象）；
+                                                     #    实际到期日为 2026-10-29，提醒时机仍提前 14 天，任务本身无需改
 
-  reasoning_mode:                            # ★ 2026-09-15 断裂点（旧脚本三处硬编码全在此域）
-    probe: dom_text_set                      # P2 层，只读 DOM 文本指纹，不点击不发送不切模式
+  mode_toggle:                               # ★ 2026-10-10 改版新增：顶部 Chat | Work 单选组
+    probe: probe_gpt_mirror_ui               # P2 浏览器只读探针（probes/probe_gpt_mirror_ui.js，2026-10-11 已建并跑通）
+    layer: P2
+    probe_uses_own_tab: true
+    selector: 'button[role=radio]'
+    labels: [Chat, Work]
+    selected_attr: data-state
+    selected_value: "on"
+    required_label: Chat                     # ⚠️ 2026-10-11 改回 Chat 为主（郭老师 2026-10-11 裁定）；Work 标签实测不可用，见 note
+    on_fail: silent-risk
+    note: >-
+      Chat：标题 Ready when you are. / composer 占位 Ask ChatGPT / 3 档 effort（Instant, Medium, High）。← 现行目标。
+      Work：标题 What should we work on? / composer 占位 Work on anything / 多一行 Plugins / 5 档 effort（Light..Max）。
+      ⚠️ 2026-10-11 实测：Work 标签（据郭老师＝接 Codex）对该账号不可用 —— Work + GPT-6 Astra + Max 下，
+      连「只回答一个数字：1+1 等于几？」与「你好，请只回复两个字：收到」都被 OpenAI 式安全拒绝挡回
+      （This content can't be shown for safety reasons）；切回 Chat 同题正常返回「收到」。⇒ 不再走 Work。
+      刷新、回历史、换窗口都会重置回 Chat + Instant。
+
+  reasoning_mode:                            # ★ 2026-09-15 首次断裂；2026-10-10 整体重构（Auto / Thinking• Extended / GPT-5.6 Luna 文案全灭）
+    probe: probe_gpt_mirror_ui               # P2 浏览器只读探针（probes/probe_gpt_mirror_ui.js，2026-10-11 已建并跑通）
+    layer: P2
+    probe_uses_own_tab: true                 # 建P2 时铁律：只开自己的 tab，绝不占用/关闭郭老师已开的标签
     pill_selector: "button.__composer-pill"
-    pill_ready_regex: '^(Model|Auto|Thinking|Extended)$'   # 放宽为集合，覆盖文案漂移（Model=hydration 未完成，点必扑空）
-    item_selector: '[role=menuitemradio]'
+    pill_ready_regex: '^(Instant|Light|Medium|High|Extra High|Max|Select model|Thinking effort|Model|Auto)$'
+                                            # 放宽为集合，覆盖文案漂移；hydration 未完成时点它必扑空
+    pill_closed_form: "Chat=档位名（如 High / Instant）｜Work=模型名+档位（如 GPT-6 Astra Max，两段间无分隔空格）"
+    pill_open_form: [Select model, Thinking effort]
+    menu_selector: '[role=menu]'             # data-testid=composer-intelligence-picker-content
+    model_item_selector: '[role=menuitem][aria-label="Select model"]'
+    power_item_selector: '[role=menuitem][aria-label="Power"]'
+    effort_slider_selector: '[role=slider]'  # aria-valuemin=0；aria-valuemax 随标签与所选模型变（Chat=2 三档 / Work=4 五档）
+    model_radios_selector: '[role=menuitemradio]'
+    model_target: "ChatGPT 6 Sol"            # ★★ 郭老师 2026-10-11 明令：**默认必须用 ChatGPT 6 Sol**（等价于「必须走镜像站 Chat 里默认选中的那一项」）
+    model_checked_label: "6"                 # 镜像站 Chat「Select model」对 GPT-6 Sol 的显示名就是 "6"；**默认即选中**（2026-10-11 实测 aria-checked=true）
+    model_must_not_change: true              # ❌ 禁止改成 GPT-5.6 Sol / GPT-5.5
+    label_class_hints:                       # ⚠️ 构建期哈希类名，随发版会变；只作定位提示，优先用 role + aria-label
+      model: '.d1BZWq_ViewToggleModelLabel'
+      effort: '.d1BZWq_ViewToggleEffortLabel'
     match: regex_fuzzy                       # 容许空格 / 圆点 / 大小写变体
     candidates:                              # A2 参数化自愈靠这个；weight 越高越优先
-      - {label: "Thinking• Extended", weight: 100, note: "2026-09-15 前"}
-      - {label: "Thinking• Standard", weight: 60,  note: "2026-09-15 后现存"}
-      - {label: "GPT-5.6 Luna",       weight: 40,  note: "2026-09-15 后现存"}
-    exclude_labels: ["Auto", "Configure..."]
-    resolved_label: null                     # ← 探针回填；执行体只读这里，禁止字面量比对
+      - {label: "6",           weight: 100, note: "★★ 现行唯一目标 = ChatGPT 6 Sol（镜像站 Chat 的显示名就是 \"6\"，默认选中）。郭老师 2026-10-11 明令默认必须用它"}
+      - {label: "GPT-5.6 Sol", weight: 10,  note: "Chat 高级视图模型项 —— ⚠️ **不是目标**，别选（仅当 \"6\" 从菜单消失时才考虑）"}
+      - {label: "GPT-5.5",     weight: 5,   note: "Chat 高级视图模型项；页面标注 Leaving on October 14 —— ⚠️ **不是目标**"}
+      # ⚠️ 2026-10-11：Work 专属模型随 Work 标签一并作废（weight 归 0，仅留历史）
+      - {label: "GPT-6 Astra", weight: 0,   note: "❌ Work 专属，2026-10-11 起不可用（Work 标签被拒）"}
+      - {label: "GPT-6.1 Sol", weight: 0,   note: "❌ Work 专属，同上"}
+      - {label: "GPT-6 Sol",   weight: 0,   note: "❌ Work 专属，同上"}
+      - {label: "GPT-6 Luna",  weight: 0,   note: "❌ Work 专属，同上"}
+    effort_ladder:                           # 2026-10-11 现行
+      chat: [Instant, Medium, High]          # ← 现行目标：Chat 滑杆 aria-valuemin=0 / aria-valuemax=2，顶端 = High
+      chat_default_model: "6"                # ★ = ChatGPT 6 Sol（镜像站显示名 "6"）；默认即选中，**保持不动**
+      work_gpt6astra: [Light, Medium, High, Extra High, Max]   # ❌ 2026-10-11 起不可用（Work 被拒），仅作历史
+      work_default_preset:                   # ❌ 同上，仅作历史
+        - {idx: 0, model: "GPT-6 Luna",   effort: High}
+        - {idx: 1, model: "GPT-6.1 Sol",  effort: Light}
+        - {idx: 2, model: "GPT-6.1 Sol",  effort: Medium}
+        - {idx: 3, model: "GPT-6 Astra",  effort: Light}
+        - {idx: 4, model: "GPT-6 Astra",  effort: Medium}
+    exclude_labels: ["Auto", "Configure...", "Instant", "Light", "Medium", "Extra High", "Max", "Select model", "Thinking effort"]
+                                            # ⚠️ 2026-10-11：Chat 顶档就是 High ⇒ 不再排除 High；改排除 Max（Work 专属）
+    resolved_label: "High"                   # ⚠️ 2026-10-11 改回 Chat 后人工实测回填（Chat 顶档；pill 闭态文本就是 "High"）；P2 探针就位后以探针回填为准，执行体只读这里、禁止字面量比对
     retry_click_max: 3                       # 菜单打开自旋重试上限
     click_method: synthetic_pointer_sequence # 原生 click 与键盘 ArrowDown 打不开 Radix 菜单
     pointer_sequence: [pointerover, pointermove, pointerenter, pointerdown, pointerup, mousedown, mouseup, native_click]
+    set_effort_method: focus_slider_then_arrow_keys   # [role=slider].focus() + ArrowRight 直到 aria-valuenow == aria-valuemax
     on_fail: warn                            # 候选集未覆盖 → 出 A3 重定位草稿，暂停并报人
 
   composer:
-    probe: dom_fingerprint
-    variants:                                # 新旧对话页 composer 不同，且 fill 有实测缺陷
-      - {page: 新对话页, selector: "textarea[placeholder='Ask anything']", fill: native_value_setter_plus_input_event}
-      - {page: 历史对话页, selector: "contenteditable", fill: base64_atob_execCommand_insertText,
-         avoid: "wcDTda_fallbackTextarea（0×0，注进去无效）"}
+    probe: probe_gpt_mirror_ui               # P2 浏览器只读探针（probes/probe_gpt_mirror_ui.js，2026-10-11 已建并跑通）
+    layer: P2
+    probe_uses_own_tab: true                 # 建 P2 时铁律：只开自己的 tab
+    variants:                                # 2026-10-10 复测：旧"新对话页=textarea"的二分法不成立
+      - {page: 新对话页, selector: "div[contenteditable=true]", fill: base64_atob_execCommand_insertText,
+         note: "Chat 占位 Ask ChatGPT / Work 占位 Work on anything；同页还有隐藏 textarea[name=prompt-textarea]，实测 w=0 h=0，勿注入"}
+      - {page: 历史对话页, selector: "div[contenteditable=true]", fill: base64_atob_execCommand_insertText,
+         avoid: "textarea[name=prompt-textarea] / wcDTda_fallbackTextarea（0×0，注进去无效）"}
+      - {page: 通用判据, selector: "getBoundingClientRect().width > 10", fill: "以几何尺寸判可见 composer，勿按标签名选"}
     known_defect: "opencli fill 对多段中文只填第一段（实测 814 字符仅进 112）→ 大段文本必须走 base64 路径"
     send_selector: "[data-testid=send-button]"   # 有文本才渲染
     stop_selector: "[data-testid=stop-button]"
@@ -138,8 +212,10 @@ conditions:
     on_fail: break
 
   opencli_session:
-    probe: process_alive
-    profile: LOCAL_BROWSER_PROFILE
+    probe: none                              # 2026-10-09：会话层属 P2（需开浏览器），P2 未建 ⇒ 不计入漏测
+    pending_probe: process_alive
+    layer: P2
+    profile: LOCAL_BROWSER_PROFILE                         # 2026-10-10 现取（default, connected v1.0.24）；旧值 LOCAL_BROWSER_PROFILE 已失效——注意 tab list 对失效码也返回 [] 而不报错，唯一真源是 `opencli profile list`
     daemon_port: <LOCAL_DAEMON_PORT>
     browser: 日常 Chrome（共享，非新实例）
     lease: single_tenant                     # 单租户占用纪律
@@ -151,8 +227,9 @@ conditions:
     on_fail: break
 
   answer_channel:
-    probe: dom_count
-    selector: "[data-message-author-role=assistant]"
+    probe: none                              # 2026-10-09：同 reasoning_mode，P2 探针未建 ⇒ 不计入漏测
+    pending_probe: dom_count
+    layer: P2
     trust_level: untrusted                   # ★ 教训⑤：镜像站不渲染该节点，asstN 常为 0 属正常
     poll_interval_s: 15
     page_auto_refresh: false                 # ★ 教训②：DOM 不自动更新，需真实状态时必须刷新页面
@@ -163,7 +240,7 @@ conditions:
       large_file: "fetch → arrayBuffer → window.__buf → 按 30000 字节分块（3 的倍数，规避 base64 跨块填充）逐段 b64decode"
       large_file_pitfall: 整段拼接 base64 必报 Incorrect padding
       image: "Download this image → Chrome 落 Downloads 为 .tmp，实为完整 PNG，复制改名即可"
-      reusable_script: D:\Work\课程思政教学竞赛\6-上课要用的素材\课件和教具\opencli_scripts\_dl_theme2.py
+      reusable_script: D:\Work\课程思政教学竞赛\6-上课要用的素材（已失效：该子目录不存在，素材实际在 05_上课设计 下）\课件和教具\opencli_scripts\_dl_theme2.py
       image_chinese: 图像模型可直接渲染中文（旧规「中文必糊、提示词禁文字」已作废）
 
   windows_arg_pitfalls:                      # opencli.cmd 是批处理，命令串会再过一遍 cmd 解析
@@ -179,10 +256,38 @@ conditions:
 gates:
   - id: mode_gate
     priority: highest                        # 发问前最后一个动作必须是本断言通过
-    assert: "runtime.reasoning_mode.resolved_label != null"
-    reject: [Auto, Configure..., null]
-    note: 刷新 / 回历史 / 换窗口都会重置，没有「刚才切过」这种想当然；Auto 档提问横竖白烧一轮
+    assert: "runtime.mode_toggle.selected == 'Chat' and runtime.reasoning_mode.model_checked == '6' and runtime.reasoning_mode.resolved_label == 'High'"
+    reject: [Work, Instant, Medium, Light, Extra High, Max, Auto, Configure..., Select model, Thinking effort, null]
+    note: >-
+      2026-10-11 **三闸**（郭老师明令「默认必须用 ChatGPT 6 Sol High」）：
+      ①顶部 Chat|Work 必须为 `Chat`（Work 接 Codex、本账号不可用）；
+      ②**模型必须是 ChatGPT 6 Sol** —— 镜像站 Chat「Select model」里显示为 `6` 且**默认即选中**，**不许改成 GPT-5.6 Sol / GPT-5.5**；
+      ③pill 闭态必须是 `High`（Chat 顶档）。
+      刷新 / 回历史 / 换窗口都会重置回 Chat + Instant，没有「刚才切过」这种想当然；非顶档提问横竖白烧一轮。
     on_violate: silent-risk
+
+  - id: delivery_readback
+    added_in: 2
+    verified_at: 2026-09-26                    # 第 5 轮真实送审三项凭证齐，verify_delivery.mjs 判 pass
+    priority: highest                        # 收到回答后的第一个动作必须是本断言通过
+    assert: "verify_delivery(answer_text).pass == true"
+    requires: [delivery_id, core_tail, spec_tail]
+    note: >-
+      送达判据是三项回读凭证齐，不是 git push 成功。delivery_id 在 CORE 首行、core_tail 在 CORE 末行、
+      spec_tail 在 SPEC 末行，每轮随机重生成，只存 runtime/delivery_nonces.json。
+      缺任一项即判"材料未完整送达"，本轮结论不采信、不得据此改代码。
+      尾凭证不可省：只测首行等于只摸到头部，证明不了 200 KB 那个包整包读到。
+    on_violate: break
+
+  - id: fetch_retry_budget
+    added_in: 2
+    verified_at: null
+    assert: "per_url_attempts <= 3 and retry_gap_seconds >= 15"
+    note: >-
+      raw URL 会间歇失败且机制未定（同一 URL 可连续数小时 miss 后突然全通，与仓库/内容/体积/路径语言/SHA 均无关）。
+      3 次仍失败就照抄工具报错原文并阻断作答，不换承载、不凭上一轮记忆续答。
+      若首行 delivery_id 命中的是上一轮而尾凭证不符，判 CDN 滞后读到旧版本，等 10 分钟重跑同一链接。
+    on_violate: warn
 
   - id: foreground_supervision
     assert: "not background_task"
@@ -195,10 +300,14 @@ gates:
     on_violate: break
 
   - id: turn_budget
-    assert: "window_turns <= 24 and task_turns <= 3 and conversation_turns <= 40"
-    source: D:\Work\AI平台\resource-ops\docs\操作手册\01_镜像站GPT操作手册.md §9.3   # ★ 数值断言必须标 source
-    note: 每 3 轮必须彻底解决一个任务；GPT 反问算同窗口；同一对话 ≤40 轮才新开
-    revision: 2026-09-18 用户修订 12 → 24（原 12 出自记忆库 feedback_gpt_rounds_discipline.md，已于 2026-09-20 同步改为 24）
+    assert: "window_turns <= 24 and task_turns <= 3"
+    source: D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\01_镜像站GPT操作手册.md §9.3   # ★ 数值断言必须标 source
+    note: 每 3 轮必须彻底解决一个任务；GPT 反问算同窗口；同一窗口 ≤24 轮（达到即「先要总结 → 带总结新开」，不是直接新开）
+    revision: >-
+      2026-09-18 用户修订 12 → 24（原 12 出自记忆库 feedback_gpt_rounds_discipline.md，已于 2026-09-20 同步改为 24）。
+      2026-10-11 删除 `conversation_turns <= 40`：该 40 出自 2026-08-25 旧记忆 workflow_gpt_repo_sync.md，
+      与手册 §9.3 的「同一窗口 ≤24 轮」直接冲突（第 25 轮时一个说留下、一个说走）；
+      手册 §9.3 是唯一真源且全篇无 40 ⇒ 以 24 为准。
     caveat: 24 轮不是免死金牌——GPT 出现遗忘 / 混淆早期约定 / 答非所问时，不等满 24 轮，立即走「要总结 → 带总结新开」
     on_violate: break
 
@@ -209,8 +318,11 @@ gates:
 
   - id: history_budget
     assert: "chat_history_count <= 10"
-    action_on_violate: 自动删末尾至剩 10
-    note: 2026-09-04 从 ≤30 收紧为 ≤10
+    source: D:\记忆\调度大脑记忆\反馈\feedback_mirror_chat_history.md
+    action_on_violate: 从列表末尾（最旧）往上删到剩 10 —— Delete 真删（不可逆，不用 Archive），批量走脚本循环
+    note: >-
+      2026-09-04 用户从「每 30 删一半」收紧为「保留最近 10 条、删最旧」。
+      定位须用 `button[aria-label="Open conversation options for <title>"]`（通用匹配会抓成顶部那条）→ 菜单 Delete → 确认框 Delete。
     on_violate: info
 
   - id: context_pushed
@@ -263,5 +375,5 @@ probe:
     drift: runtime/gpt-mirror.drift.json
     manual_edit: forbidden
 
-updated_at: 2026-09-19
-status: verified    # 2026-09-24 复探（exit 0）：break 已解除——explicit_list(CARD-23/49/11, source=记忆真源) + 断言求值器初值 bug 修复后 active=1/3（CARD-11「GPT-5 ⑪」活跃 PLUS；CARD-23 黄色受限态 isHealthy=false；CARD-49 真 Plus 失效）；残余 warn=池页纯 GET 1 字节（SPA 壳，HTML 发现路径对该页永久无效，卡号一律走 explicit_list）；会员余 33 天。历史：09-23 首跑 break=1 系断言求值器 $actual 初值 bug 所致假信号
+updated_at: 2026-10-11
+status: verified    # 2026-10-11（契约 v5）郭老师明令**默认必须用 ChatGPT 6 Sol + High** ⇒ mode_gate 升**三闸**（Chat / 模型 "6"=ChatGPT 6 Sol / pill=High）；reasoning_mode 新增 model_target="ChatGPT 6 Sol"、model_checked_label="6"、model_must_not_change=true，candidates 以 "6" 为唯一 weight=100。历史：2026-10-11（v4）目标改回 Chat 标签 + 顶档 High：Work 标签（接 Codex）对该账号不可用 —— Work+GPT-6 Astra+Max 下连「1+1」「你好」都被 OpenAI 式安全拒绝挡回，切回 Chat 同题正常（2026-10-11 实测，郭老师裁定）。改动：mode_toggle.required_label Work→Chat、reasoning_mode.resolved_label→"High"、candidates/effort_ladder/exclude_labels 与 mode_gate 同步。历史：2026-10-10（v3）站点改版适配：新增 mode_toggle（Chat|Work）、reasoning_mode 整体重写（旧 Auto/Thinking•Extended/GPT-5.6 Luna 文案全灭 → 新版 pill + Power 滑杆，当时目标 GPT-6 Astra Max）；同步修正 opencli_session.profile(LOCAL_BROWSER_PROFILE→LOCAL_BROWSER_PROFILE)、membership_expiry(10-28→10-29)、composer.variants。历史：2026-09-24 复探（exit 0）：break 已解除——explicit_list(CARD-23/49/11, source=记忆真源) + 断言求值器初值 bug 修复后 active=1/3（CARD-11「GPT-5 ⑪」活跃 PLUS；CARD-23 黄色受限态 isHealthy=false；CARD-49 真 Plus 失效）；残余 warn=池页纯 GET 1 字节（SPA 壳，HTML 发现路径对该页永久无效，卡号一律走 explicit_list）；会员余 33 天。历史：09-23 首跑 break=1 系断言求值器 $actual 初值 bug 所致假信号

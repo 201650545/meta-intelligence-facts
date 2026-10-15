@@ -65,7 +65,7 @@ powershell -ExecutionPolicy Bypass -File scripts\enumerate_broken_links.ps1 -Pre
 
 ## 三、铁律与退出码
 
-照搬 `D:\Work\自适应工作流引擎\probes\probe_gpt_mirror.ps1` 的同一套纪律，不另起：
+照搬 `D:\Work\元智能\20_自适应工作流引擎\probes\probe_gpt_mirror.ps1` 的同一套纪律，不另起：
 
 1. **只读** —— 只枚举目录、只读文件哈希。脚本无任何写/删/移动被检对象的能力，产物只落在 `runtime\`
 2. **零字面量** —— 扫描根、正则、阈值、哨兵全从配置读；脚本内不得出现硬编码外部常量

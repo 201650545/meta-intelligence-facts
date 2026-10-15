@@ -17,7 +17,7 @@
 
 | 目标父目录 | 条数 | 该目录现在存在吗 |
 |---|---|---|
-| `C:\Users\郭永涛\.agents\skills` | 946 | 存在（源目录还在，只是里面的技能被删了） |
+| `<HOME>\.agents\skills` | 946 | 存在（源目录还在，只是里面的技能被删了） |
 
 **根因判读**：全部死链的目标父目录只有 1 个，且该目录本身仍存在 —— 说明不是盘符迁移、也不是整片路径失效，而是**从这一个 hub 里删掉了 149 个技能目录，但散在 9 个宿主里的 946 条链接没有回收**。清理因此是单一动作，不需要逐宿主分别判断。
 
@@ -32,25 +32,25 @@
 
 | host | 链接数 | 断链 | 普查对照 | 备注 |
 |---|---|---|---|---|
-| `C:\Users\郭永涛\.qoder\skills` | 187 | 149 | 149 | ok |
-| `C:\Users\郭永涛\.kiro\skills` | 190 | 149 | 149 | ok |
-| `C:\Users\郭永涛\.qwen\skills` | 190 | 149 | 149 | ok |
-| `C:\Users\郭永涛\.trae\skills` | 190 | 149 | 149 | ok |
-| `C:\Users\郭永涛\.iflow\skills` | 186 | 148 | 148 | ok |
-| `C:\Users\郭永涛\.codebuddy\skills` | 186 | 148 | 148 | ok |
-| `C:\Users\郭永涛\.trae-cn\skills` | 36 | 19 | 19 | ok |
-| `C:\Users\郭永涛\.qoder-cn\skills` | 28 | 18 | 18 | ok |
-| `C:\Users\郭永涛\.claude\skills` | 31 | 17 | 17 | ok |
-| `C:\Users\郭永涛\.cc-switch\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.workbuddy\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.workbuddy-ai\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.config\agents\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.config\opencode\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.qoderworkcn\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.trae-local\skills` | 0 | 0 | 0 | host_not_found |
-| `C:\Users\郭永涛\.codex\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.agents\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.box-agent\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.qoder\skills` | 187 | 149 | 149 | ok |
+| `<HOME>\.kiro\skills` | 190 | 149 | 149 | ok |
+| `<HOME>\.qwen\skills` | 190 | 149 | 149 | ok |
+| `<HOME>\.trae\skills` | 190 | 149 | 149 | ok |
+| `<HOME>\.iflow\skills` | 186 | 148 | 148 | ok |
+| `<HOME>\.codebuddy\skills` | 186 | 148 | 148 | ok |
+| `<HOME>\.trae-cn\skills` | 36 | 19 | 19 | ok |
+| `<HOME>\.qoder-cn\skills` | 28 | 18 | 18 | ok |
+| `<HOME>\.claude\skills` | 31 | 17 | 17 | ok |
+| `<HOME>\.cc-switch\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.workbuddy\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.workbuddy-ai\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.config\agents\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.config\opencode\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.qoderworkcn\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.trae-local\skills` | 0 | 0 | 0 | host_not_found |
+| `<HOME>\.codex\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.agents\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.box-agent\skills` | 0 | 0 | 0 | ok |
 
 ## 三、清理动作的安全要求（执行前必读）
 

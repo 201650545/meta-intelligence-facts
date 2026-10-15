@@ -21,8 +21,8 @@ sources:
   pilot_inventory: docs/02-镜像站试点盘点.md
   design: docs/03-方案构想.md
   contract: contracts/gpt-mirror-extended-review.yaml
-  skill_home: D:\Work\AI自成长引擎\技能库\loomy-learned-gpt-mirror-extended-review\SKILL.md
-  skill_index: D:\Work\AI自成长引擎\技能库\README.md
+  skill_home: skill://gpt-mirror-extended-review   # 2026-10-08 R7 批次0b：迁逻辑 URI（真源=10_AI自成长引擎/技能库/gpt-mirror-extended-review/SKILL.md；skill_index 为无 scheme 等价物的索引页，保留 legacy 由双轨报告跟踪）
+  skill_index: D:\Work\元智能\10_AI自成长引擎\技能库\README.md
 
 handbook:
   version: v1.0
@@ -32,19 +32,30 @@ pattern_source: D:\Work\AI平台\docs\design\AI基础设施\00-AI基础设施-�
 
 sibling_project:
   id: ai-self-growth-engine
-  local_path: D:\Work\AI自成长引擎\
+  local_path: D:\Work\元智能\10_AI自成长引擎\
   relation: 上游沉淀方（记忆→资产）；本项目为下游运行方（资产→可运行+自愈）
 
 pilot:
-  name: GPT 镜像站 Extended 送审
-  contract: contracts/gpt-mirror-extended-review.yaml     # A1 阶段创建
+  name: GPT 镜像站深度送审（Chat 标签 / 顶档 High）   # 2026-10-11：Work 标签实测不可用（接 Codex、无权限）⇒ 改回 Chat；2026-10-10 旧名「Work / GPT-6 Astra Max」作废
+  contract: contracts/gpt-mirror-extended-review.yaml     # A1 阶段创建；2026-10-11 升 v4（required=Chat、resolved=High）；2026-10-10 曾升 v3（新增 mode_toggle）
   baseline_metric: 零到可发问耗时 9.6s（tolerance +50%）
+    # ⚠️ 该基线是旧 UI（Auto→Extended 两步）测的；2026-10-10 改版后步骤变多（切标签/选模型/推滑杆），2026-10-11 又改回 Chat 单步推档 —— 基线需重测
   known_risks:
-    - "evalB_ext.js 三处硬编码断言于 2026-09-15 后断裂（假信号，待 D4 处置）"
-    - "镜像站会员 2026-10-28 到期，当前无人登记（待 D7）"
+    - "evalB_ext.js / ext_menu_open.js / ext_menu_pick.js 于 2026-10-10 随新版 ChatGPT UI 整体作废（旧 Thinking• Extended 结构消失；evalA_jump.js 仍有效）"
+    - "⭐ Work 标签不可用（2026-10-11 实测）：接 Codex、本账号无权限 —— Work + GPT-6 Astra + Max 下连「1+1」「你好」都被 OpenAI 式安全拒绝挡回；一律留在 Chat 标签 + 顶档 High"
+    - "镜像站会员 2026-10-29 到期（2026-10-10 实测页面；原记 10-28）；Loomy 提醒任务已建（2026-10-14 09:00）"
+    - "账号额度（panelAccountList[].metadata.limits_progress）无人监管——派活前须人工查，否则会派到 file_upload=0 的账号（CARD-24 实测）"
+    - "P2 UI 探针 probe_gpt_mirror_ui.js 仍未建 ⇒ mode_gate 的 pill 断言暂靠人工核对"
 
 repo: null
-milestone: A1-契约已落盘，待P1探针首跑
+milestone: A1 契约已落盘（v4，2026-10-11 改回 Chat）；P1 探针已跑通（2026-10-10）；P2 探针待建
 
 created_at: 2026-09-19
-updated_at: 2026-09-19
+updated_at: 2026-10-11
+
+# R1 步骤4/R7§4（2026-10-08）：机器层身份登记块。三键固定；形态与可达由 authority-check 判据7 管，存在性由 check-conformance 管。
+fusion:
+  authority_ref: machine/demands/D-003.yaml
+  contract_binding: machine/spec_binding.yaml#task
+  projection_of: 30_元智能/02_SYSTEM_CORE/META_INTELLIGENCE_V1.md
+

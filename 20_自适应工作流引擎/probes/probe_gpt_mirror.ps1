@@ -1,7 +1,7 @@
 # =====================================================================
 #  P1 网络探针（只读 HTTP · 不开浏览器 · 零打扰）
 # ---------------------------------------------------------------------
-#  契约真源 : D:\Work\自适应工作流引擎\contracts\gpt-mirror-extended-review.yaml
+#  契约真源 : D:\Work\元智能\20_自适应工作流引擎\contracts\gpt-mirror-extended-review.yaml
 #  产物     : ..\runtime\gpt-mirror.runtime.json （全量事实）
 #             ..\runtime\gpt-mirror.drift.json   （偏差投影）
 #  用法     : powershell -ExecutionPolicy Bypass -File probe_gpt_mirror.ps1
@@ -19,7 +19,7 @@
 #          3=自检失败（契约缺失/本机无网）——本次结果不可采信，不要当 drift 用
 # =====================================================================
 param(
-    [string]$Contract = 'D:\Work\自适应工作流引擎\contracts\gpt-mirror-extended-review.yaml',
+    [string]$Contract = 'D:\Work\元智能\20_自适应工作流引擎\contracts\gpt-mirror-extended-review.yaml',
     [switch]$Verbose2
 )
 
@@ -31,6 +31,35 @@ $RuntimeDir = Join-Path (Split-Path -Parent $ScriptDir) 'runtime'
 $NewLine = [Environment]::NewLine
 
 function Log([string]$m) { Write-Host $m; if ($Verbose2) { Write-Verbose $m } }
+
+# ---------------------------------------------------------------------
+# 〇、artifact-lifecycle v1（mirror-drift：mutable_observation）：覆盖前把旧代字节留档。
+# 契约：machine/contracts/artifact-lifecycle.yaml（prop_artifact_lifecycle_v1，郭老师 2026-10-09 批准）。
+# manifest = machine\baselines\generations\mirror-drift\manifest.jsonl（JSONL、无 BOM、逐代追加）。
+# ---------------------------------------------------------------------
+function Save-DriftGeneration {
+  param([string]$JsonText, [string]$TargetPath)
+  $lifecycleRoot = Split-Path -Parent (Split-Path -Parent $ScriptDir)
+  $genRoot = Join-Path $lifecycleRoot 'machine\baselines\generations\mirror-drift'
+  $manifest = Join-Path $genRoot 'manifest.jsonl'
+  if (Test-Path -LiteralPath $TargetPath) {
+    $prevBytes = [IO.File]::ReadAllBytes($TargetPath)
+    $sha256 = [System.Security.Cryptography.SHA256]::Create()
+    $prevSha = [BitConverter]::ToString($sha256.ComputeHash($prevBytes)).Replace('-', '').ToLower()
+    $prevLines = @(); if (Test-Path -LiteralPath $manifest) { $prevLines = @(Get-Content -LiteralPath $manifest -Encoding UTF8 | Where-Object { $_.Trim() }) }
+    $seq = $prevLines.Count + 1
+    $genId = 'gen-{0:D6}' -f $seq
+    $genDir = Join-Path $genRoot $genId
+    New-Item -ItemType Directory -Force -Path $genDir | Out-Null
+    [IO.File]::WriteAllBytes((Join-Path $genDir 'drift.json'), $prevBytes)
+    $prevId = ''
+    if ($prevLines.Count -gt 0) { try { $prevId = (ConvertFrom-Json ($prevLines[-1])).generation_id } catch { $prevId = '' } }
+    $mf = [ordered]@{ artifact_id = 'mirror-drift'; generation_id = $genId; sequence = $seq; captured_at = (Get-Date).ToUniversalTime().ToString('o'); previous_generation_id = $prevId; producer_id = 'probe_gpt_mirror'; content_sha256 = $prevSha; content_bytes = $prevBytes.Length; snapshot_path = ('machine/baselines/generations/mirror-drift/' + $genId + '/drift.json') }
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [IO.File]::AppendAllText($manifest, (($mf | ConvertTo-Json -Compress) + "`n"), $utf8NoBom)
+  }
+  Set-Content -LiteralPath $TargetPath -Value $JsonText -Encoding UTF8
+}
 
 # ---------------------------------------------------------------------
 # 一、契约读取：极简 YAML 子集解析（缩进 + 列表 + 标量），失败即自检失败
@@ -223,10 +252,23 @@ try {
 
 # ---- 3.2 取契约字段（缺任一必需字段 → 自检失败，不产出 drift 结论）----
 try {
+    # 2026-10-09 郭老师裁定新增：契约里标 probe: none 的条件，P1 不再硬跑。
+    # 起因：account_pool 被标 none（匿名 GET 验不了登录后才有的健康特征，见契约同块注释），
+    # 但本探针原本把它的取数逻辑写死在代码里，不看 probe 字段 ⇒ 仍会跑、仍会报假警。
+    # 规则：**probe=none 的条件，P1 跳过取数与判定，产物里记 n/a**；
+    #   需要真的测它，就建 P2（browser 层），别在 P1 里硬凑。
+    $poolProbe   = Get-Cfg $C 'conditions.account_pool.probe'
+    $POOL_SKIP   = ($poolProbe -eq 'none')
+    if ($POOL_SKIP) { Log '[P1] account_pool: 契约标记 probe=none（属 P2 浏览器域）⇒ 本层跳过，不产出该条读数' }
+
+    if (-not $POOL_SKIP) {
     $poolUrls   = Get-CfgList $C 'conditions.account_pool.urls'
     $poolProxy  = Get-Cfg $C 'conditions.account_pool.proxy'
     $poolHealth = Get-Required $C 'conditions.account_pool.health_regex'
     $poolFail   = Get-Cfg $C 'conditions.account_pool.on_fail'
+    } else {
+    $poolUrls = @(); $poolProxy = ''; $poolHealth = ''; $poolFail = ''
+    }
 
     $cardEndpoint   = Get-Required $C 'conditions.active_card.endpoint'
     $cardExpect     = Get-Required $C 'conditions.active_card.expect'
@@ -242,7 +284,7 @@ try {
     $expWarn    = [int](Get-Required $C 'conditions.membership_expiry.warn_before_days')
     $expFail    = Get-Cfg $C 'conditions.membership_expiry.on_fail'
 
-    if ($poolUrls.Count -eq 0) { throw '契约 conditions.account_pool.urls 为空列表' }
+    if ($poolUrls.Count -eq 0 -and -not $POOL_SKIP) { throw '契约 conditions.account_pool.urls 为空列表' }
     $selfTest.required_fields_ok = $true
     Log "[P1] 必需字段齐全（pool=$($poolUrls.Count) 个URL，patterns=$($discPatterns.Count) 条）"
 } catch {
@@ -253,8 +295,9 @@ try {
     if (-not (Test-Path $RuntimeDir)) { New-Item -ItemType Directory -Path $RuntimeDir -Force | Out-Null }
     @{ probed_at = $probedAt; contract = $Contract; probe_self_test = 'fail'; fields = $null; drift = $drift; summary = $summary } |
         ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $RuntimeDir 'gpt-mirror.runtime.json') -Encoding UTF8
-    @{ probed_at = $probedAt; contract_version = (Get-Cfg $C 'contract_version'); probe_self_test = 'fail'; items = $drift; summary = $summary } |
-        ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $RuntimeDir 'gpt-mirror.drift.json') -Encoding UTF8
+    $driftJsonFail = @{ probed_at = $probedAt; contract_version = (Get-Cfg $C 'contract_version'); probe_self_test = 'fail'; items = $drift; summary = $summary } |
+        ConvertTo-Json -Depth 8
+    Save-DriftGeneration -JsonText $driftJsonFail -TargetPath (Join-Path $RuntimeDir 'gpt-mirror.drift.json')
     exit 3
 }
 
@@ -366,6 +409,7 @@ foreach ($cid in $carIds) {
 
 if ($carIds.Count -gt 0) {
     $anyReachable = ($cardResults | Where-Object { $_.reachable }).Count
+    if ($anyReachable -gt 0) { $selfTest.network_reachable = $true }
     if ($anyReachable -eq 0) {
         $drift += [ordered]@{ condition = 'active_card'; level = 'break'
             note = "健康徽章端点全部不可达（探了 $anyReachable/$($carIds.Count)）—— 若 account_pool 同样连不上，则属本机网络问题而非站点问题"
@@ -454,7 +498,8 @@ $driftDoc = [ordered]@{
 
 if (-not (Test-Path $RuntimeDir)) { New-Item -ItemType Directory -Path $RuntimeDir -Force | Out-Null }
 ($runtime | ConvertTo-Json -Depth 10) | Set-Content -LiteralPath (Join-Path $RuntimeDir 'gpt-mirror.runtime.json') -Encoding UTF8
-($driftDoc | ConvertTo-Json -Depth 10) | Set-Content -LiteralPath (Join-Path $RuntimeDir 'gpt-mirror.drift.json') -Encoding UTF8
+$driftJsonMain = ($driftDoc | ConvertTo-Json -Depth 10)
+Save-DriftGeneration -JsonText $driftJsonMain -TargetPath (Join-Path $RuntimeDir 'gpt-mirror.drift.json')
 
 Log ""
 Log ("[P1] 自检={0}  info={1} warn={2} break={3} silent-risk={4}  耗时 {5}ms" -f $selfTestVerdict, $summary.info, $summary.warn, $summary['break'], $summary.silent_risk, $runtime.elapsed_ms)

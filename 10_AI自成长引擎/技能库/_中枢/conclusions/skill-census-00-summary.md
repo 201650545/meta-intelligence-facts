@@ -1,7 +1,7 @@
-﻿# 技能普查体检摘要（P0 只读）
+# 技能普查体检摘要（P0 只读）
 
 - 探测时间：2026-09-24T10:29:41+08:00
-- 配置：`D:\Work\AI自成长引擎\技能库\_中枢\audit.config.yaml`
+- 配置：`D:\Work\元智能\10_AI自成长引擎\技能库\_中枢\audit.config.yaml`
 - probe_self_test：**pass**（枚举 / 分类 / 哈希 / 断链 四类判据均命中已知样本）
 - 访问目录数：211954
 
@@ -61,25 +61,25 @@
 
 | host | entities（实体） | links_alive（活链接） | broken（断链） |
 |---|---|---|---|
-| `C:\Users\郭永涛\.qoder\skills` | 25 | 38 | 149 |
-| `C:\Users\郭永涛\.kiro\skills` | 25 | 41 | 149 |
-| `C:\Users\郭永涛\.qwen\skills` | 25 | 41 | 149 |
-| `C:\Users\郭永涛\.trae\skills` | 25 | 41 | 149 |
-| `C:\Users\郭永涛\.iflow\skills` | 25 | 38 | 148 |
-| `C:\Users\郭永涛\.codebuddy\skills` | 26 | 38 | 148 |
-| `C:\Users\郭永涛\.trae-cn\skills` | 39 | 17 | 19 |
-| `C:\Users\郭永涛\.qoder-cn\skills` | 0 | 10 | 18 |
-| `C:\Users\郭永涛\.claude\skills` | 6 | 14 | 17 |
-| `C:\Users\郭永涛\.cc-switch\skills` | 20 | 0 | 0 |
-| `C:\Users\郭永涛\.workbuddy\skills` | 55 | 0 | 0 |
-| `C:\Users\郭永涛\.workbuddy-ai\skills` | 26 | 0 | 0 |
-| `C:\Users\郭永涛\.config\agents\skills` | 26 | 0 | 0 |
-| `C:\Users\郭永涛\.config\opencode\skills` | 25 | 0 | 0 |
-| `C:\Users\郭永涛\.qoderworkcn\skills` | 46 | 0 | 0 |
-| `C:\Users\郭永涛\.trae-local\skills` | 0 | 0 | 0 |
-| `C:\Users\郭永涛\.codex\skills` | 2 | 0 | 0 |
-| `C:\Users\郭永涛\.agents\skills` | 79 | 0 | 0 |
-| `C:\Users\郭永涛\.box-agent\skills` | 28 | 0 | 0 |
+| `<HOME>\.qoder\skills` | 25 | 38 | 149 |
+| `<HOME>\.kiro\skills` | 25 | 41 | 149 |
+| `<HOME>\.qwen\skills` | 25 | 41 | 149 |
+| `<HOME>\.trae\skills` | 25 | 41 | 149 |
+| `<HOME>\.iflow\skills` | 25 | 38 | 148 |
+| `<HOME>\.codebuddy\skills` | 26 | 38 | 148 |
+| `<HOME>\.trae-cn\skills` | 39 | 17 | 19 |
+| `<HOME>\.qoder-cn\skills` | 0 | 10 | 18 |
+| `<HOME>\.claude\skills` | 6 | 14 | 17 |
+| `<HOME>\.cc-switch\skills` | 20 | 0 | 0 |
+| `<HOME>\.workbuddy\skills` | 55 | 0 | 0 |
+| `<HOME>\.workbuddy-ai\skills` | 26 | 0 | 0 |
+| `<HOME>\.config\agents\skills` | 26 | 0 | 0 |
+| `<HOME>\.config\opencode\skills` | 25 | 0 | 0 |
+| `<HOME>\.qoderworkcn\skills` | 46 | 0 | 0 |
+| `<HOME>\.trae-local\skills` | 0 | 0 | 0 |
+| `<HOME>\.codex\skills` | 2 | 0 | 0 |
+| `<HOME>\.agents\skills` | 79 | 0 | 0 |
+| `<HOME>\.box-agent\skills` | 28 | 0 | 0 |
 
 ---
 

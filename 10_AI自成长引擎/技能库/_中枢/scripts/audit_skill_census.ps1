@@ -11,7 +11,7 @@
 #             ..\runtime\00-summary.md           人读摘要
 #  用法     : powershell -ExecutionPolicy Bypass -File audit_skill_census.ps1 [-Config <路径>]
 #
-#  铁律（照搬 D:\Work\自适应工作流引擎\probes\probe_gpt_mirror.ps1 的范式）
+#  铁律（照搬 D:\Work\元智能\20_自适应工作流引擎\probes\probe_gpt_mirror.ps1 的范式）
 #   1. 只读：只枚举目录与读文件哈希，绝不创建 / 修改 / 删除任何被检对象
 #   2. 零字面量：扫描根 / 分类正则 / 阈值 / 哨兵 全部从配置读取，
 #      本脚本内不得出现任何硬编码的外部常量
@@ -236,7 +236,7 @@ foreach ($f in $skillFiles) {
 
     # 分类优先级：所有权标记 > 路径判据 > 已知第三方合集
     # 标记优先的理由：`.loomy-skill.json` 是"该技能归程序所有、更新会覆盖"的直接证据，
-    # 而 Loomy 运行时目录（C:\Users\Public\Loomy\...）按路径段判会被误归 B 待判。
+    # 而 Loomy 运行时目录（<HOME>\Loomy\...）按路径段判会被误归 B 待判。
     $cls = 'B'; $why = 'default'
     $ownedByMarker = $false
     foreach ($mk in $markers) {

@@ -26,36 +26,36 @@
 
 | 容器目录 | 在范围 | 退出范围 | 首个判据 |
 |---|---|---|---|
-| `C:\Users\郭永涛\.codebuddy\skills-marketplace\skills` | 0 | 295 | 未声明(默认) |
+| `<HOME>\.codebuddy\skills-marketplace\skills` | 0 | 295 | 未声明(默认) |
 | `D:\OfficeAce\office-claw-skills` | 277 | 0 | 声明的在范围根 |
-| `C:\Users\郭永涛\.workbuddy-ai\skills-marketplace\skills` | 0 | 268 | 未声明(默认) |
-| `C:\Users\郭永涛\.workbuddy\skills-marketplace\skills` | 0 | 268 | 未声明(默认) |
+| `<HOME>\.workbuddy-ai\skills-marketplace\skills` | 0 | 268 | 未声明(默认) |
+| `<HOME>\.workbuddy\skills-marketplace\skills` | 0 | 268 | 未声明(默认) |
 | `D:\Open Design\resources\open-design\plugins\_official\examples` | 0 | 182 | 未声明(默认) |
 | `D:\Open Design\resources\open-design\skills` | 0 | 155 | 未声明(默认) |
-| `C:\Users\郭永涛\.workbuddy\plugins\marketplaces\codebuddy-plugins-official\external_plugins\scientific-skills` | 0 | 138 | 未声明(默认) |
-| `C:\Users\郭永涛\.workbuddy-ai\plugins\marketplaces\codebuddy-plugins-official\external_plugins\scientific-skills` | 0 | 138 | 未声明(默认) |
-| `C:\Users\郭永涛\.codebuddy\plugins\marketplaces\codebuddy-plugins-official\external_plugins\scientific-skills` | 0 | 138 | 未声明(默认) |
+| `<HOME>\.workbuddy\plugins\marketplaces\codebuddy-plugins-official\external_plugins\scientific-skills` | 0 | 138 | 未声明(默认) |
+| `<HOME>\.workbuddy-ai\plugins\marketplaces\codebuddy-plugins-official\external_plugins\scientific-skills` | 0 | 138 | 未声明(默认) |
+| `<HOME>\.codebuddy\plugins\marketplaces\codebuddy-plugins-official\external_plugins\scientific-skills` | 0 | 138 | 未声明(默认) |
 | `D:\Open Design\resources\open-design\design-templates` | 0 | 109 | 未声明(默认) |
-| `C:\Users\郭永涛\.qclaw\skills` | 0 | 107 | 未声明(默认) |
-| `C:\Users\郭永涛\.openclaw-autoclaw\skills\autoclaw-design-capability\审美相关skill\skills` | 0 | 106 | 未声明(默认) |
-| `C:\Users\郭永涛\.openclaw-autoclaw\skills\autoclaw-design-capability_noqa\审美相关skill\skills` | 0 | 106 | 未声明(默认) |
-| `C:\Users\郭永涛\.openclaw-autoclaw\agents\auto-designer\workspace\审美相关skill\skills` | 0 | 106 | 未声明(默认) |
-| `C:\Users\郭永涛\.openclaw-autoclaw\skills` | 0 | 106 | 未声明(默认) |
-| `C:\Users\郭永涛\.openclaw-autoclaw\skills\autoclaw-design-capability\审美相关skill\design-skeletons` | 0 | 84 | 未声明(默认) |
-| `C:\Users\郭永涛\.openclaw-autoclaw\skills\autoclaw-design-capability_noqa\审美相关skill\design-skeletons` | 0 | 84 | 未声明(默认) |
-| `C:\Users\郭永涛\.openclaw-autoclaw\agents\auto-designer\workspace\审美相关skill\design-skeletons` | 0 | 84 | 未声明(默认) |
-| `C:\Users\Public\Loomy\c3773183a592\opencode\skills` | 11 | 69 | 出厂自带(.loomy-skill.json:bundled) |
-| `C:\Users\郭永涛\.config\alma\skills` | 0 | 73 | 未声明(默认) |
-| `C:\Users\郭永涛\.agents\skills` | 69 | 0 | 声明的在范围根 |
+| `<HOME>\.qclaw\skills` | 0 | 107 | 未声明(默认) |
+| `<HOME>\.openclaw-autoclaw\skills\autoclaw-design-capability\审美相关skill\skills` | 0 | 106 | 未声明(默认) |
+| `<HOME>\.openclaw-autoclaw\skills\autoclaw-design-capability_noqa\审美相关skill\skills` | 0 | 106 | 未声明(默认) |
+| `<HOME>\.openclaw-autoclaw\agents\auto-designer\workspace\审美相关skill\skills` | 0 | 106 | 未声明(默认) |
+| `<HOME>\.openclaw-autoclaw\skills` | 0 | 106 | 未声明(默认) |
+| `<HOME>\.openclaw-autoclaw\skills\autoclaw-design-capability\审美相关skill\design-skeletons` | 0 | 84 | 未声明(默认) |
+| `<HOME>\.openclaw-autoclaw\skills\autoclaw-design-capability_noqa\审美相关skill\design-skeletons` | 0 | 84 | 未声明(默认) |
+| `<HOME>\.openclaw-autoclaw\agents\auto-designer\workspace\审美相关skill\design-skeletons` | 0 | 84 | 未声明(默认) |
+| `<HOME>\Loomy\c3773183a592\opencode\skills` | 11 | 69 | 出厂自带(.loomy-skill.json:bundled) |
+| `<HOME>\.config\alma\skills` | 0 | 73 | 未声明(默认) |
+| `<HOME>\.agents\skills` | 69 | 0 | 声明的在范围根 |
 | `D:\xunfei\Loomy\resources\opencode-home-template\skills` | 0 | 69 | 未声明(默认) |
-| `C:\Users\郭永涛\.workbuddy\connectors-marketplace\connectors\linkfox\skills` | 0 | 66 | 未声明(默认) |
-| `C:\Users\郭永涛\.workbuddy-ai\connectors-marketplace\connectors\linkfox-product-selection\skills` | 0 | 66 | 未声明(默认) |
-| `C:\Users\郭永涛\skills` | 65 | 0 | 声明的在范围根 |
+| `<HOME>\.workbuddy\connectors-marketplace\connectors\linkfox\skills` | 0 | 66 | 未声明(默认) |
+| `<HOME>\.workbuddy-ai\connectors-marketplace\connectors\linkfox-product-selection\skills` | 0 | 66 | 未声明(默认) |
+| `<HOME>\skills` | 65 | 0 | 声明的在范围根 |
 | `D:\02-AI工具\autoclaw\resources\skills` | 0 | 62 | 未声明(默认) |
 | `D:\02-AI工具\autoclaw\resources\gateway\openclaw\skills` | 0 | 52 | 未声明(默认) |
 | `D:\qclaw\v0.2.37.630\resources\openclaw\config\skills` | 0 | 50 | 未声明(默认) |
-| `C:\Users\郭永涛\.workbuddy\skills` | 0 | 50 | 未声明(默认) |
-| `C:\Users\郭永涛\.openclaw-autoclaw\agents\auto-legal\workspace\.openclaw\template-backups\v30\skills` | 0 | 48 | 未声明(默认) |
+| `<HOME>\.workbuddy\skills` | 0 | 50 | 未声明(默认) |
+| `<HOME>\.openclaw-autoclaw\agents\auto-legal\workspace\.openclaw\template-backups\v30\skills` | 0 | 48 | 未声明(默认) |
 
 ## 可治理清单 TOP30（范围内、同名多份且内容不一致）
 

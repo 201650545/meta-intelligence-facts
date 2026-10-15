@@ -1,9 +1,14 @@
 # 自适应工作流引擎（Adaptive Workflow Engine）
 
-> **本地路径**：`D:\Work\自适应工作流引擎\`（本仓自报，路径漂移以本行为准）
+> ## ⚠️ 镜像站送审线已转交（2026-10-11）
+> **本项目的 GPT 镜像站送审试点（skill + 契约 v5 + runbook 整簇）已收口并转交给下一个执行 Agent**。
+> 接手方**只读这一页**即可开工：[`任务转交_给执行Agent_20261011.md`](任务转交_给执行Agent_20261011.md)（自包含：背景口径 / 资产落点 / 已完成清单 / 关键实测事实 / 未完成 T1~T7 / 红线）。
+> 本页其余内容仍有效，但**以交接页为准**。
+
+> **本地路径**：`D:\Work\元智能\20_自适应工作流引擎\`（本仓自报，路径漂移以本行为准）
 > **别名**：工作流自动化构造 / AWE
 > **状态**：构想中（试点盘点与架构定稿完成，尚未开工）
-> **依赖规范**：handbook v1.0；范式来源 ai-platform `docs/design/AI基础设施/00-AI基础设施-总览.md`
+> **依赖规范**：handbook v1.1；范式来源 ai-platform `docs/design/AI基础设施/00-AI基础设施-总览.md`
 
 ## 这是什么
 
@@ -13,17 +18,20 @@
 
 **它解决的不是"没有自动化"，而是"自动化会静默过期，并且过期后给出假信号"。** 本项目的立项证据就在试点里：镜像站 2026-09-15 菜单文案改版后，`evalB_ext.js` 三处硬编码断言全部断裂，脚本却照常返回结构化结果 —— 假阴性 `ok:false`，或"以为切到 Extended 实际是 Standard"的假阳性；当时的唯一应对，是在手册里手写两行 ⚠️ 注释。
 
-**边界**：不做沉淀（那是 `D:\Work\AI自成长引擎\` 的活，本项目只接它产出的 L2/L3）；不接管 ai-platform 的 `gateways.json` 与端口登记；不改 handbook 与记忆正文；**A4 级"机器改方法论"明确排除**。
+**边界**：不做沉淀（那是 `D:\Work\元智能\10_AI自成长引擎\` 的活，本项目只接它产出的 L2/L3）；不接管 ai-platform 的 `gateways.json` 与端口登记；不改 handbook 与记忆正文；**A4 级"机器改方法论"明确排除**。
 
 ## 当前状态（As of 2026-09-19）
 
 > ### ⚠️ 本任务已转交（收尾与断链修复已完成）
-> 立项会话收尾与断链修复已于 2026-09-19 全部完成：skill 路径已全量同步至上游 `D:\Work\AI自成长引擎\技能库\`，本仓无本地草稿目录；契约与文档均已同步。详情见 **`D:\Work\AI自成长引擎\双引擎立项收口交接_给执行Agent_20260919.md`**。
+> 立项会话收尾与断链修复已于 2026-09-19 全部完成：skill 路径已全量同步至上游 `D:\Work\元智能\10_AI自成长引擎\技能库\`，本仓无本地草稿目录；契约与文档均已同步。详情见 **`D:\Work\元智能\10_AI自成长引擎\双引擎立项收口交接_给执行Agent_20260919.md`**。
 
-- 阶段：**A1 进行中** —— 契约已落盘（`contracts\gpt-mirror-extended-review.yaml`，8 conditions / 11 gates），只剩 **P1 网络探针首跑（T6）**
+- 阶段：**A1 进行中** —— 契约已落盘（`contracts\gpt-mirror-extended-review.yaml`，**2026-10-11 升 v4：9 conditions / 13 gates**；v3 为 10-10，原 8/11 为 09-19 快照），只剩 **P1 网络探针首跑（T6）**
+- **2026-10-15 新增第二份契约（T20）**：`contracts\ops-task-fleet.yaml`（38 conditions）＋ `probes\probe_ops_tasks.ps1`（只读 · 零字面量 · 实测 2.3s · 自检 pass）＋ skill `ops-task-fleet-watch`（技能库第 6 类「定时任务与巡检类」）—— 把本机 ~38 个「我方运维计划任务」纳入三件套核对，`patrol.mjs` 每日 08:35 一并巡检。**首跑即报出 3 条真故障**（ModelScope 登录态失效 / 小红书 `unlike_resume.bat` 占位符未替换 / AutoSeatOrchestrate 非零码待定性）。见 `docs/01-任务看板.md` T20 与 §六 2026-10-15。
 - 已拍板：**D1** 契约中立 + skill 起步、**D2** 现在不装 n8n、**D3** 探针跑通后再安装 skill、**D4** 旧脚本只标注不原地改（已执行）、**D7** 会员到期提醒现在就设（已执行）
 - 待表态：D5（runtime 是否进 git）/ D6（探针调度频率）/ D8（第二个试点选哪个）
-- 最近重大变化：立项并完成镜像站全量盘点（16 份资产）；发现并已处置两条真实风险 —— `evalB_ext.js` 三处断言断裂（已加失效标注）、会员 **2026-10-28 到期**（已建 2026-10-14 提醒 + 写入契约 break 条件）
+- 最近重大变化：立项并完成镜像站全量盘点（16 份资产）；发现并已处置两条真实风险 —— `evalB_ext.js` 三处断言断裂（已加失效标注）、会员 **2026-10-29 到期**（页面 2026-10-10 实测；原记 10-28，**Loomy 提醒任务名仍带旧日期，勿改任务名**）
+- **2026-10-10 站点大改版（背景）**：镜像站换新版 ChatGPT UI，旧文案 `Auto / Thinking• Extended / GPT-5.6 Luna` **一个字都不剩** → 顶部 `Chat`/`Work` 标签 + 模型 pill 里的 `Power` 滑杆；契约升 **v3**（新增 `mode_toggle`、`reasoning_mode` 整体重写、`profile` 改 `LOCAL_BROWSER_PROFILE`）。
+- **⭐ 2026-10-11 目标改回 `Chat`**：实测 **`Work` 标签不可用**（接 Codex、本账号无权限）—— Work + `GPT-6 Astra` + `Max` 下连「1+1」「你好」都被 OpenAI 式安全拒绝挡回，切回 `Chat` 同题正常 ⇒ 郭老师裁定**改回 `Chat` 标签 + 顶档 `High`**，契约升 **v4**；skill / 工具记忆 §二 / 手册 §一.4+§八 / 新脚本 `to_chat_high.js` 同步。详见 `D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\GPT镜像站送审流程.md` §八。
 - 详细任务状态：`docs/01-任务看板.md`
 
 ## Source of Truth
@@ -35,7 +43,8 @@
 | **镜像站试点的全部资产清单 + 失效逐行证据 + skill 化清单** | `docs/02-镜像站试点盘点.md` |
 | 怎么实现（载体选型对比 / 契约 schema / 探针分层 / 自愈执行序 / Windows 传参三坑） | `docs/03-方案构想.md` |
 | **★ 镜像站契约实体（声明态真源，执行体从这里读参数）** | `contracts/gpt-mirror-extended-review.yaml` |
-| 待安装 skill（**不生效**） | `D:\Work\AI自成长引擎\技能库\loomy-learned-gpt-mirror-extended-review\SKILL.md`（跨仓，归属上游技能库） |
+| **★ 定时任务舰队契约实体（同上，2026-10-15 入）** | `contracts/ops-task-fleet.yaml` ＋ 探针 `probes/probe_ops_tasks.ps1` |
+| 待安装 skill（**不生效**） | `D:\Work\元智能\10_AI自成长引擎\技能库\gpt-mirror-extended-review\SKILL.md`（跨仓，归属上游技能库） |
 
 ## 给 AI / Agent 的读取顺序
 
@@ -44,13 +53,13 @@
    → docs/02-镜像站试点盘点（试点事实，含失效证据）
    → docs/01-任务看板（当前阶段 + 待决策）
    → 要写契约/探针才读 docs/03-方案构想
-   → 执行镜像站流程本身：先读 D:\Work\AI平台\docs\runbooks\GPT镜像站送审流程.md（手册仍是操作真源），再看本项目契约与 drift
+   → 执行镜像站流程本身：先读 D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\GPT镜像站送审流程.md（手册仍是操作真源），再看本项目契约与 drift
 ```
 
 ## 不要假设
 
 - **尚无独立 Git 仓、未登记 `projects.yaml`**（A3 验收通过再补，见任务看板）
 - `contracts/` **已建并落盘一份契约**；`probes/ runners/ runtime/` 三个目录 **仍需 A1~A2 阶段创建**，当前不存在——所以 skill 草稿里的「前置探针」一节暂时无法执行
-- **skill 现存在上游技能库 `D:\Work\AI自成长引擎\技能库\`，该位置不加载、不触发**；本仓已无本地草稿目录。安装到 `D:\记忆\_Skills\` 是需点头的独立一步（D3）
-- 现有 `D:\Work\AI平台\docs\runbooks\scripts\evalB_ext.js` **仍未修复**，处置方式待 D4 决定
+- **skill 现存在上游技能库 `D:\Work\元智能\10_AI自成长引擎\技能库\`，该位置不加载、不触发**；本仓已无本地草稿目录。安装到 `D:\记忆\_Skills\` 是需点头的独立一步（D3）
+- 现有 `D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\scripts\evalB_ext.js` **仍未修复**，处置方式待 D4 决定
 - 文档内时间戳为准；GitHub 内容可能晚于本地

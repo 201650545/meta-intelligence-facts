@@ -14,13 +14,13 @@
 #  断链哨兵不降级：.trae 的已知断链必须检出，否则同样 exit 3
 # =====================================================================
 config_version: 1
-owner_plan: D:\Work\AI自成长引擎\docs\04-方案_技能统一治理与浏览器能力域_20260924.md
+owner_plan: D:\Work\元智能\10_AI自成长引擎\docs\04-方案_技能统一治理与浏览器能力域_20260924.md
 output_prefix: skill-census-smoke
 
 scan:
   roots:
-    - C:\Users\郭永涛\.workbuddy\|4
-    - C:\Users\郭永涛\.workbuddy-ai\|4
+    - <HOME>\.workbuddy\|4
+    - <HOME>\.workbuddy-ai\|4
   exclude_path_regex: node_modules|\.git\\|\.pnpm-store|\$RECYCLE\.BIN|System Volume Information
   skill_file_name: SKILL.md
 
@@ -30,11 +30,11 @@ classify:
   b_class_known_dirs:
     - D:\OfficeAce\office-claw-skills
   true_source_dirs:
-    - D:\Work\AI自成长引擎\技能库
+    - D:\Work\元智能\10_AI自成长引擎\技能库
 
 link_hosts:
-  - C:\Users\郭永涛\.trae\skills
-  - C:\Users\郭永涛\.agents\skills
+  - <HOME>\.trae\skills
+  - <HOME>\.agents\skills
 
 self_test:
   min_skill_files_total: 200
@@ -45,7 +45,7 @@ self_test:
   min_hashed_files: 150
   max_frontmatter_missing_rate: 0.60
   min_broken_links: 100
-  sentinel_broken_link: C:\Users\郭永涛\.trae\skills\ad-creative
+  sentinel_broken_link: <HOME>\.trae\skills\ad-creative
   sentinel_source: 2026-09-24 find -type l ! -exec test -e 实测样本
   sentinel_dup_name: none
   sentinel_dup_min_copies: 0
