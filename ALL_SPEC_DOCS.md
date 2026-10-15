@@ -2021,7 +2021,7 @@ V1 freezes the conceptual model and turns it into an executable operating specif
 
 ########## 文件开始：20_自适应工作流引擎/contracts/gpt-mirror-extended-review.yaml ##########
 # ============================================================
-# 契约（声明态真源 · 唯一）：GPT 镜像站 Extended 送审
+# 契约（声明态真源 · 唯一）：GPT 镜像站深度送审（Chat 标签 / ChatGPT 6 Sol / 顶档 High）
 # ------------------------------------------------------------
 # 铁律（照搬 ai-platform docs/design/AI基础设施/00-AI基础设施-总览.md）：
 #   1. 声明态与运行态分离：本文件只写「期望与依赖」，绝不写当前健康 / 当前文案 / pid
@@ -2032,30 +2032,31 @@ V1 freezes the conceptual model and turns it into an executable operating specif
 # 创建：2026-09-19（A1 阶段）｜决策 D1=契约中立+skill 起步｜D4=旧脚本只标注不原地改
 # ============================================================
 
-contract_version: 1
+contract_version: 5                        # v5（2026-10-11）：郭老师明令**默认必须用 ChatGPT 6 Sol + High** ⇒ 把「模型」写进 mode_gate（required_model=ChatGPT 6 Sol，镜像站显示名 "6"）。v4（2026-10-11）：Work 不可用 ⇒ 目标改回 Chat + 顶档 High。v3（2026-10-10）：站点换新版 ChatGPT UI —— 新增 mode_toggle（Chat|Work），reasoning_mode 整体重写
+                                           # v2（2026-09-26）：新增 delivery_readback 与 fetch_retry_budget 两条闸门
 workflow_id: gpt-mirror-extended-review
-display_name: GPT 镜像站 Extended 送审
+display_name: GPT 镜像站深度送审（Chat 标签 / ChatGPT 6 Sol / 顶档 High）
 
-owner_skill: loomy-learned-gpt-mirror-extended-review
+owner_skill: gpt-mirror-extended-review          # 真源身份（我们的命名空间）；装进 Loomy 时才换成宿主形态 loomy-learned-gpt-mirror-extended-review，映射见 10_AI自成长引擎/技能库/naming.yaml
 # skill 存放与安装（2026-09-19 郭老师口径：项目产出的 skill 不进程序技能目录，统一存 AI自成长引擎 技能库）
-skill_home: D:\Work\AI自成长引擎\技能库\loomy-learned-gpt-mirror-extended-review\SKILL.md   # ← 当前实际位置（草稿，不生效）
-skill_install_to: D:\记忆\_Skills\          # 程序运行时加载的目录；安装即改变 Agent 真实行为，需人工点头（D3=等 A2 探针跑通再装）
-skill_index: D:\Work\AI自成长引擎\技能库\README.md
+skill_home: skill://gpt-mirror-extended-review   # 2026-10-08 R7 批次0b：跨树绝对路径迁逻辑 URI（resolver 登记处=10_AI自成长引擎/技能库/*/SKILL.md；真源=10_AI自成长引擎/技能库/gpt-mirror-extended-review/SKILL.md，「草稿不生效」语义不变。skill_index 指向技能库 README，该对象无 URI scheme 等价物，保留 legacy 路径由 resolve-uri 双轨报告显式跟踪）
+skill_install_to: <HOME>\Loomy\c3773183a592\opencode\skills\          # 程序运行时加载的目录；安装即改变 Agent 真实行为，需人工点头（D3=等 A2 探针跑通再装）
+skill_index: D:\Work\元智能\10_AI自成长引擎\技能库\README.md
 
 superseded_runners:                          # 已被本契约取代/待取代的旧执行体
-  - path: D:\Work\AI平台\docs\runbooks\scripts\evalB_ext.js
+  - path: D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\scripts\evalB_ext.js
     status: annotated_broken                 # D4：只加失效标注，不原地改 ai-platform 执行真源
     broken_at: 2026-09-15
     annotated_at: 2026-09-19
     reason: 三处硬编码断言（pill 就绪正则 / 菜单项匹配 / ==='Extended'）全断裂，会给出假信号
-    replacement: D:\Work\自适应工作流引擎\runners\evalB_ext_adaptive.js   # A2 阶段创建
-  - path: D:\Work\AI平台\docs\runbooks\scripts\evalA_jump.js
+    replacement: D:\Work\元智能\20_自适应工作流引擎\runners\evalB_ext_adaptive.js   # A2 阶段创建
+  - path: D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\scripts\evalA_jump.js
     status: active_with_fallback
     note: 取 .n-card[0] 兜底；卡号轮换属 info 级，由 active_card 探针回填
 
 source_assets:                               # 知识出处（可回溯，禁止在本文件重写正文）
-  operations_truth: D:\Work\AI平台\docs\runbooks\GPT镜像站送审流程.md
-  handoff: D:\Work\AI平台\docs\runbooks\GPT镜像站一键交接文档（给执行Agent）.md
+  operations_truth: D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\GPT镜像站送审流程.md
+  handoff: D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\GPT镜像站一键交接文档（给执行Agent）.md
   memory:
     - D:\记忆\调度大脑记忆\流程\workflow_ai_<POOL_NAME>_open.md
     - D:\记忆\调度大脑记忆\流程\workflow_gpt_repo_sync.md
@@ -2067,14 +2068,14 @@ source_assets:                               # 知识出处（可回溯，禁止
     - D:\记忆\调度大脑记忆\反馈\feedback_gpt_context_github.md
     - D:\记忆\调度大脑记忆\反馈\feedback_fork_forbidden.md
     - D:\记忆\调度大脑记忆\教训\error_lessons.md
-  inventory: D:\Work\自适应工作流引擎\docs\02-镜像站试点盘点.md
+  inventory: D:\Work\元智能\20_自适应工作流引擎\docs\02-镜像站试点盘点.md
 
 baseline:                                    # 回归对照：自愈后性能不得显著劣化
   metric: 零到可发问耗时(s)
   value: 9.6
   tolerance: "+50%"                          # 上限 14.4s
   history: [13.9, 9.6, 14.0]
-  reference: D:\Work\AI平台\docs\runbooks\测试任务-镜像零到Extended计时.md
+  reference: D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\测试任务-镜像零到Extended计时.md
 
 # ------------------------------------------------------------
 # conditions：外部依赖条件（探针核对对象）
@@ -2083,12 +2084,27 @@ baseline:                                    # 回归对照：自愈后性能不
 conditions:
 
   account_pool:
-    probe: http_get                          # P1 层，零打扰，不碰浏览器
-    urls:
+    # 2026-10-09 郭老师裁定：本条移出 P1，改标 none。
+    # 根因（实测）：P1 探针是**匿名 GET**（无 Cookie/无登录态），而健康特征
+    #   '(账号池|GPT-5|n-card)' 只出现在**登录后**的页面里 ⇒ 永远匹配不上，
+    #   返回 1 字节 → 每天误报"前端可能已改版"。站点本身没问题：同契约的
+    #   active_card（后端 account_health_badge，非 UI）实测正常，且郭老师与
+    #   其他 Agent 用 opencli 走已登录 Chrome 打开一切正常。
+    # 2026-10-12 落地 P2 探针：opencli 自建标签读取 panelAccountList 额度与状态，巡检完毕自动关闭
+    probe: probes/probe_gpt_mirror_limits.js
+    layer: P2
+    probe_uses_own_tab: true
+    urls:                                     # 以下保留：建 P2 时直接用（只读，不点击不发送）
       - https://<POOL_HOST>/?utm_source=hidden-ncn
     proxy: http://127.0.0.1:7890
     health_regex: '(账号池|GPT-5|n-card)'
-    on_fail: break                           # 池不可达 = 熔断，不启动浏览器
+    sibling_entries:                          # 2026-10-10 实测：该页已从"单一 ChatGPT 池"升级为多模型门户
+      - {label: "ChatGPT Plus镜像", in_use: true}
+      - {label: "Claude 镜像站",    in_use: false}
+      - {label: "DeepSeek R1",      in_use: false}
+      - {label: "Gemini Pro镜像",   in_use: false}
+      - {label: "Grok 镜像站",      in_use: false}
+    on_fail: break                           # 建 P2 时的失败动作；当前生效的熔断保护见 active_card（同为 break）
     dead_history: [<POOL_HOST_LEGACY>, <CARD-23.MIRROR_LEGACY_HOST>]   # 仅记录，不再探测
 
   active_card:
@@ -2101,8 +2117,10 @@ conditions:
     card_discovery:
       ui_fallback_selector: ".n-card span"   # 仅 P2 层需要看 UI 时使用
       ui_text_prefix: "GPT-5"
-      active_marker: 绿色圆点
+      ui_badge_prefix: "Plus"                # 2026-10-10：卡片 span 顺序 = ["Plus","GPT-5 ⑪"]，徽章 span 在前；按 /^GPT-5/ 找 span 仍命中
+      active_marker: 活跃（黄点）             # 2026-10-10 实测是黄点，非旧记的"绿点"；颜色以现场为准，勿写死
       skip_marker: [灰, 红]                  # 受限卡直接跳过别点（提速要点）
+      badges_seen: [PLUS, PROLITE]           # 2026-10-10 实测新增 PROLITE 档（CARD-31/27/32/30），其余 13 张为 PLUS；当日 17 张全 isHealthy=true
     card_id_discovery:                       # ★ 探针如何取得 carid —— 写在契约里，探针内不得出现字面量卡号
       primary:
         method: html_regex                   # 从账号池页面 HTML 直接提取（不开浏览器）
@@ -2125,34 +2143,90 @@ conditions:
 
   membership_expiry:                         # ★ 已知未来故障，必须登记（D7 已落实提前 14 天提醒）
     probe: static_date
-    value: 2026-10-28
+    value: 2026-10-29                       # 2026-10-10 实测：账号池页底部「会员有效期至：2026-10-29」（原记 10-28，差 1 天）
     warn_before_days: 14
     on_fail: break                           # 到期后全池受限 → 熔断并停止烧轮次
     reminder_task: 镜像站会员到期提醒（2026-10-28）   # Loomy 定时任务，2026-10-14 09:00 触发
+                                                     # ⚠️ 任务名里仍带旧日期 10-28 —— 那是 Loomy 侧的既有任务标识（未改名，避免动到外部对象）；
+                                                     #    实际到期日为 2026-10-29，提醒时机仍提前 14 天，任务本身无需改
 
-  reasoning_mode:                            # ★ 2026-09-15 断裂点（旧脚本三处硬编码全在此域）
-    probe: dom_text_set                      # P2 层，只读 DOM 文本指纹，不点击不发送不切模式
+  mode_toggle:                               # ★ 2026-10-10 改版新增：顶部 Chat | Work 单选组
+    probe: probe_gpt_mirror_ui               # P2 浏览器只读探针（probes/probe_gpt_mirror_ui.js，2026-10-11 已建并跑通）
+    layer: P2
+    probe_uses_own_tab: true
+    selector: 'button[role=radio]'
+    labels: [Chat, Work]
+    selected_attr: data-state
+    selected_value: "on"
+    required_label: Chat                     # ⚠️ 2026-10-11 改回 Chat 为主（郭老师 2026-10-11 裁定）；Work 标签实测不可用，见 note
+    on_fail: silent-risk
+    note: >-
+      Chat：标题 Ready when you are. / composer 占位 Ask ChatGPT / 3 档 effort（Instant, Medium, High）。← 现行目标。
+      Work：标题 What should we work on? / composer 占位 Work on anything / 多一行 Plugins / 5 档 effort（Light..Max）。
+      ⚠️ 2026-10-11 实测：Work 标签（据郭老师＝接 Codex）对该账号不可用 —— Work + GPT-6 Astra + Max 下，
+      连「只回答一个数字：1+1 等于几？」与「你好，请只回复两个字：收到」都被 OpenAI 式安全拒绝挡回
+      （This content can't be shown for safety reasons）；切回 Chat 同题正常返回「收到」。⇒ 不再走 Work。
+      刷新、回历史、换窗口都会重置回 Chat + Instant。
+
+  reasoning_mode:                            # ★ 2026-09-15 首次断裂；2026-10-10 整体重构（Auto / Thinking• Extended / GPT-5.6 Luna 文案全灭）
+    probe: probe_gpt_mirror_ui               # P2 浏览器只读探针（probes/probe_gpt_mirror_ui.js，2026-10-11 已建并跑通）
+    layer: P2
+    probe_uses_own_tab: true                 # 建P2 时铁律：只开自己的 tab，绝不占用/关闭郭老师已开的标签
     pill_selector: "button.__composer-pill"
-    pill_ready_regex: '^(Model|Auto|Thinking|Extended)$'   # 放宽为集合，覆盖文案漂移（Model=hydration 未完成，点必扑空）
-    item_selector: '[role=menuitemradio]'
+    pill_ready_regex: '^(Instant|Light|Medium|High|Extra High|Max|Select model|Thinking effort|Model|Auto)$'
+                                            # 放宽为集合，覆盖文案漂移；hydration 未完成时点它必扑空
+    pill_closed_form: "Chat=档位名（如 High / Instant）｜Work=模型名+档位（如 GPT-6 Astra Max，两段间无分隔空格）"
+    pill_open_form: [Select model, Thinking effort]
+    menu_selector: '[role=menu]'             # data-testid=composer-intelligence-picker-content
+    model_item_selector: '[role=menuitem][aria-label="Select model"]'
+    power_item_selector: '[role=menuitem][aria-label="Power"]'
+    effort_slider_selector: '[role=slider]'  # aria-valuemin=0；aria-valuemax 随标签与所选模型变（Chat=2 三档 / Work=4 五档）
+    model_radios_selector: '[role=menuitemradio]'
+    model_target: "ChatGPT 6 Sol"            # ★★ 郭老师 2026-10-11 明令：**默认必须用 ChatGPT 6 Sol**（等价于「必须走镜像站 Chat 里默认选中的那一项」）
+    model_checked_label: "6"                 # 镜像站 Chat「Select model」对 GPT-6 Sol 的显示名就是 "6"；**默认即选中**（2026-10-11 实测 aria-checked=true）
+    model_must_not_change: true              # ❌ 禁止改成 GPT-5.6 Sol / GPT-5.5
+    label_class_hints:                       # ⚠️ 构建期哈希类名，随发版会变；只作定位提示，优先用 role + aria-label
+      model: '.d1BZWq_ViewToggleModelLabel'
+      effort: '.d1BZWq_ViewToggleEffortLabel'
     match: regex_fuzzy                       # 容许空格 / 圆点 / 大小写变体
     candidates:                              # A2 参数化自愈靠这个；weight 越高越优先
-      - {label: "Thinking• Extended", weight: 100, note: "2026-09-15 前"}
-      - {label: "Thinking• Standard", weight: 60,  note: "2026-09-15 后现存"}
-      - {label: "GPT-5.6 Luna",       weight: 40,  note: "2026-09-15 后现存"}
-    exclude_labels: ["Auto", "Configure..."]
-    resolved_label: null                     # ← 探针回填；执行体只读这里，禁止字面量比对
+      - {label: "6",           weight: 100, note: "★★ 现行唯一目标 = ChatGPT 6 Sol（镜像站 Chat 的显示名就是 \"6\"，默认选中）。郭老师 2026-10-11 明令默认必须用它"}
+      - {label: "GPT-5.6 Sol", weight: 10,  note: "Chat 高级视图模型项 —— ⚠️ **不是目标**，别选（仅当 \"6\" 从菜单消失时才考虑）"}
+      - {label: "GPT-5.5",     weight: 5,   note: "Chat 高级视图模型项；页面标注 Leaving on October 14 —— ⚠️ **不是目标**"}
+      # ⚠️ 2026-10-11：Work 专属模型随 Work 标签一并作废（weight 归 0，仅留历史）
+      - {label: "GPT-6 Astra", weight: 0,   note: "❌ Work 专属，2026-10-11 起不可用（Work 标签被拒）"}
+      - {label: "GPT-6.1 Sol", weight: 0,   note: "❌ Work 专属，同上"}
+      - {label: "GPT-6 Sol",   weight: 0,   note: "❌ Work 专属，同上"}
+      - {label: "GPT-6 Luna",  weight: 0,   note: "❌ Work 专属，同上"}
+    effort_ladder:                           # 2026-10-11 现行
+      chat: [Instant, Medium, High]          # ← 现行目标：Chat 滑杆 aria-valuemin=0 / aria-valuemax=2，顶端 = High
+      chat_default_model: "6"                # ★ = ChatGPT 6 Sol（镜像站显示名 "6"）；默认即选中，**保持不动**
+      work_gpt6astra: [Light, Medium, High, Extra High, Max]   # ❌ 2026-10-11 起不可用（Work 被拒），仅作历史
+      work_default_preset:                   # ❌ 同上，仅作历史
+        - {idx: 0, model: "GPT-6 Luna",   effort: High}
+        - {idx: 1, model: "GPT-6.1 Sol",  effort: Light}
+        - {idx: 2, model: "GPT-6.1 Sol",  effort: Medium}
+        - {idx: 3, model: "GPT-6 Astra",  effort: Light}
+        - {idx: 4, model: "GPT-6 Astra",  effort: Medium}
+    exclude_labels: ["Auto", "Configure...", "Instant", "Light", "Medium", "Extra High", "Max", "Select model", "Thinking effort"]
+                                            # ⚠️ 2026-10-11：Chat 顶档就是 High ⇒ 不再排除 High；改排除 Max（Work 专属）
+    resolved_label: "High"                   # ⚠️ 2026-10-11 改回 Chat 后人工实测回填（Chat 顶档；pill 闭态文本就是 "High"）；P2 探针就位后以探针回填为准，执行体只读这里、禁止字面量比对
     retry_click_max: 3                       # 菜单打开自旋重试上限
     click_method: synthetic_pointer_sequence # 原生 click 与键盘 ArrowDown 打不开 Radix 菜单
     pointer_sequence: [pointerover, pointermove, pointerenter, pointerdown, pointerup, mousedown, mouseup, native_click]
+    set_effort_method: focus_slider_then_arrow_keys   # [role=slider].focus() + ArrowRight 直到 aria-valuenow == aria-valuemax
     on_fail: warn                            # 候选集未覆盖 → 出 A3 重定位草稿，暂停并报人
 
   composer:
-    probe: dom_fingerprint
-    variants:                                # 新旧对话页 composer 不同，且 fill 有实测缺陷
-      - {page: 新对话页, selector: "textarea[placeholder='Ask anything']", fill: native_value_setter_plus_input_event}
-      - {page: 历史对话页, selector: "contenteditable", fill: base64_atob_execCommand_insertText,
-         avoid: "wcDTda_fallbackTextarea（0×0，注进去无效）"}
+    probe: probe_gpt_mirror_ui               # P2 浏览器只读探针（probes/probe_gpt_mirror_ui.js，2026-10-11 已建并跑通）
+    layer: P2
+    probe_uses_own_tab: true                 # 建 P2 时铁律：只开自己的 tab
+    variants:                                # 2026-10-10 复测：旧"新对话页=textarea"的二分法不成立
+      - {page: 新对话页, selector: "div[contenteditable=true]", fill: base64_atob_execCommand_insertText,
+         note: "Chat 占位 Ask ChatGPT / Work 占位 Work on anything；同页还有隐藏 textarea[name=prompt-textarea]，实测 w=0 h=0，勿注入"}
+      - {page: 历史对话页, selector: "div[contenteditable=true]", fill: base64_atob_execCommand_insertText,
+         avoid: "textarea[name=prompt-textarea] / wcDTda_fallbackTextarea（0×0，注进去无效）"}
+      - {page: 通用判据, selector: "getBoundingClientRect().width > 10", fill: "以几何尺寸判可见 composer，勿按标签名选"}
     known_defect: "opencli fill 对多段中文只填第一段（实测 814 字符仅进 112）→ 大段文本必须走 base64 路径"
     send_selector: "[data-testid=send-button]"   # 有文本才渲染
     stop_selector: "[data-testid=stop-button]"
@@ -2160,8 +2234,10 @@ conditions:
     on_fail: break
 
   opencli_session:
-    probe: process_alive
-    profile: LOCAL_BROWSER_PROFILE
+    probe: none                              # 2026-10-09：会话层属 P2（需开浏览器），P2 未建 ⇒ 不计入漏测
+    pending_probe: process_alive
+    layer: P2
+    profile: LOCAL_BROWSER_PROFILE                         # 2026-10-10 现取（default, connected v1.0.24）；旧值 LOCAL_BROWSER_PROFILE 已失效——注意 tab list 对失效码也返回 [] 而不报错，唯一真源是 `opencli profile list`
     daemon_port: <LOCAL_DAEMON_PORT>
     browser: 日常 Chrome（共享，非新实例）
     lease: single_tenant                     # 单租户占用纪律
@@ -2173,8 +2249,9 @@ conditions:
     on_fail: break
 
   answer_channel:
-    probe: dom_count
-    selector: "[data-message-author-role=assistant]"
+    probe: none                              # 2026-10-09：同 reasoning_mode，P2 探针未建 ⇒ 不计入漏测
+    pending_probe: dom_count
+    layer: P2
     trust_level: untrusted                   # ★ 教训⑤：镜像站不渲染该节点，asstN 常为 0 属正常
     poll_interval_s: 15
     page_auto_refresh: false                 # ★ 教训②：DOM 不自动更新，需真实状态时必须刷新页面
@@ -2185,7 +2262,7 @@ conditions:
       large_file: "fetch → arrayBuffer → window.__buf → 按 30000 字节分块（3 的倍数，规避 base64 跨块填充）逐段 b64decode"
       large_file_pitfall: 整段拼接 base64 必报 Incorrect padding
       image: "Download this image → Chrome 落 Downloads 为 .tmp，实为完整 PNG，复制改名即可"
-      reusable_script: D:\Work\课程思政教学竞赛\6-上课要用的素材\课件和教具\opencli_scripts\_dl_theme2.py
+      reusable_script: D:\Work\课程思政教学竞赛\6-上课要用的素材（已失效：该子目录不存在，素材实际在 05_上课设计 下）\课件和教具\opencli_scripts\_dl_theme2.py
       image_chinese: 图像模型可直接渲染中文（旧规「中文必糊、提示词禁文字」已作废）
 
   windows_arg_pitfalls:                      # opencli.cmd 是批处理，命令串会再过一遍 cmd 解析
@@ -2201,10 +2278,38 @@ conditions:
 gates:
   - id: mode_gate
     priority: highest                        # 发问前最后一个动作必须是本断言通过
-    assert: "runtime.reasoning_mode.resolved_label != null"
-    reject: [Auto, Configure..., null]
-    note: 刷新 / 回历史 / 换窗口都会重置，没有「刚才切过」这种想当然；Auto 档提问横竖白烧一轮
+    assert: "runtime.mode_toggle.selected == 'Chat' and runtime.reasoning_mode.model_checked == '6' and runtime.reasoning_mode.resolved_label == 'High'"
+    reject: [Work, Instant, Medium, Light, Extra High, Max, Auto, Configure..., Select model, Thinking effort, null]
+    note: >-
+      2026-10-11 **三闸**（郭老师明令「默认必须用 ChatGPT 6 Sol High」）：
+      ①顶部 Chat|Work 必须为 `Chat`（Work 接 Codex、本账号不可用）；
+      ②**模型必须是 ChatGPT 6 Sol** —— 镜像站 Chat「Select model」里显示为 `6` 且**默认即选中**，**不许改成 GPT-5.6 Sol / GPT-5.5**；
+      ③pill 闭态必须是 `High`（Chat 顶档）。
+      刷新 / 回历史 / 换窗口都会重置回 Chat + Instant，没有「刚才切过」这种想当然；非顶档提问横竖白烧一轮。
     on_violate: silent-risk
+
+  - id: delivery_readback
+    added_in: 2
+    verified_at: 2026-09-26                    # 第 5 轮真实送审三项凭证齐，verify_delivery.mjs 判 pass
+    priority: highest                        # 收到回答后的第一个动作必须是本断言通过
+    assert: "verify_delivery(answer_text).pass == true"
+    requires: [delivery_id, core_tail, spec_tail]
+    note: >-
+      送达判据是三项回读凭证齐，不是 git push 成功。delivery_id 在 CORE 首行、core_tail 在 CORE 末行、
+      spec_tail 在 SPEC 末行，每轮随机重生成，只存 runtime/delivery_nonces.json。
+      缺任一项即判"材料未完整送达"，本轮结论不采信、不得据此改代码。
+      尾凭证不可省：只测首行等于只摸到头部，证明不了 200 KB 那个包整包读到。
+    on_violate: break
+
+  - id: fetch_retry_budget
+    added_in: 2
+    verified_at: null
+    assert: "per_url_attempts <= 3 and retry_gap_seconds >= 15"
+    note: >-
+      raw URL 会间歇失败且机制未定（同一 URL 可连续数小时 miss 后突然全通，与仓库/内容/体积/路径语言/SHA 均无关）。
+      3 次仍失败就照抄工具报错原文并阻断作答，不换承载、不凭上一轮记忆续答。
+      若首行 delivery_id 命中的是上一轮而尾凭证不符，判 CDN 滞后读到旧版本，等 10 分钟重跑同一链接。
+    on_violate: warn
 
   - id: foreground_supervision
     assert: "not background_task"
@@ -2217,10 +2322,14 @@ gates:
     on_violate: break
 
   - id: turn_budget
-    assert: "window_turns <= 24 and task_turns <= 3 and conversation_turns <= 40"
-    source: D:\Work\AI平台\resource-ops\docs\操作手册\01_镜像站GPT操作手册.md §9.3   # ★ 数值断言必须标 source
-    note: 每 3 轮必须彻底解决一个任务；GPT 反问算同窗口；同一对话 ≤40 轮才新开
-    revision: 2026-09-18 用户修订 12 → 24（原 12 出自记忆库 feedback_gpt_rounds_discipline.md，已于 2026-09-20 同步改为 24）
+    assert: "window_turns <= 24 and task_turns <= 3"
+    source: D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\01_镜像站GPT操作手册.md §9.3   # ★ 数值断言必须标 source
+    note: 每 3 轮必须彻底解决一个任务；GPT 反问算同窗口；同一窗口 ≤24 轮（达到即「先要总结 → 带总结新开」，不是直接新开）
+    revision: >-
+      2026-09-18 用户修订 12 → 24（原 12 出自记忆库 feedback_gpt_rounds_discipline.md，已于 2026-09-20 同步改为 24）。
+      2026-10-11 删除 `conversation_turns <= 40`：该 40 出自 2026-08-25 旧记忆 workflow_gpt_repo_sync.md，
+      与手册 §9.3 的「同一窗口 ≤24 轮」直接冲突（第 25 轮时一个说留下、一个说走）；
+      手册 §9.3 是唯一真源且全篇无 40 ⇒ 以 24 为准。
     caveat: 24 轮不是免死金牌——GPT 出现遗忘 / 混淆早期约定 / 答非所问时，不等满 24 轮，立即走「要总结 → 带总结新开」
     on_violate: break
 
@@ -2231,8 +2340,11 @@ gates:
 
   - id: history_budget
     assert: "chat_history_count <= 10"
-    action_on_violate: 自动删末尾至剩 10
-    note: 2026-09-04 从 ≤30 收紧为 ≤10
+    source: D:\记忆\调度大脑记忆\反馈\feedback_mirror_chat_history.md
+    action_on_violate: 从列表末尾（最旧）往上删到剩 10 —— Delete 真删（不可逆，不用 Archive），批量走脚本循环
+    note: >-
+      2026-09-04 用户从「每 30 删一半」收紧为「保留最近 10 条、删最旧」。
+      定位须用 `button[aria-label="Open conversation options for <title>"]`（通用匹配会抓成顶部那条）→ 菜单 Delete → 确认框 Delete。
     on_violate: info
 
   - id: context_pushed
@@ -2285,8 +2397,8 @@ probe:
     drift: runtime/gpt-mirror.drift.json
     manual_edit: forbidden
 
-updated_at: 2026-09-19
-status: verified    # 2026-09-24 复探（exit 0）：break 已解除——explicit_list(CARD-23/49/11, source=记忆真源) + 断言求值器初值 bug 修复后 active=1/3（CARD-11「GPT-5 ⑪」活跃 PLUS；CARD-23 黄色受限态 isHealthy=false；CARD-49 真 Plus 失效）；残余 warn=池页纯 GET 1 字节（SPA 壳，HTML 发现路径对该页永久无效，卡号一律走 explicit_list）；会员余 33 天。历史：09-23 首跑 break=1 系断言求值器 $actual 初值 bug 所致假信号
+updated_at: 2026-10-11
+status: verified    # 2026-10-11（契约 v5）郭老师明令**默认必须用 ChatGPT 6 Sol + High** ⇒ mode_gate 升**三闸**（Chat / 模型 "6"=ChatGPT 6 Sol / pill=High）；reasoning_mode 新增 model_target="ChatGPT 6 Sol"、model_checked_label="6"、model_must_not_change=true，candidates 以 "6" 为唯一 weight=100。历史：2026-10-11（v4）目标改回 Chat 标签 + 顶档 High：Work 标签（接 Codex）对该账号不可用 —— Work+GPT-6 Astra+Max 下连「1+1」「你好」都被 OpenAI 式安全拒绝挡回，切回 Chat 同题正常（2026-10-11 实测，郭老师裁定）。改动：mode_toggle.required_label Work→Chat、reasoning_mode.resolved_label→"High"、candidates/effort_ladder/exclude_labels 与 mode_gate 同步。历史：2026-10-10（v3）站点改版适配：新增 mode_toggle（Chat|Work）、reasoning_mode 整体重写（旧 Auto/Thinking•Extended/GPT-5.6 Luna 文案全灭 → 新版 pill + Power 滑杆，当时目标 GPT-6 Astra Max）；同步修正 opencli_session.profile(LOCAL_BROWSER_PROFILE→LOCAL_BROWSER_PROFILE)、membership_expiry(10-28→10-29)、composer.variants。历史：2026-09-24 复探（exit 0）：break 已解除——explicit_list(CARD-23/49/11, source=记忆真源) + 断言求值器初值 bug 修复后 active=1/3（CARD-11「GPT-5 ⑪」活跃 PLUS；CARD-23 黄色受限态 isHealthy=false；CARD-49 真 Plus 失效）；残余 warn=池页纯 GET 1 字节（SPA 壳，HTML 发现路径对该页永久无效，卡号一律走 explicit_list）；会员余 33 天。历史：09-23 首跑 break=1 系断言求值器 $actual 初值 bug 所致假信号
 ########## 文件结束：20_自适应工作流引擎/contracts/gpt-mirror-extended-review.yaml ##########
 
 ==========================================================================
@@ -2719,6 +2831,10 @@ tags:
 
 > [[00-项目总览]] 讲"为什么这么切"，本页讲"东西具体长什么样"。
 > 贯穿全页的一条设计原则：**契约与载体解耦** —— 契约是 YAML 声明，载体（skill / 脚本 / n8n 节点）只是执行壳，换壳不用重写知识。
+>
+> ⚠️ **本文是构想稿（2026-09-19 草案），文中所有 YAML / JSON 片段都是"长什么样"的示意，不是现行真源。**
+> 真实契约已落盘并升到 **v3**：`contracts/gpt-mirror-extended-review.yaml` —— 2026-10-10 因镜像站换新版 ChatGPT UI，新增 `mode_toggle`、`reasoning_mode` 整体重写。
+> 因此文中的示例值（`Thinking• Extended` / `Thinking• Standard` / `LOCAL_BROWSER_PROFILE` / `2026-10-28`）**均已过期**；现行口径以契约文件 + `D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\` 下三份文档为准。
 
 ## 一、载体选型：n8n？skill？还是自研？
 
@@ -2766,18 +2882,18 @@ contract_version: 1
 workflow_id: gpt-mirror-extended-review
 display_name: GPT 镜像站 Extended 送审
 owner_skill: loomy-learned-gpt-mirror-extended-review
-skill_home: D:\Work\AI自成长引擎\技能库\loomy-learned-gpt-mirror-extended-review\SKILL.md   # 技能库暂存（草稿，不生效）
+skill_home: D:\Work\元智能\10_AI自成长引擎\技能库\loomy-learned-gpt-mirror-extended-review\SKILL.md   # 技能库暂存（草稿，不生效）
 skill_install_to: D:\记忆\_Skills\          # 程序运行时目录（安装需点头）
-skill_index: D:\Work\AI自成长引擎\技能库\README.md
+skill_index: D:\Work\元智能\10_AI自成长引擎\技能库\README.md
 source_assets:                                            # 知识出处（可回溯）
-  - D:\Work\AI平台\docs\runbooks\GPT镜像站送审流程.md
+  - D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\GPT镜像站送审流程.md
   - D:\记忆\调度大脑记忆\流程\workflow_ai_<POOL_NAME>_open.md
   - D:\记忆\调度大脑记忆\反馈\feedback_gpt_mirror_subagent_flow.md
 baseline:                                                 # 回归对照基线
   metric: 零到可发问耗时(s)
   value: 9.6
   tolerance: "+50%"                                       # 自愈后不得劣化超过 50%
-  reference: D:\Work\AI平台\docs\runbooks\测试任务-镜像零到Extended计时.md
+  reference: D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\测试任务-镜像零到Extended计时.md
 
 conditions:                                               # ★ 外部条件（探针核对对象）
   account_pool:
@@ -2922,14 +3038,14 @@ flowchart TD
 | 验证方式 | 现有 | 回归基线：零→可发问 ≤14.4s（9.6 × 1.5）、`ok:true`、pill 与契约 `resolved_label` 一致 |
 | 来源 | 现有 | 契约路径 + 原手册 + 记忆条目清单 |
 
-> 草稿在**上游技能库 `D:\Work\AI自成长引擎\技能库\<skill-id>\`**，**安装 = 复制到 `D:\记忆\_Skills\`**（该目录是程序运行时加载处）。安装这一步必须我点头 —— 它会改变 Agent 后续真实行为。安装顺序与闸门见 [[../../AI自成长引擎/技能库/README|技能库 README]] §四 的五步闸门。
+> 草稿在**上游技能库 `D:\Work\元智能\10_AI自成长引擎\技能库\<skill-id>\`**，**安装 = 复制到 `D:\记忆\_Skills\`**（该目录是程序运行时加载处）。安装这一步必须我点头 —— 它会改变 Agent 后续真实行为。安装顺序与闸门见 [[../../10_AI自成长引擎/技能库/README|技能库 README]] §四 的五步闸门。
 
 ## 七、Windows 传参三坑（继承手册 §三·六，实现时必须规避）
 
 1. `opencli.cmd` 是批处理 → **多行 JS 传参会炸**，必须压成单行或走临时文件
 2. JS 字符串里带 `&`（如 URL 的 `&fn=&cd=&ts=&sig=`）→ 被 cmd 当命令分隔，**URL 先 base64，JS 内 `atob` + `decodeURIComponent(escape())` 还原**；Python 侧 `subprocess.run(..., shell=False)`
 3. 大文件取回：`fetch → arrayBuffer → window.__buf`，按 **30000 字节分块**（3 的倍数，规避 base64 跨块填充）逐段 `b64decode`；整段拼接必报 `Incorrect padding`
-   - 可复用脚本：`D:\Work\课程思政教学竞赛\6-上课要用的素材\课件和教具\opencli_scripts\_dl_theme2.py`
+   - 可复用脚本：`D:\Work\课程思政教学竞赛\6-上课要用的素材（已失效：该子目录不存在，素材实际在 05_上课设计 下）\课件和教具\opencli_scripts\_dl_theme2.py`
 
 ## 八、暂不做（防膨胀）
 
@@ -2951,7 +3067,7 @@ flowchart TD
 tags:
   - 自适应工作流引擎
   - 台账
-更新时间: 2026-09-19
+更新时间: 2026-10-15   # 2026-10-15 新增 T20（定时任务舰队巡检契约 + 只读探针）；2026-10-01 审计修正：原写 2026-09-19，而正文 §六/§七 已有 09-21、09-23、09-24、09-27 条目
 状态: A1 进行中
 依赖规范: handbook v1.0 → 30-台账格式
 ---
@@ -2981,11 +3097,12 @@ tags:
 | T2 | 盘点镜像站全部记忆资产，定位失效点 | `docs/02-镜像站试点盘点.md` 列出 16 份资产 + `evalB_ext.js` 三处断裂逐行证据 | 待验收 |
 | T3 | 定稿自适应架构（三件套推广 / A0~A4 分级 / 四级闸门） | `docs/00-项目总览.md` §二~§四 可读通；与 AI自成长引擎 边界表无重叠 | 待验收 |
 | T4 | 给出契约 schema + 探针设计 + 自愈执行序 | `docs/03-方案构想.md` 契约样例可直接当模板复制 | 待验收 |
-| T5 | 写 `contracts\gpt-mirror-extended-review.yaml` 实体文件 | 契约含 conditions + gates + baseline；**执行体无字面量** | 待验收（2026-09-19 已产出：8 conditions / 11 gates / baseline 9.6s+50% / superseded_runners 已登记旧脚本） |
-| T6 | 实现 `probes\probe_gpt_mirror.ps1`（P1，只读 HTTP） | 一条命令产出 `runtime\gpt-mirror.runtime.json` + `drift.json`；不启动浏览器；**首跑必须产出 ≥1 条真实 drift**；`probe_self_test: pass` | 完成 |
-| T7 | 产出镜像站 skill 待安装草稿（技能库，不生效） | `D:\Work\AI自成长引擎\技能库\loomy-learned-gpt-mirror-extended-review\SKILL.md` 含七段（比现有四段多「前置探针」「闸门清单」） | 待验收（2026-09-19 已产出，含 11 条闸门 + 10 条禁止事项；2026-09-19 由原草稿目录迁至上游技能库） |
+| T5 | 写 `contracts\gpt-mirror-extended-review.yaml` 实体文件 | 契约含 conditions + gates + baseline；**执行体无字面量** | 待验收（2026-09-19 已产出：8 conditions / 13 gates（2026-10-01 审计修正：原写 11 gates，实测 `grep -c "^  - id:" contracts/gpt-mirror-extended-review.yaml` = 13）/ baseline 9.6s+50% / superseded_runners 已登记旧脚本） |
+| T6 | 实现 `probes\probe_gpt_mirror.ps1`（P1，只读 HTTP） | 一条命令产出 `runtime\gpt-mirror.runtime.json` + `runtime\gpt-mirror.drift.json`；不启动浏览器；**首跑必须产出 ≥1 条真实 drift**；`probe_self_test: pass` | 完成 |
+| T7 | 产出镜像站 skill 待安装草稿（技能库，不生效） | `D:\Work\元智能\10_AI自成长引擎\技能库\gpt-mirror-extended-review\SKILL.md` 含七段（比现有四段多「前置探针」「闸门清单」）（2026-10-01 审计修正：原写 `D:\Work\元智能\10_AI自成长引擎\技能库\loomy-learned-gpt-mirror-extended-review\SKILL.md`，该旧址已不存在、`loomy-learned-`/`yz-` 前缀 09-28 已裁定撤销，实测真身＝本行路径） | 待验收（2026-09-19 已产出，含 11 条闸门 + 10 条禁止事项；2026-09-19 由原草稿目录迁至上游技能库） |
 | T8 | 用户对 §五 决策项表态 | 每条决策在 §五「结果」列写明；同步追加 §六 决策日志 | 进行中（**D1/D2/D3/D4/D7 已定**；D5/D6/D8 待定） |
 | T18 | 契约 `status` 由 `draft_pending_first_run` 转 `verified` | T6 首跑通过且 drift 产物结构符合 `docs/03-方案构想.md` §四 样例 | 完成 |
+| T19 | 学习链首例：镜像站 drift 证据转经验候选（R7 批次4） | 本侧 learning_trigger 证据转出 Candidate 并过 Gate32 覆盖；drift 产物路径的逐字声明归产出任务行 T6（R2 定案：归属必须唯一，两行同时逐字点名即拒生成） | 进行中（2026-10-08 首例候选已生成，待人审 disposition） |
 
 ## 三、后续阶段任务占位
 
@@ -2993,13 +3110,14 @@ tags:
 |---|---|---|---|---|
 | T9 | A2 | `runners\evalB_ext_adaptive.js`：pill 就绪判定用契约 `pill_ready_regex` 集合、菜单项按 `candidates.weight` 择优、校验读 `resolved_label` | 在当前"文案已变"的真实环境下 dry-run 返回 `ok:true`，且 `after` == 契约 `resolved_label` | 待办 |
 | T10 | A2 | `probes\probe_gpt_mirror_ui.js`（P2 只读 DOM 指纹） | 只 `querySelector` + 读文本，不点击不发送不切模式；用自己的独立 tab；含 `probe_self_test` | 待办 |
-| T11 | A3 | skill 安装到 `D:\记忆\_Skills\` + 一次真实送审跑通 | 触发词命中；`mode_gate` 生效（Auto/Standard 下拒发）；耗时 ≤14.4s | 待办（阻塞：T9/T10 —— D3 已定，探针跑通后才装） |
+| T11 | A3 | skill 安装到 `D:\记忆\_Skills\` + 一次真实送审跑通 | 触发词命中；`mode_gate` 生效（Auto/Standard 下拒发）；耗时 ≤14.4s；**`delivery_readback` 生效：三项回读凭证齐才算跑通，缺项即判未送达** | 待办（阻塞：T9/T10 —— D3 已定，探针跑通后才装） |
 | T12 | A3 | 处置现有 `evalB_ext.js` 三处断裂 | D4=「标注已失效并指向新 runner」 | **完成**（2026-09-19：脚本头部加 25 行失效标注块，逐行说明三处断裂 + 假信号性质 + 替代 runner 路径 + 保留原因；手册 §三·五 加 ⚠️ 失效标注段与"不要只凭返回值决定是否可发问"提示；**未改动 ai-platform 任何执行逻辑**，代码体一字未改） |
 | T13 | A4 | Loomy 定时任务：每日 08:30 跑 P1 探针 | 连续 7 天自动产出 drift.json，无一次误报 break | 待办（阻塞：D6） |
-| T14 | A4 | 周报：info 自愈计数 / warn / break / silent-risk 汇总 | 每周一 09:00 自动出一页；同一条件 30 天内自愈 ≥3 次自动升 warn | 待办 |
-| T15 | A5 | 抽出通用骨架（contract / probe / runner / gates 四件套模板） | 第二个试点能在 1 小时内套完骨架 | **已冻结**（2026-09-27 用户裁定：机制外扩冻结、不立为长期目标，见 DEC-32）｜原阻塞事实保留：D8 未定 |
-| T16 | A6 | 产出载体导出说明（契约 → n8n workflow JSON / orchestrator 挂载） | `runners\README.md` 说明导出映射；如需 n8n 则按 ai-platform `02-维护规范` + `01-端口登记` 登记，端口避开 8000/8791/3000/3100 | **已冻结**（2026-09-27 用户裁定：同上，见 DEC-32）｜原阻塞事实保留：D1 已定先不选型，A3 后再评估 |
+| T14 | A4 | 周报：info 自愈计数 / warn / break / silent-risk 汇总 | 每周一 09:00 自动出一页；同一条件 30 天内自愈 ≥3 次自动升 warn；**含送审失败率与回读凭证缺失次数（来源 `verify_delivery.mjs` 的判定记录）** | 待办 |
+| T15 | A5 | 抽出通用骨架（contract / probe / runner / gates 四件套模板） | 第二个试点能在 1 小时内套完骨架 | **已冻结**（2026-09-27 用户裁定：机制外扩冻结、不立为长期目标，见文末台账 `frozen: true` 与 DEC-32）｜原阻塞事实保留：D8 未定 |
+| T16 | A6 | 产出载体导出说明（契约 → n8n workflow JSON / orchestrator 挂载） | `runners\README.md` 说明导出映射；如需 n8n 则按 ai-platform `02-维护规范` + `01-端口登记` 登记，端口避开 8000/8791/3000/3100 | **已冻结**（2026-09-27 用户裁定：同上，见文末台账 `frozen: true` 与 DEC-32）｜原阻塞事实保留：D1 已定先不选型，A3 后再评估 |
 | T17 | — | **会员到期提醒（已提前单设，不等框架）** | Loomy 定时任务「镜像站会员到期提醒（2026-10-28）」于 2026-10-14 09:00 单次触发 | **完成**（2026-09-19 创建；提示词含续费与备用通道两问 + 两处真源路径） |
+| **T20** | — | **第二份契约：本机定时任务舰队巡检**（`contracts\ops-task-fleet.yaml` + `probes\probe_ops_tasks.ps1`，郭老师 2026-10-15 直接指示） | 契约声明 38 个受监任务；探针只读、零字面量、含 `probe_self_test`；`patrol.mjs` 能认出并逐条核对（`coverage=38/38`）；首跑产出真实 drift | **完成**（2026-10-15：契约 + 探针 + skill `ops-task-fleet-watch` 三件落盘；探针实测 2.3s、自检 pass、38 条全测到；**首跑即报出 3 条真故障**：ModelScope 退出码 3＝登录态失效、`XHS_Unlike_Resume_0200` 退出码 1＝入口 bat 含未替换占位符、`AutoSeatOrchestrate` 退出码 1＝待定性。⚠️ 见 §六 2026-10-15 关于 DEC-32 冻结范围的记录） |
 
 ## 四、明确不做（范围锁定）
 
@@ -3019,7 +3137,7 @@ tags:
 |---|---|---|---|---|
 | **D1** | 载体选型 | A. Loomy skill + 脚本 + 定时任务 B. 真装 n8n C. 扩展 ai-platform orchestrator:8791 **D. 契约中立 + A 起步，预留 B/C 接口** | **D** | ✅ **选 D**（2026-09-19）：契约写成载体中立 YAML，M0 用 skill + 脚本起步，n8n / orchestrator 留作 A6 的执行壳导出 |
 | **D2** | 是否现在就装 n8n | A. 现在装 B. 不装，A6 再评估 | **B** | ✅ **选 B**（2026-09-19）：现在不装。本机零 n8n 痕迹，M0 阶段多一个常驻服务反而多一份运维且与三件套声明态有冲突风险 |
-| **D3** | skill 草稿何时安装到 `D:\记忆\_Skills\` | A. 点头即装 B. dry-run 验过再装 C. 等 A2 探针跑通再装 | **C** | ✅ **选 C**（2026-09-19）：草稿存于 `D:\Work\AI自成长引擎\技能库\`，A2 的 T9/T10 跑通后再装（skill 正文要引用探针产物，探针不存在时装了是死条文） |
+| **D3** | skill 草稿何时安装到 `D:\记忆\_Skills\` | A. 点头即装 B. dry-run 验过再装 C. 等 A2 探针跑通再装 | **C** | ✅ **选 C**（2026-09-19）：草稿存于 `D:\Work\元智能\10_AI自成长引擎\技能库\`（2026-10-01 审计修正：原写 `D:\Work\元智能\10_AI自成长引擎\技能库\`，09-29 结构重组后旧址不存在，实测真身＝此路径），A2 的 T9/T10 跑通后再装（skill 正文要引用探针产物，探针不存在时装了是死条文） |
 | **D4** | 现有 `evalB_ext.js` 怎么处置（ai-platform 仓的执行真源） | A. 原地修 B. **标注"已失效"并指向新 runner** C. 完全不动 | **B** | ✅ **选 B，已执行**（2026-09-19 → T12 完成）：脚本头部加标注块、手册 §三·五 加 ⚠️ 段；不原地改逻辑，不静默改别人家真源 |
 | **D5** | `runtime\*.json` 是否进 git | A. 进（drift 历史可回溯）B. 不进（噪声） | **A**（保留近 30 天，超期归档） | 待定 |
 | **D6** | 探针调度频率 | A. 日跑 08:30 B. 仅执行前跑 C. A+B | **A**（P1 零打扰，日跑可提前发现域名/会员漂移） | ✅ **选 A**（2026-09-24）：每日 08:30 定时任务已建（break 解除后启用） |
@@ -3041,23 +3159,127 @@ tags:
 | 2026-09-19 | **D7 定案并执行：会员到期提醒单设，不等 A4 框架** | 这是**已知未来故障**（2026-10-28，39 天后），等框架建好才提醒不合理；已建 Loomy 单次定时任务（2026-10-14 09:00，提前 14 天），同时把 `membership_expiry.on_fail: break` 写进契约，到期后探针直接熔断，不再空跑烧账号额度 |
 | 2026-09-19 | 契约落盘 8 conditions / 11 gates，并把 `superseded_runners` 写进契约 | 让"哪个执行体已失效、被谁取代"成为声明态的一部分，而不是散落在注释里；旧脚本保留为回归基线与失效样本 |
 | 2026-09-19 | 暂不建 Git 仓、暂不登记 `projects.yaml` | 同 AI自成长引擎口径：该表以有独立 repo 为前提，A3 验收通过再补 |
-| 2026-09-19 | 技能库归并与断链修复：项目产出的 skill 统一迁至上游 `D:\Work\AI自成长引擎\技能库\`，本仓草稿目录删除 | 用户口径明确"程序技能目录不进，项目产出集中到自成长引擎下统一管理"；移动 skill 至上游技能库并删空目录；T7 路径已修正为技能库实际位置，T11 安装来源同步修正为技能库（仍待 A2 探针跑通）；全仓 10 处断链引用完成修复 |
+| 2026-09-19 | 技能库归并与断链修复：项目产出的 skill 统一迁至上游 `D:\Work\元智能\10_AI自成长引擎\技能库\`（2026-10-01 审计修正：原写 `D:\Work\元智能\10_AI自成长引擎\技能库\`＝当时落点，09-29 结构重组后实测真身＝此路径），本仓草稿目录删除 | 用户口径明确"程序技能目录不进，项目产出集中到自成长引擎下统一管理"；移动 skill 至上游技能库并删空目录；T7 路径已修正为技能库实际位置，T11 安装来源同步修正为技能库（仍待 A2 探针跑通）；全仓 10 处断链引用完成修复 |
 
 | **2026-09-21** | 契约 `gates.turn_budget` 由 `window_turns <= 12` 改为 `<= 24`，并新增 `source` / `revision` / `caveat` 三字段 | 审查发现：12 出自记忆库，而 ai-platform 操作手册 §9.3 已于 2026-09-18 经用户修订为 24；契约照抄记忆库导致**会在实际允许的窗口内提前误熔断**。用户裁定「契约与记忆库都改 24」。同步四处：本契约、记忆库三处条目、上游技能草稿 SKILL.md。详见 `docs/02-镜像站试点盘点.md` §八 |
 | **2026-09-21** | 新增契约设计规范：**数值型/枚举型断言必须标 `source` 指向真源**；探针除核对外部世界外，还要核对**内部多真源一致性** | 上述事故根因是"只信单一真源、未跨真源比对"。这等于给三件套加了第四件：跨真源常量一致性校验 |
-| **2026-09-21** | 还原 ai-platform 仓 24 个被删服务文件：`git -C "D:\Work\AI平台" checkout -- apps/api-gateway/services/`；509.8MB 重复目录 `D:\Work\api-gateway\` **原封不动保留** | 用户裁定「只还原删除，重复目录先留着」。删除未提交故可 100% 还原；服务源码经核实在 `apps\search-gateway\services\`、`D:\项目\ai-hub\search_gateway\services\`、`_backup_search_gateway_20260905\` 三处仍有副本，**从未丢失**。还原后该仓仅剩 6 个 M 文件（含我方 2 处标注），无删除项 |
+| **2026-09-21** | 还原 ai-platform 仓 24 个被删服务文件：`git -C "D:\Work\AI平台" checkout -- apps/api-gateway/services/`；509.8MB 重复目录 `D:\Work\API转发网关\` **原封不动保留** | 用户裁定「只还原删除，重复目录先留着」。删除未提交故可 100% 还原；服务源码经核实在 `apps\search-gateway\services\`、`D:\项目\ai-hub\search_gateway\services\`、`_backup_search_gateway_20260905\` 三处仍有副本，**从未丢失**。还原后该仓仅剩 6 个 M 文件（含我方 2 处标注），无删除项 |
 | **2026-09-21** | 全局路由 P2 加载路径由不存在的 `docs\00-自适应工作流总纲.md` 改为 `docs\00-项目总览.md` + `docs\03-方案构想.md` | 审查发现哑路由：`AGENTS.md` P2 指向的文件从未被创建，导致"契约执行状态机/漂移降级"整条能力静默失效。改指既有文件，**不新建** `00-` 文件以免与 `00-项目总览.md` 编号撞车 |
+| **2026-10-10** | 镜像站换新版 ChatGPT UI（顶部 `Chat`/`Work` 标签 + 模型 pill 里的 `Power` 滑杆），契约升 **v3**：新增 `mode_toggle` 条件、`reasoning_mode` 整体重写、`opencli_session.profile` 由 `LOCAL_BROWSER_PROFILE` 改为 `LOCAL_BROWSER_PROFILE`、`membership_expiry` 由 10-28 改 10-29；skill 按 **`Work` 标签 / `GPT-6 Astra Max`** 重写 | 站点大改版，旧档位体系（Auto / Thinking• Extended / GPT-5.6 Luna）**整体消失**，`evalB_ext.js` 从"三处断裂"升级为"整段作废"。郭老师裁定：改版后一律走 `Work` 标签、目标档 `GPT-6 Astra Max`（须**先显式选模型再推滑杆到 Max**，否则预设梯度最高只到 Medium）。详见 `docs/02-镜像站试点盘点.md` §四/§五 与 `D:\Work\元智能\20_自适应工作流引擎\docs\runbooks\GPT镜像站Work模式模型与额度指南.md` |
+| **2026-10-11** | **目标改回 `Chat` 标签 + 顶档 `High`**：契约升 **v4**（`mode_toggle.required_label` Work→Chat、`reasoning_mode.resolved_label`→`High`、`candidates`/`effort_ladder`/`exclude_labels`/`mode_gate` 同步）；新增脚本 `…\技能库\gpt-mirror-extended-review\scripts\to_chat_high.js` | 实测 **`Work` 标签不可用**（郭老师：接 Codex、本账号用不了）—— Work + `GPT-6 Astra` + `Max` 下，连「1+1」「你好」都被 OpenAI 式安全拒绝挡回（`This content can't be shown for safety reasons`），切回 `Chat` 同题正常 ⇒ **2026-10-10 的「一律走 Work」裁定作废**。详见 `docs/02-镜像站试点盘点.md` §四/§五 与手册 §八。 |
+| **2026-10-15** | **新增第二份契约 `ops-task-fleet.yaml`**（+ 只读探针 + skill `ops-task-fleet-watch`），把本机 ~38 个「我方运维计划任务」纳入三件套核对 | **郭老师 2026-10-15 直接指示**：「把近期这些运维流程固化成 skill，然后再做成定时任务……所有的定时任务 skill 都分成类别，放到一个项目里，由一个 Agent 定时去检查」；其后「你都做完吧」。<br>**与 DEC-32 的关系（必须写明，不许悄悄解冻）**：2026-09-27 郭老师裁定「**机制外扩冻结、不立为长期目标**」，T15（抽通用骨架）/T16（n8n 导出）据此 `frozen: true`。本次是把**同一套已验证机制**用于第二个域，属"用机制"而非"扩机制"（未抽骨架模板、未接 n8n），且系郭老师**当日直接指示**——按「后出的明确指示覆盖在先的常设裁定」处理，**仅此一案**；T15/T16 的冻结状态**不变**。<br>**为什么选这个域**：本机 ~45 个计划任务里除元智能自己 3 个外全是各自为政的运维自动化，「跑没跑、多久没跑、失败了谁知道」无人统一管——网关 `:3000` 2026-09-25 静默死掉 6 周无人发现即实例，正是本机制要治的病。<br>**产出**：38 条 condition / P1 只读探针（2.3s、自检 pass）/ skill 已登记技能库新增第 6 类「定时任务与巡检类」/ 首跑报出 3 条真故障。 |
 
 ## 七、复盘记录
 
 （每阶段验收后在此记录：探针误报率、自愈命中率、基线劣化情况、被我直接拒绝的建议）
 
-- **2026-09-21** —— 本轮为**审查驱动的修正**，探针仍无运行数据（T6 未首跑）。完成：① 按用户裁定把契约 `turn_budget` 从 12 改为 24 并补 `source`/`revision`/`caveat`（原值照抄记忆库过期常量，会提前误熔断）；② 立新规：契约内数值型断言**必须标 `source`**，探针须兼查「内部多真源常量一致性」——等于给三件套加第四件；③ 还原 ai-platform 仓 24 个被删服务文件（`git checkout -- apps/api-gateway/services/`），509.8MB 重复目录 `D:\Work\api-gateway\` 按裁定**原封保留待裁**；④ 全局路由 P2 的哑路径改指本仓 `docs\00-项目总览.md` + `docs\03-方案构想.md`。**剩余阻塞**：D5/D6/D8 待表态；T6 需一次真实网络首跑校准 carid；重复目录 canonical 归属待裁。完整裁定与证据见 `D:\Work\AI自成长引擎\进度审查报告_微内核路由与双引擎_20260920.md` §五。
+- **2026-09-21** —— 本轮为**审查驱动的修正**，探针仍无运行数据（T6 未首跑）。完成：① 按用户裁定把契约 `turn_budget` 从 12 改为 24 并补 `source`/`revision`/`caveat`（原值照抄记忆库过期常量，会提前误熔断）；② 立新规：契约内数值型断言**必须标 `source`**，探针须兼查「内部多真源常量一致性」——等于给三件套加第四件；③ 还原 ai-platform 仓 24 个被删服务文件（`git checkout -- apps/api-gateway/services/`），509.8MB 重复目录 `D:\Work\API转发网关\` 按裁定**原封保留待裁**；④ 全局路由 P2 的哑路径改指本仓 `docs\00-项目总览.md` + `docs\03-方案构想.md`。**剩余阻塞**：D5/D6/D8 待表态；T6 需一次真实网络首跑校准 carid；重复目录 canonical 归属待裁。完整裁定与证据见 `D:\Work\元智能\10_AI自成长引擎\进度审查报告_微内核路由与双引擎_20260920.md` §五。
 - **2026-09-23 · T6 首跑完成（执行方执行，Loomy 实证复核）**：exit 2，self_test=pass，info=1/warn=1/break=1，12672ms。契约 status → **verified**，T6/T18 → 完成。X1–X4 修复逐一核verified、语法零错误。**复核更正一条归因**：break 根因 = 池页纯 GET 仅回 1 字节（SPA 壳/反爬）→ HTML 发现失败 → 兜底盲枚举 CARD-1..12 全部「Plus失效」——真实 Plus 卡号在 CARD-23+ 段不在枚举范围；**与会员到期（余 34 天）无关**。详见 `docs/02-镜像站试点盘点.md` §九 与验收报告复核意见。**break 未解除前，A2 runner / skill 安装均不得执行**（送审链路前置不成立）。下一步三选一待用户拍板：真实卡号入契约 / P2 UI 探针（需浏览器许可）/ 扩大枚举（不推荐）。
-- **2026-09-23 · 外部事件记录（非本仓任务，仅台账）**：ai-platform 仓当日被网关渠道工作提交 10+ 次（Jev/groq/运维面板），本地领先 origin **5 个提交未推送**；我方 2 处失效标注 + 4 个无关 M 文件被 `d33b52c`（主题"摘除 groq"）收编入库——内容无损且已永久入库；同批把 **509.8MB 素材树（848 文件/620 个二进制）add 进了 git**（.git loose objects 实测 498MB），违反 handbook「成品资产不进 git」。push 前是否瘦身待用户决定；`D:\Work\api-gateway\` 重复目录（557.8MB，内容即这批素材的完整副本）按裁定仍原封保留。
-- **2026-09-24 · 历史瘦身已执行并落远端（用户裁定"push 前先瘦身"）**：双备份先行（全仓 bundle 503.9MB → `D:\AI平台-backup-pre-slim-20260923.bundle` + 指针分支 `backup/pre-slim-20260923`）→ `git filter-branch --index-filter` 按 **842 条精确 pathspec**（四素材目录 + api-gateway 下二进制；**保留 5 个文本方案文档与全部网关代码工作**）重写未推送提交 → 剥离后 **Bin=0**（14 files/1604 insertions）→ filter-branch 收尾检出误删工作树素材文件，已从 `refs/original` 全量恢复（845 文件回盘，抽查通过）→ `.gitignore` 补四目录忽略并提交（f612e8b，ahead 1）。**结果：瘦身后的提交已被并发会话推上 GitHub（origin/main = d6da437），498MB 素材从未到达远端**。安全网仍在：bundle + 备份分支 + `refs/original`（本地 .git 仍占约 500MB，确认无误后可删引用 + gc 回收，需用户点头）。**⚠️ 教训：该仓存在并发写入者（09-24 00:10 的 paid-fast 提交出现在两次检查之间），历史重写期间随时可能有人提交/推送——本次时序幸运；今后对该仓做任何历史手术必须先与所有活跃会话协调。**
+- **2026-09-23 · 外部事件记录（非本仓任务，仅台账）**：ai-platform 仓当日被网关渠道工作提交 10+ 次（Jev/groq/运维面板），本地领先 origin **5 个提交未推送**；我方 2 处失效标注 + 4 个无关 M 文件被 `d33b52c`（主题"摘除 groq"）收编入库——内容无损且已永久入库；同批把 **509.8MB 素材树（848 文件/620 个二进制）add 进了 git**（.git loose objects 实测 498MB），违反 handbook「成品资产不进 git」。push 前是否瘦身待用户决定；`D:\Work\API转发网关\` 重复目录（557.8MB，内容即这批素材的完整副本）按裁定仍原封保留。
+- **2026-09-24 · 历史瘦身已执行并落远端（用户裁定"push 前先瘦身"）**：双备份先行（全仓 bundle 503.9MB → `D:\Work\AI平台-backup-pre-slim-20260923.bundle` + 指针分支 `backup/pre-slim-20260923`）→ `git filter-branch --index-filter` 按 **842 条精确 pathspec**（四素材目录 + api-gateway 下二进制；**保留 5 个文本方案文档与全部网关代码工作**）重写未推送提交 → 剥离后 **Bin=0**（14 files/1604 insertions）→ filter-branch 收尾检出误删工作树素材文件，已从 `refs/original` 全量恢复（845 文件回盘，抽查通过）→ `.gitignore` 补四目录忽略并提交（f612e8b，ahead 1）。**结果：瘦身后的提交已被并发会话推上 GitHub（origin/main = d6da437），498MB 素材从未到达远端**。安全网仍在：bundle + 备份分支 + `refs/original`（本地 .git 仍占约 500MB，确认无误后可删引用 + gc 回收，需用户点头）。**⚠️ 教训：该仓存在并发写入者（09-24 00:10 的 paid-fast 提交出现在两次检查之间），历史重写期间随时可能有人提交/推送——本次时序幸运；今后对该仓做任何历史手术必须先与所有活跃会话协调。**
 - **2026-09-24 · break 解除，A1 全绿收口**：① 契约新增 `explicit_list`（CARD-23/49/11，source=记忆真源——「引用即校验」：记忆只作候选，真值以健康端点实测为准）；② **连带揪出并修掉探针断言求值器初值 bug**（`$actual` 误写 `$null` → 所有卡恒判不健康 → 09-23 两次 active=0 均为无效数据）；③ 复跑 exit 0：active=**1**/3（CARD-11「GPT-5 ⑪」活跃 PLUS），送审链路恢复可用。语义观察：CARD-23 isHealthy=false 但 message=活跃（黄色受限态）——契约以 isHealthy 为准。④ D6 每日 08:30 探针巡检任务已建。详见 `docs/02-镜像站试点盘点.md` §九 第二次更正。
 - **2026-09-24 · D6/D8 定案**：D6 = 每日 08:30 探针巡检（任务已建）；D8 = 预定 B（搜索网关 8 引擎健康），A5 启动时套四件套骨架。
+- **2026-10-01 · 巡检现状（新增行，09-24 历史行照原样保留）**：最新一份巡检日志 `runtime\patrol-log\patrol-2026-10-01.log`（实跑于 10:15:55，非调度声明的 08:35）判 **FAIL**。`:49` 逐字 `GATE|PATROL|FAIL|contracts=1|red=5|warn=1|codes=CONDITION_RED,COVERAGE_GAP|coverage=3/7|max_age_h=26|recorded=true`；条件覆盖率 **3/7**（`:47`：声明 8，其中 1 个声明为不用测；漏测 4 个）；**退出码 1**（`:52`）。红 5 条＝`account_pool` 的 CONDITION_RED 1 条（页面可达但未匹配健康特征）＋ COVERAGE_GAP 4 条（`reasoning_mode` / `composer` / `opencli_session` / `answer_channel` 无任何读数，因 P2 浏览器探针默认不开）；warn 1 条＝BROWSER_PROBE_SKIPPED。台账 8 条、`kind=skill` 0 条，契约 owner_skill 的 `effective` 仍为 UNKNOWN（`:25`）。⇒ 上面 2026-09-24「break 解除、A1 全绿」是当日实测的历史账；**截至 2026-10-01 的巡检现状是 FAIL，A1 不能算绿**。（2026-10-01 审计修正：原看板最新状态停在 09-24 全绿，未记本次 FAIL）
+
+## 八、demand_id 归属（机器读取，勿改本节格式）
+
+> 依据 `D:\Work\元智能\machine\migration\demand_backfill_proposal.md` 与 `D:\meta-intelligence-facts\VERDICTS.md` 第 4 轮（DEC-19 / DEC-20 / DEC-21）。
+> 上面 §二 §三 的表格结构遵循 handbook `30-台账格式`，**未作任何改动**；生成器只读本节。
+> 归属判据：问「送审链路有活卡吗、档位生效吗、结论被读到了吗」→ D-002；只影响本系统内部结构 → `scope: local`；跨系统机制外扩未获授权 → `scope: unresolved`。
+
+task_bindings:
+- task: T1
+  scope: global
+  demand_id: D-001
+  evidence: 子库登记入口，属 D-001「真源可追溯」
+- task: T2
+  scope: global
+  demand_id: D-002
+  evidence: 盘点镜像站资产并定位失效点，服务链路可用性
+- task: T3
+  scope: local
+  system_id: adaptive-workflow
+  demand_id: null
+  evidence: 本项目架构定稿，不改变任何全局 Demand 的 success_state
+- task: T4
+  scope: local
+  system_id: adaptive-workflow
+  demand_id: null
+  evidence: 契约 schema 与探针设计是本系统的机制底座建设
+- task: T5
+  scope: global
+  demand_id: D-002
+  evidence: 送审契约实体，含 gates 与 baseline
+- task: T6
+  scope: global
+  demand_id: D-002
+  evidence: P1 探针产出「有活卡可发」的真实证据
+- task: T7
+  scope: global
+  demand_id: D-002
+  evidence: 送审 skill 草稿承载档位闸门与禁止事项
+- task: T8
+  scope: local
+  system_id: adaptive-workflow
+  demand_id: null
+  evidence: 用户对决策项表态只推进本系统建设
+- task: T9
+  scope: global
+  demand_id: D-002
+  evidence: 档位判定契约化，对应「档位确实生效」
+- task: T10
+  scope: global
+  demand_id: D-002
+  evidence: P2 UI 指纹探针检测站点改版导致的失效
+- task: T11
+  scope: global
+  demand_id: D-002
+  evidence: 真实送审跑通验证链路端到端可用
+- task: T12
+  scope: global
+  demand_id: D-002
+  evidence: 处置 evalB_ext.js 三处断裂，消除假信号
+- task: T13
+  scope: global
+  demand_id: D-002
+  evidence: 定时探针持续产出 drift
+- task: T14
+  scope: global
+  demand_id: D-002
+  evidence: drift 周报汇总链路健康与自愈计数
+- task: T15
+  scope: unresolved
+  demand_id: null
+  blocked: true
+  frozen: true
+  frozen_on: 2026-09-27
+  frozen_reason: 用户 2026-09-27 裁定「机制外扩冻结，不立为长期目标」；依 VERDICTS 第 5 轮「继续留 unresolved-migration，但必须是非 active 状态」
+  evidence: 抽通用骨架属机制外扩，D-003 只授权保留已验证机制，未授权推广
+- task: T16
+  scope: unresolved
+  demand_id: null
+  blocked: true
+  frozen: true
+  frozen_on: 2026-09-27
+  frozen_reason: 同上；用户未把 n8n 导出立为长期目标前不评估选型
+  evidence: n8n 载体导出同为机制外扩，需用户先决定是否立为长期目标
+- task: T17
+  scope: global
+  demand_id: D-002
+  evidence: 会员到期提醒直接服务「有活卡可发」
+- task: T18
+  scope: global
+  demand_id: D-002
+  evidence: 契约状态转 verified 是链路可信的登记动作
+- task: T19
+  scope: global
+  demand_id: D-002
+  evidence: 镜像站 drift 转经验候选，接上 D-002 经验资产线
+- task: T20
+  scope: local
+  system_id: adaptive-workflow
+  demand_id: null
+  evidence: 定时任务舰队巡检是本系统已验证机制的一次域内应用（不改变任何全局 Demand 的 success_state）；T15/T16 的 frozen 状态不因此变更
 ########## 文件结束：20_自适应工作流引擎/docs/01-任务看板.md ##########
 
 ==========================================================================
@@ -3068,7 +3290,7 @@ tags:
 tags:
   - AI自成长引擎
   - 台账
-更新时间: 2026-09-21
+更新时间: 2026-10-01   # 2026-10-01 审计修正：原写 2026-09-21，早于正文 §七 的 2026-09-24 条目
 状态: M1 进行中（P1 路由已上线并实际产出 L1）
 依赖规范: handbook v1.0 → 30-台账格式
 ---
@@ -3090,33 +3312,34 @@ tags:
 
 > **纪律**：M0 没走通就不进 M1。先用真实对话验证价值，再谈代码。
 >
-> ⚠️ **2026-09-21 实况与本纪律不符，如实记录**：外部会话已先行部署全局微内核路由（`C:\Users\郭永涛\AGENTS.md`），**M1 的捕获环节（P1 打点 + 落盘）已真实运行并产出 3 条 L1**，而 M0 的「会话末建议固化清单 → 用户勾选」这一环**至今没跑过一次**。等于 M1 抢在 M0 前面发生了。处置：不强行回退（自动产出已在积累），但 **M0 那一环必须在进 M2 之前补跑一次**，否则 2026-09-20 裁定保留的 L2/L3 人工闸门没有落地载体。
+> ⚠️ **2026-09-21 实况与本纪律不符，如实记录**：外部会话已先行部署全局微内核路由（`<HOME>\AGENTS.md`），**M1 的捕获环节（P1 打点 + 落盘）已真实运行并产出 3 条 L1**，而 M0 的「会话末建议固化清单 → 用户勾选」这一环**至今没跑过一次**。等于 M1 抢在 M0 前面发生了。处置：不强行回退（自动产出已在积累），但 **M0 那一环必须在进 M2 之前补跑一次**，否则 2026-09-20 裁定保留的 L2/L3 人工闸门没有落地载体。
 
 ## 二、当前阶段任务
 
 | # | 要求 | 验收标准 | 状态 |
 |---|---|---|---|
-| T1 | 在 work 库建立子项目文件夹并注册入口 | `D:\Work\AI自成长引擎\` 存在；README / project.yaml / docs 齐全；`Home.md` 子库一览有本行 | 完成 |
+| T1 | 在 work 库建立子项目文件夹并注册入口 | `D:\Work\元智能\10_AI自成长引擎\` 存在；README / project.yaml / docs 齐全；`Home.md` 子库一览有本行 | 完成 |
 | T2 | 把原始想法无损记录下来（含原话） | `docs/02-原始想法记录.md` 含用户原话逐字引用 + 需求逐条对应表 | 待验收 |
 | T3 | 定稿策略层设计（五段流水线 / 三级产物 / owner 表） | `docs/00-项目总览.md` §三~§四 可读通，无需口头补充 | 待验收 |
 | T4 | 给出实施骨架（模板 / 命名 / 闸门 / 衰减阈值） | `docs/03-方案构想.md` 三套模板可直接复制使用 | 待验收 |
 | T5 | 用户对 §五 待决策表态 | 每条决策在结果列写明 | 进行中（**D3 / D5 / D7 已定**；D1 / D2 / D4 / D6 待定） |
-| T6 | 用一次真实对话跑通闭环演练（**素材 = GPT 镜像站试点**） | 会话末出现"建议固化清单" → 用户勾选 → 至少 1 条 L1 落入 `草稿区\L1_经验\` | 进行中（**L1 部分已达成**：3 条真实 L1；**"清单 → 勾选"这一环尚未跑过**） |
+| T6 | 用一次真实对话跑通闭环演练（**素材 = GPT 镜像站试点**） | 会话末出现"建议固化清单" → 用户勾选 → 至少 1 条 L1 落入 `草稿区\L1_经验\` | 进行中（**L1 部分已达成**：25 条真实 L1（截至 2026-10-01 实测；2026-10-01 审计修正：原写 3 条，实测 25 条）；**"清单 → 勾选"这一环尚未跑过**） |
 | T7 | 复盘：判定器误报率、漏捕获情况、**撞车率** | 写进 §七，明确是否进 M2 | 进行中（首轮复盘已记，见 §七 2026-09-21） |
-| T8 | 中转区落地：三个子目录 + 命名规则 | 目录存在且有真实草稿 | **完成**（`草稿区\{L1_经验, L2_SOP, L3_Skill}\` 已建；命名 `YYYYMMDD_[主题kebab].md`；已有 3 条真实 L1） |
-| T15 | 草稿区 / 技能库每日快照兜底（替代 git） | 脚本可跑、产物真实生成、保留策略生效、有日志 | **完成**（`scripts\快照草稿区.ps1`；2026-09-21 实跑退出码 0，产出 `草稿区_…zip` 2991B + `技能库_…zip` 9549B，zip 内层级完整；定时任务每日 23:30） |
+| T8 | 中转区落地：三个子目录 + 命名规则 | 目录存在且有真实草稿 | **完成**（`草稿区\{L1_经验, L2_SOP, L3_Skill}\` 已建；命名 `YYYYMMDD_[主题kebab].md`；已有 25 条真实 L1（截至 2026-10-01 实测；2026-10-01 审计修正：原写 3 条，实测 25 条）） |
+| T15 | 草稿区 / 技能库每日快照兜底（替代 git） | 脚本可跑、产物真实生成、保留策略生效、有日志 | **完成**（`scripts\快照草稿区.ps1`；**2026-10-01 23:43 实跑退出码 0**，产出 `草稿区_20261001_234308.zip` 70,798B／39 文件 ＋ `技能库_20261001_234308.zip` 502,990B／56 文件，日志 `_快照\快照日志.txt` 已写，`_快照` 现 9 个文件、Keep=14）。⚠️ **2026-10-01 审计修正：原写"定时任务每日 23:30"是空账——`schtasks` 全表零命中，快照实际停在 2026-09-23（8 天没跑），而这是 D5 裁定的唯一回滚兜底。已于 10-01 23:43 注册计划任务 `MetaIntelligence_DraftSnapshot`（Daily 23:30、State Ready、Next 10-02 23:30、WorkDir `10_AI自成长引擎`）** |
 | T16 | 撞车检查补做：与既有真源重叠的 L1 补标 `relates_to` | 每条撞车草稿有增补说明 + 既有真源路径 | **完成**（2 条已补标，见 §七） |
 | T17 | 「引用即校验」写进 SOP 与全局硬约束 | `经验沉淀SOP.md` §三.3 + `AGENTS.md` 硬约束 3 均有该条 | **完成** |
+| T18 | 学习链首例：技能普查 drift 证据转经验候选（R7 批次4） | `10_AI自成长引擎/技能库/_中枢/runtime/skill-census.drift.json` 的 learning_trigger 证据有对应 Candidate 并过 Gate32 覆盖 | 进行中（2026-10-08 首例候选已生成，待人审 disposition） |
 
 ## 三、后续阶段任务占位
 
 | # | 阶段 | 要求 | 验收标准 | 状态 |
 |---|---|---|---|---|
 | T9 | M1 | 捕获器规则写成 skill（6 类信号 + `signals_for_recall` 必填门槛 + **撞车检查前置**） | 新会话能自动打点，漏捕获率 < 30%；**新建条目前必须先查三处既有真源**，命中则走增补 | 待办（部分已由全局路由 P1 承担，但撞车检查尚未内建） |
-| T10 | M1 | 落盘器脚本（写草稿区 + 提纯时更新真源） | 一条命令完成 L1 落盘，失败可回滚（回滚依赖 `_快照\`） | 待办 |
+| T10 | M1 | 落盘器脚本（写草稿区 + 提纯时更新真源） | 一条命令完成 L1 落盘，失败可回滚（回滚依赖 `_快照\`） | 进行中（2026-09-28 按 `docs/05-最小自动闭环工单_镜像站问诊_20260928.md` §S1 起步，场景锁镜像站问诊；闸门件 `runners/l1-writer-gate.mjs` 已落，缺「会话收尾自动产候选」这一段） |
 | T11 | M2 | L2 反推：从工具调用序列生成 SOP 草稿，强制补齐「校验点 + 失败回退」 | 拿 `loomy-learned-disk-relocation-decay-check` 做回归对照，生成稿不差于现有手工稿 | 待办 |
-| T12 | M3 | L3 生成 + dry-run + 敏感串脱敏扫描 | 生成的 `loomy-learned-*` 能被正确触发一次，且草稿中无明文凭据 | 待办 |
-| T13 | M4 | 衰减计数与 stale 标记 | `命中 / 被推翻 / 最后命中` 三计数在真实资产上跑起来 | 待办 |
+| T12 | M3 | L3 生成 + dry-run + 敏感串脱敏扫描 | 生成的无前缀 `<slug>` 目录能被正确触发一次（安装时按 技能库/naming.yaml 映射成宿主形态），且草稿中无明文凭据 | 待办 |
+| T13 | M4 | 衰减计数与 stale 标记 | `命中 / 被推翻 / 最后命中` 三计数在真实资产上跑起来 | **进行中**（2026-10-15：聚合件 `runners/skill-decay-report.mjs` ＋ 夹具 16 项 ＋ 接入 fusion-check 已落，三计数口径与 effective 的 PASS 判据对齐；**真实资产三计数仍全 0** —— 台账 `kind=skill` 0 条，等第一条真实回执，与 v0.2 的 effective 同源卡点） |
 | T14 | M4 | 每周复盘报表（Loomy 定时任务，周一 09:00） | 连续两周自动产出，含误报率、**撞车率**与阈值建议 | 待办 |
 
 ## 四、明确不做（范围锁定）
@@ -3133,19 +3356,19 @@ tags:
 
 | # | 决策 | 选项 | 建议 | 结果 |
 |---|---|---|---|---|
-| **D1** | 项目归属与落点 | A. `D:\Work\AI自成长引擎\`（独立子库）B. `AI平台\docs\设计\` 一篇 RFC C. `项目学习\p2-` | **A** | 事实上按 A 运行中（已落盘此处、已登记 Home.md），未正式表态 |
+| **D1** | 项目归属与落点 | A. `D:\Work\元智能\10_AI自成长引擎\`（独立子库）B. `AI平台\docs\设计\` 一篇 RFC C. `项目学习\p2-` | **A** | 事实上按 A 运行中（已落盘此处、已登记 Home.md），未正式表态 |
 | **D2** | 固化触发时机 | A. 每次会话结束 B. 攒够 N 个信号 C. 仅我喊「固化」D. A+C | **D** | ✅ **选 D 变体**（2026-09-24）：P1 信号即时静默落 L1（已实现）+ 会话末对 L2/L3 出「建议固化清单」（清单实装挂 T9） |
 | **D3** | L1 是否允许自动写入（不等确认） | A. 允许（可撤销）B. 一律先过中转区审校 | **B** | ✅ **选 B**（2026-09-20 裁定：L1 静默写入草稿区即可；**L2/L3 必须保留人工闸门**）。现状与之一致 |
 | **D4** | 是否需要每周自动复盘报表 | A. 要（Loomy 定时任务）B. 手动看 | **A** | ✅ **选 A**（2026-09-24）：每周一 09:00 复盘报表定时任务已建（撞车率 / 命中 / stale / 自愈计数） |
 | **D5** | 中转区是否进 git | A. 进（可回溯）B. 不进（省噪声） | **A** | ✅ **改为 C：不进 git，用每日快照兜底**（2026-09-20 裁定）。`scripts\快照草稿区.ps1` 每日打包 `草稿区` + `技能库` 到 `_快照\`，保留 14 份，日志 `_快照\快照日志.txt` |
 | **D6** | 是否现在建 GitHub 仓并登记 `projects.yaml` | A. 现在建 B. M0 验收后再建 | **B** | 待定 |
-| **D7** | 待审草稿中转区放哪 | A. 保持 `D:\记忆\_inbox\` B. 迁到本项目下 | 双面理由见 09-19 记录 | ✅ **选 B 的变体**（2026-09-20 裁定）：实际落在 `D:\Work\AI自成长引擎\草稿区\{L1_经验, L2_SOP, L3_Skill}\`（目录名「草稿区」而非 `_inbox`）。原设计的 `D:\记忆\_inbox\` **作废**，`03-方案构想.md` §2.2 已同步 |
+| **D7** | 待审草稿中转区放哪 | A. 保持 `D:\记忆\_inbox\` B. 迁到本项目下 | 双面理由见 09-19 记录 | ✅ **选 B 的变体**（2026-09-20 裁定）：实际落在 `D:\Work\元智能\10_AI自成长引擎\草稿区\{L1_经验, L2_SOP, L3_Skill}\`（目录名「草稿区」而非 `_inbox`）。原设计的 `D:\记忆\_inbox\` **作废**，`03-方案构想.md` §2.2 已同步 |
 
 ## 六、决策日志
 
 | 时间 | 决定 / 转向 | 原因 |
 |---|---|---|
-| 2026-09-19 | 立项，落点暂选 `D:\Work\AI自成长引擎\`，状态 = 构想中 | 用户要求记入 work 库子项目；独立子库符合 handbook「一项目一仓」 |
+| 2026-09-19 | 立项，落点暂选 `D:\Work\元智能\10_AI自成长引擎\`，状态 = 构想中 | 用户要求记入 work 库子项目；独立子库符合 handbook「一项目一仓」 |
 | 2026-09-19 | 采用「三级产物 + 五段流水线」作为策略骨架；M0 定为零代码纸面闭环 | 复用既有 `loomy-learned-*` 与 `D:\记忆` 惯例，不新造存放地；先验证价值再写代码 |
 | 2026-09-19 | 引入中转区，自动产物不直写真源 | 保证单写真源法则不被自动流程破坏，误收可无损丢弃 |
 | 2026-09-19 | 暂不登记 `projects.yaml`、暂不建 Git 仓 | 该表以「有独立 repo」为前提；待 M0 验收通过再补（见 D6） |
@@ -3154,7 +3377,7 @@ tags:
 | 2026-09-19 | 口径变更：项目产出的 skill 不进 `D:\记忆\_Skills\`，统一先存本项目 `技能库\` | 用户明确要求"跟之前的那些放一起…方便统一观看和管理"；该位置不加载不触发，安装为需点头的独立一步 |
 | 2026-09-21 | 修正 09-19 遗留：`project.yaml` 两条模板残留幽灵路径（`docs/02-资产清单.md`、`docs/03-规格与规范.md`）已删 | `Test-Path` 查出指向不存在文件；教训升级为全局硬约束「引用即校验」 |
 | **2026-09-20** | **裁定：静默范围仅限 L1；L2 出草稿待确认，L3 须列「建议固化清单」由用户点头 + dry-run 才生效** | 全局路由原写「绝不主动询问是否保存为 Skill」，把 L2/L3 的人工闸门一并掐掉了；而该闸门是防幻觉污染的唯一防线。已同步改 `AGENTS.md` 硬约束 2 与 `经验沉淀SOP.md` §三 |
-| **2026-09-20** | **裁定：D5 不进 git，改每日快照兜底**（新选项 C） | 两个项目短期内不建仓（守 D6/M0 纪律），但草稿误删仍需可回捞；快照比建仓轻。已建 `scripts\快照草稿区.ps1` + 每日 23:30 定时任务 |
+| **2026-09-20** | **裁定：D5 不进 git，改每日快照兜底**（新选项 C） | 两个项目短期内不建仓（守 D6/M0 纪律），但草稿误删仍需可回捞；快照比建仓轻。已建 `scripts\快照草稿区.ps1` + 每日 23:30 定时任务 ⚠️ **2026-10-01 审计更正：脚本当天确实建了，但"每日 23:30 定时任务"从未真注册**（`schtasks` 全表零命中，快照日志停在 09-23，8 天没跑）；已于 10-01 23:43 注册 `MetaIntelligence_DraftSnapshot`（Daily 23:30、Ready、Next 10-02 23:30）并手工跑通一次。原裁定与脚本本身没问题，问题在"登记完成"没验过调度面 |
 | **2026-09-20** | **裁定：中转区落本项目 `草稿区\`，原 `D:\记忆\_inbox\` 设计作废** | 与「项目产出不进记忆库」同口径；已同步 `03-方案构想.md` §2.2、`经验沉淀SOP.md` §一、`技能库\README.md` §五 |
 | **2026-09-20** | **裁定：L3 唯一归口 = `技能库\`；`草稿区\L3_Skill\` 仅为写入缓冲** | 避免同一技能两处并存导致检索分裂；SOP §一 已加三步流转规则（移动 → 登记 → 状态流转） |
 | **2026-09-21** | **新增铁律「引用即校验」并前置撞车检查** | 首轮 L1 实产 3 条中有 2 条与既有真源同题（见 §七），暴露捕获环节缺撞车检查；已写入 `AGENTS.md` 硬约束 3、`经验沉淀SOP.md` §三.3、`03-方案构想.md` §2.2 |
@@ -3175,7 +3398,88 @@ tags:
   **撞车率 2/3 ≈ 67%** —— 首轮就这个比例，说明**捕获环节没有"落盘前先查既有真源"这一步**。已把撞车检查前置写进 SOP 与 `03-方案构想.md` §2.2，并列入 T9 的验收标准。
   **两条撞车草稿都比既有真源更详细**（多了引号转义、竖线字段名、`record-get` 复核、`--prefix` 具体值、失败特征），所以不是垃圾重复产出，而是**增量没有被合并回真源**。处置：保留草稿 + 标注增量，提纯时并入既有真源。
   **另一发现**：M1 抢在 M0 之前运行（见 §一 ⚠️）。全局路由只覆盖了 P1 静默落盘，没有实现"会话末建议固化清单"，所以 D2 的建议值（A+C）与现状（信号即时触发）不一致，待用户裁定。
-- **2026-09-24** —— 决策收口：D2 = D 变体（信号即时落 L1 + 会话末对 L2/L3 出清单）；D4 = A（每周一 09:00 复盘报表定时任务已建）。**M0「建议固化清单」在本日会话首次实跑**：素材即本次会话（探针修复 / git 瘦身 / 断言求值器 bug 等），清单已当面列出待用户勾选，勾选结果落 `草稿区\L2_SOP\` / `技能库\` 并回填此处。全局路由 L84 措辞修正（Extended 写死档位名 → 引用契约 resolved_label）已完成。下游 A1 全绿（break 解除，CARD-11 活跃）。
+- **2026-09-24** —— 决策收口：D2 = D 变体（信号即时落 L1 + 会话末对 L2/L3 出清单）；D4 = A（每周一 09:00 复盘报表定时任务已建）。**M0「建议固化清单」在本日会话首次实跑**：素材即本次会话（探针修复 / git 瘦身 / 断言求值器 bug 等），清单已当面列出待用户勾选，勾选结果落 `草稿区\L2_SOP\` / `技能库\` 并回填此处。全局路由 L84 措辞修正（Extended 写死档位名 → 引用契约 resolved_label）已完成。⚠️ 2026-10-01 审计：`<HOME>\AGENTS.md` 已于 09-30 整体重写为 20 行（实测 `wc -l` = 20），`grep resolved_label` 零命中 ⇒ 原 L84 措辞已不存在，此裁定现无处可验（本次未改 AGENTS.md 本身）。下游 A1 全绿（break 解除，CARD-11 活跃）。
+
+## 八、demand_id 归属（机器读取，勿改本节格式）
+
+> 依据 `D:\Work\元智能\machine\migration\demand_backfill_proposal.md` 与 `D:\meta-intelligence-facts\VERDICTS.md` 第 4 轮（DEC-19 / DEC-20 / DEC-21）。
+> 上面 §二 §三 的表格结构遵循 handbook `30-台账格式`，**未作任何改动**；生成器只读本节。
+> 归属判据：问「资产唯一吗、可控吗、可追踪吗」→ D-001；问「经验提取得准不准、值不值得复用、何时衰减」→ D-004；只影响本系统内部结构 → `scope: local`；跨系统机制外扩未获授权 → `scope: unresolved`。
+
+task_bindings:
+- task: T1
+  scope: global
+  demand_id: D-001
+  evidence: 子库登记入口，属 D-001「真源可追溯」
+- task: T2
+  scope: global
+  demand_id: D-004
+  evidence: 原始想法无损记录 = D-004 的「来源保留」
+- task: T3
+  scope: global
+  demand_id: D-004
+  evidence: 策略层定稿决定分层与抽取口径
+- task: T4
+  scope: global
+  demand_id: D-004
+  evidence: 实施骨架含闸门与衰减阈值，属质量判据载体
+- task: T5
+  scope: local
+  system_id: ai-growth
+  demand_id: null
+  evidence: 用户对决策项表态只推进本系统建设，不改变任何全局 Demand 的 success_state
+- task: T6
+  scope: global
+  demand_id: D-004
+  evidence: 真实对话闭环验证「候选抽取 → 判层 → 复用」是否成立
+- task: T7
+  scope: global
+  demand_id: D-001
+  evidence: 撞车率即技能与规则分叉，D-001 原文「不分叉」
+- task: T8
+  scope: global
+  demand_id: D-001
+  evidence: 中转区保证自动产物不直写真源
+- task: T9
+  scope: global
+  demand_id: D-001
+  evidence: 撞车检查前置写进捕获规则，防平行条目
+- task: T10
+  scope: global
+  demand_id: D-004
+  evidence: 落盘器决定经验能否可追溯地进入资产
+- task: T11
+  scope: global
+  demand_id: D-004
+  evidence: L2 反推是判层正确性的核心环节
+- task: T12
+  scope: global
+  demand_id: D-004
+  evidence: L3 生成与 dry-run 是晋升质量闸门
+- task: T13
+  scope: global
+  demand_id: D-004
+  evidence: 衰减计数直接服务「何时保留或淘汰」
+- task: T14
+  scope: global
+  demand_id: D-004
+  evidence: 复盘报表产出误判率与复用效果证据
+- task: T15
+  scope: global
+  demand_id: D-001
+  evidence: 每日快照是可回溯与可回滚手段
+- task: T16
+  scope: global
+  demand_id: D-001
+  evidence: 撞车条目补 relates_to，消除双真源
+- task: T17
+  scope: global
+  demand_id: D-001
+  evidence: 引用即校验 = D-001 原文「引用不悬空」
+- task: T18
+  scope: global
+  demand_id: D-001
+  evidence: drift 证据转经验候选 = 经验沉淀流水线的执行证据落地
 ########## 文件结束：10_AI自成长引擎/docs/01-任务看板.md ##########
 
 ==========================================================================
@@ -3189,23 +3493,23 @@ tags:
 
 ## 一、落盘目录与命名规则
 
-所有产出**严禁直写生产目录（如 `D:\记忆\_Skills\`）**，一律先落入草稿缓冲隔离区：
+所有产出**严禁直写生产目录（如 `<HOME>\Loomy\c3773183a592\opencode\skills\`）**，一律先落入草稿缓冲隔离区：
 
-- **L1 经验草稿**：`D:\Work\AI自成长引擎\草稿区\L1_经验\YYYYMMDD_[主题kebab].md`
-- **L2 SOP草稿**：`D:\Work\AI自成长引擎\草稿区\L2_SOP\YYYYMMDD_[动宾短语].md`
-- **L3 Skill草稿**：`D:\Work\AI自成长引擎\草稿区\L3_Skill\loomy-learned-[主题kebab]\SKILL.md`
+- **L1 经验草稿**：`D:\Work\元智能\10_AI自成长引擎\草稿区\L1_经验\YYYYMMDD_[主题kebab].md`
+- **L2 SOP草稿**：`D:\Work\元智能\10_AI自成长引擎\草稿区\L2_SOP\YYYYMMDD_[动宾短语].md`
+- **L3 Skill草稿**：`D:\Work\元智能\10_AI自成长引擎\草稿区\L3_Skill\<主题kebab>\SKILL.md`（**目录名不带任何前缀**，2026-09-28 裁定）
 
 > ### ★ L3 流转规则（2026-09-20 用户裁定，强制）
 >
 > **草稿区只是写入缓冲区，不是技能的归属地。** L3 skill 提炼完成后必须：
 >
-> 1. **移动**（非复制）整个 `loomy-learned-[主题]\` 目录 → `D:\Work\AI自成长引擎\技能库\loomy-learned-[主题]\`
+> 1. **移动**（非复制）整个 `[主题]\` 目录 → `D:\Work\元智能\10_AI自成长引擎\技能库\<主题>\`
 > 2. 在 `技能库\README.md` §二 技能清单**登记一行**（skill 名 / 用途一句话 / 来源项目 / 状态 / 安装位置）
-> 3. 状态先填 `草稿`；验证过改 `dry-run 通过`；**安装到 `D:\记忆\_Skills\` 必须郭老师点头**，装完改 `已安装` 并填安装位置
+> 3. 状态先填 `草稿`；验证过改 `dry-run 通过`；**安装到 `<HOME>\Loomy\c3773183a592\opencode\skills\` 必须郭老师点头**，装完改 `已安装` 并填安装位置
 >
 > **技能库是 L3 的唯一归口**（`技能库\README.md` §一 有完整的两目录分工表）。若 `草稿区\L3_Skill\` 与 `技能库\` 同时存在同名技能，视为未完成流转，须立即补做第 1、2 步 —— 两处并存会导致检索分裂成两套。
 >
-> **兜底**：草稿区无 git，由 `D:\Work\AI自成长引擎\scripts\快照草稿区.ps1` 每日打包 `_快照\`（保留最近 14 份），误删可回捞。
+> **兜底**：草稿区无 git，由 `D:\Work\元智能\10_AI自成长引擎\scripts\快照草稿区.ps1` 每日打包 `_快照\`（保留最近 14 份），误删可回捞。
 
 ---
 
@@ -3248,7 +3552,7 @@ tags:
 2. **L2/L3 必须留人工闸门**（2026-09-20 用户裁定，优先级高于「不加戏」）：
    - **L2 工作流 SOP**：出草稿后**告知用户草稿路径并等确认**，未确认不得当定稿引用。
    - **L3 可执行技能 / 脚本**：必须在会话末列入「建议固化清单」（一行一条：名称 / 触发信号 / 落点），由用户回复编号同意、且 dry-run 通过后，才移入 `技能库\` 并登记一行。
-   - **此闸门是防幻觉污染的唯一防线，不得以「不加戏」为由跳过。** 口径与 `C:\Users\郭永涛\AGENTS.md` 负向硬约束第 2 条一致。
+   - **此闸门是防幻觉污染的唯一防线，不得以「不加戏」为由跳过。** 口径与 `<HOME>\AGENTS.md` 负向硬约束第 2 条一致。
 3. **引用即校验**：写入草稿的任何**路径**与**数值常量**，落盘前必须核对（路径 `Test-Path`；数值做跨真源比对，数值型断言标 `source` 指向真源）。根因见 `进度审查报告_微内核路由与双引擎_20260920.md` 问题 1（哑路由）与问题 7（照抄过期常量）。
 4. **每日快照兜底**：草稿区与技能库均无 git，由 `scripts\快照草稿区.ps1` 每日打包到 `_快照\`（保留最近 14 份）。误删先查 `_快照\快照日志.txt` 定位最近一份 zip 回捞。
 ########## 文件结束：10_AI自成长引擎/docs/经验沉淀SOP.md ##########
@@ -3261,83 +3565,166 @@ tags:
 tags:
   - AI自成长引擎
   - 技能库
-更新时间: 2026-09-19
+  - 技能治理
+更新时间: 2026-10-15
 ---
 
-# 技能库 · 项目产出的 skill 统一存放处
+# 技能库 · 个人自制 Skill 统一真源母仓
 
-> **一句话**：本项目体系（AI自成长引擎 + 自适应工作流引擎 + 后续同类项目）**总结出来的 skill 一律先落这里**，不进 `D:\记忆\_Skills\`。
-> 目的：统一查看与管理，同时保持程序技能目录干净。
+> **定位（2026-10-08 郭老师裁定）**：**这里只放我自制的 Skill，其他程序自带、自己下载的统统不管。**
+> 
+> 本目录（`D:\Work\元智能\10_AI自成长引擎\技能库\`）是**所有个人自产 Skill 的唯一真源母仓（Single Source of Truth）**。
+> 目的：杜绝自制资产散落在各项目与宿主藏角，实现个人核心资产集中管理、井井有条、一览无余；外部宿主（如 Trae / Loomy）通过符号链接（Junction）或标准分发读取，改动永远只改本库真源。
 
-## 一、两个目录的分工（★ 别搞混）
+---
 
-| 目录 | 是什么 | 谁写 | 会不会真生效 |
+## 一、两个界面的分工（★ 别搞混）
+
+| 界面 | 是什么 | 谁管 | 会不会真生效 |
 |---|---|---|---|
-| **`D:\记忆\_Skills\`** | **电脑程序中已有的 skill**（Loomy 运行时加载的技能目录） | 程序 / 既有安装 | ✅ 会被加载、会被触发 |
-| **`D:\Work\AI自成长引擎\技能库\`（本页）** | 我们**从对话与项目中总结出来的 skill**，含草稿与待装版本 | 本项目体系产出 | ❌ **不生效**，只是归档与统一管理 |
+| **各程序自带/运行时目录**（如 `Loomy/opencode/skills/`、`~/.workbuddy/` 等） | 各软件自带的第三方插件、市场下载包 | **完全不管**（任其自生自灭，不碰不删） | 程序自管 |
+| **`D:\Work\元智能\10_AI自成长引擎\技能库\`（本页）** | **郭老师自己亲手造、踩坑提炼出的核心技能资产** | **唯一自管真源** | 通过软链/安装投影生效 |
 
-> **含义（务必知情）**：放在本页目录下的 skill **不会被自动加载、不会自动触发**。要让它真正生效，需要单独一步"安装"（复制 skill 文件夹到 `D:\记忆\_Skills\`），而那一步会改变 Agent 后续真实行为，**必须郭老师点头**。
-> 当前口径：**先都在技能库存着，暂不安装**。
+> **安全与备份**：本目录存放在 `D:\Work`，绝不随任何 IDE / 软件卸载重装而丢失；每晚 23:30 由 `scripts\快照草稿区.ps1` 自动执行增量 zip 快照兜底（保留最近 14 份）。
 
-## 二、技能清单
+---
 
-| skill 名 | 用途一句话 | 来源项目 | 状态 | 安装位置 |
+## 一之二、命名与映射原则
+
+- **真源不带任何前缀**（2026-09-28 郭老师裁定）：目录名与 front-matter 的 `name` 就是 `<slug>`，全小写 kebab，不带宿主程序名、不带版本号。
+- **宿主形态（如 `loomy-learned-`）仅为写权限映射**：安装或软链到特定宿主时按 `naming.yaml` 换算，不作为真源目录名。
+- **外部项目引用走 Junction**：项目专属业务技能（如小红书管线）本体归入本库，原项目内通过 Windows Junction 目录链接直通本库，保持脚本路径与自动化无缝衔接。
+
+---
+
+## 二、自制技能全景清单 (Master Inventory)
+
+### 1. 业务自动化管线类 (Business Pipelines)
+生产环境真正在跑、带状态机与自动化调度的全流程业务技能：
+
+| skill 名 (Slug) | 用途一句话 | 来源项目 | 状态 | 当前生效位置 |
 |---|---|---|---|---|
-| `loomy-learned-gpt-mirror-extended-review` | 走 AI <POOL_NAME_CN>账号池 / GPT 镜像站，以深度档（Extended→Thinking）送审方案、问架构；含 11 条闸门与前置探针 | [[../../自适应工作流引擎/README\|自适应工作流引擎]]（契约 `contracts\gpt-mirror-extended-review.yaml`） | **草稿 · 未安装** | — |
-
-状态取值：`草稿`（写完没验证）/ `dry-run 通过`（验过没装）/ `已安装`（在 `D:\记忆\_Skills\`，会真生效）/ `已废弃`（被取代，保留不删）
-
-## 三、目录约定
-
-```
-D:\Work\AI自成长引擎\技能库\
-├── README.md                                  # 本页（索引 + 分工说明）
-└── <skill-id>\                                # 目录名 = skill id，英文 kebab（安装时要一致）
-    ├── SKILL.md                               # 必需
-    ├── scripts\                               # 可选，可执行脚本
-    └── references\                            # 可选，长参考
-```
-
-- **skill id 命名**：沿用现有惯例 `loomy-learned-<kebab-主题>`，**不要为"项目产出"另起命名体系**（否则新旧技能检索会分裂成两套）
-- **每个 skill 的 SKILL.md 必须写全来源**：出自哪个项目、哪次对话/盘点、原始资产路径
-- **不在这里放运行态数据**（runtime/drift/日志归各项目仓），本目录只放知识资产
-
-## 四、装一个 skill 的正确顺序（闸门）
-
-1. 在本目录写好 `SKILL.md`，状态标 `草稿`
-2. 依赖的探针 / 脚本 / 契约**先就位并跑通**（否则 skill 正文引用的字段不存在，装了就是死条文）
-3. dry-run 或真实环境验证一次，状态改 `dry-run 通过`
-4. **郭老师点头** → 复制整个 skill 文件夹到 `D:\记忆\_Skills\` → 状态改 `已安装`，填「安装位置」列
-5. 安装后做一次触发词命中测试；不命中就回去改 `description` 的触发词
-
-> 相关决策：自适应工作流引擎 **D3 = 等 A2 探针跑通再装**（见其 `docs\01-任务看板.md` §五）；本项目自身的 L3 闸门见 [[../docs/00-项目总览|00-项目总览]] §四。
-
-## 五、已定：待审草稿的中转区在哪（2026-09-20 用户裁定）
-
-原设计的 `D:\记忆\_inbox\` **作废**。实际落点 = **`D:\Work\AI自成长引擎\草稿区\`**，三级子目录与本页技能库分工如下：
-
-| 目录 | 放什么 | 会不会生效 | 归宿 |
-|---|---|---|---|
-| `草稿区\L1_经验\` | 经验条目草稿 | 否 | 审校后提纯进记忆真源 |
-| `草稿区\L2_SOP\` | 流程 SOP 草稿 | 否 | **须用户确认后**才算定稿 |
-| `草稿区\L3_Skill\` | 技能草稿（写入缓冲） | 否 | **移动**到本页 `技能库\` 并登记一行 |
-| `技能库\`（本页） | **L3 的唯一归口** | 否（仍需安装） | 用户点头后安装进 `D:\记忆\_Skills\` 才生效 |
-| `_快照\` | 每日 zip 兜底 + `快照日志.txt` | — | 保留最近 14 份 |
-
-- 裁定依据：与「项目产出不进 `D:\记忆`」同口径；统一查看管理、程序与记忆目录保持干净
-- 代价（已接受）：离 L1 最终落点多一次搬运
-- **因两个项目均无 git（D5 裁定：不进 git），可回溯由每日快照承担** —— `scripts\快照草稿区.ps1`，定时任务每日 23:30 跑
-- 流转规则详见 [[../docs/经验沉淀SOP|经验沉淀SOP]] §一「L3 流转规则」
-
-### ★ 撞车检查必须在落盘前做（2026-09-21 新增铁律）
-
-新建任何草稿前，先查三处既有真源：**Loomy memory（`…\share\memory\<type>\`）· `D:\记忆\调度大脑记忆\` · 本页 `技能库\`**。命中同题 → 走**增补**（草稿头部标 `relates_to: <既有真源路径>` + 写明本条增量），**不新建平行条目**。
-
-首轮 3 条 L1 实测撞车率 2/3，两条都与既有 `context\*.md` 同题——所以这条不是洁癖，是必须内建的步骤。详见 [[../docs/01-任务看板|01-任务看板]] §七 2026-09-21 复盘。
+| **`xhs-like-daily`** | 小红书点赞每日管线（A取消旧赞/B新笔记v3深度分析/C旧信息联网复核） | [[../../小红书点赞分析/README\|小红书点赞分析]] | **生产运行中** | `小红书/.trae/skills/` (Junction) + 计划任务 10:17 |
+| **`multi-store-sync-delete`** | 多数据源同步真删 SOP（dry-run 校验、分批删云端行、删本地文件与 JSON 键、双向孤儿终检） | [[../../小红书点赞分析/README\|小红书点赞分析]] | **生产就绪** | `小红书/.trae/skills/` (Junction) |
 
 ---
 
-**维护规则**：新增 skill 必须在 §二 清单加一行；改状态同步改行；本页与 skill 内 SKILL.md 冲突时，以 SKILL.md 为准、本页只改索引。
+### 2. 系统架构与路由协议类 (Architecture & Protocols)
+跨项目、跨 Agent 的基础设施与治理协议：
+
+| skill 名 (Slug) | 用途一句话 | 来源项目 | 状态 | 当前生效位置 |
+|---|---|---|---|---|
+| **`memory-router`** | 多 Agent 多项目共享记忆路由协议（Routing before Retrieval，先定项目再读记忆，fail-closed） | [[../../AI平台/Home\|AI平台]] | **现行规范** | `AI平台/agent/memory/protocol/` |
+| **`gpt-mirror-extended-review`** | 走 AI <POOL_NAME_CN>账号池 / GPT 镜像站（**Chat 标签 + ChatGPT 6 Sol + 顶档 High**）送审方案；含 13 条自愈闸门（`mode_gate` 为**三闸**：Chat / 模型 `6` / pill `High`） | [[../../20_自适应工作流引擎/README\|自适应工作流引擎]] | **草稿 · 未安装**（P1 探针已跑通；P2 UI 探针待建） | 真源在 `技能库\`，契约已挂接巡检每日调度 |
+
+---
+
+### 3. 踩坑自沉淀工具类 (Self-Learned L3 Skills)
+从真实工程排障与开发报错中提炼出的硬核防护技能（2026-10-08 统一由草稿区晋升归口）：
+
+| skill 名 (Slug) | 用途一句话 | 提炼来源 (L1) | 状态 |
+|---|---|---|---|
+| **`lark-cli-home-redirect-not-configured`** | 解决 Windows 环境下用户家目录重定向导致 lark-cli 读不到用户配置的问题 | `20260920_lark-cli-home-redirect...` | 待按需分发 |
+| **`node-exit-drops-piped-stdout`** | 防止 Node.js 在 process.exit 退出前写管道截断输出，避免下游工具拿到假数据 | `20260928_node-exit-drops-piped...` | 待按需分发 |
+| **`obsidian-canvas-board`** | 规范用户语境下的可视化看板/可画特指 Obsidian Canvas (.canvas) 原生画布文件 | `20260920_obsidian-canvas-board...` | 待按需分发 |
+| **`powershell-json-arg-space-truncation-field-id`** | 防御 PowerShell 5.1 传参时含空格 JSON 字符串被截断，强制使用字段 ID | `20260920_powershell-json-arg...` | 待按需分发 |
+| **`snapshot-membership-loop-drops-new-inputs`** | 防止批处理遍历上一轮快照成员集时静默丢失新写入的数据条目 | `20260928_snapshot-membership-loop...` | 待按需分发 |
+| **`split-parallel-walk-for-mass-fs-scan`** | 百万级海量目录遍历的分片并行扫描与进度心跳规范，防假死与卡顿 | `20260928_split-parallel-walk...` | 待按需分发 |
+| **`zero-hit-census-is-scanner-failure-not-absence`** | 普查扫描零命中强制判定为扫描器自身故障，防止把脚本失效伪装为“无数据” | `20260928_zero-hit-census-is-scanner...` | 待按需分发 |
+
+---
+
+### 4. 伴跑自学生效资产收存类 (Session Learned Assets)
+* **目录**：[`_收存_宿主自产/`](file:///D:/Work/元智能/10_AI自成长引擎/技能库/_收存_宿主自产/)
+* **收存数量**：20 份 `SKILL.md`（2026-09-29 郭老师裁定确认为个人资产收存，包括 `opencli-browser-stable-roundtrip`、`feishu-base-batch-record-migration`、`agent-role-handover-doc` 等；2026-10-15 补收宿主新学的 `clash-direct-rule-fix`）。
+* **性质**：只读收存，与运行时 20/20 SHA256 逐条相符，供后续体系深度整合时按需调用。
+* **清单口径**（2026-10-15 郭老师裁定）：`清单.tsv` **只登记本人资产**（收存 / 漂移 / 无顶层 SKILL.md）。宿主程序自带、非本人资产的「非宿主形态（不收）」不落清单，只在采集脚本的终端统计里报告。
+
+---
+
+### 4.5 工作流 SOP 类 (Workflow SOPs)
+多步骤固定操作流程的标准作业程序（不装进任何宿主，按需查阅）：
+
+| skill 名 (Slug) | 用途一句话 | 来源项目 | 状态 |
+|---|---|---|---|
+| **`统编版语文教材篇目核对与同步`** | 教材篇目核对铁律（教师为唯一真源 / 先查替换时间表 / 只碰标题层）+ 五步同步流程 + 双验证门禁，防止照抄旧版目录与破坏 lessonId 资产对接键 | [[../../AI精听训练器/README\|AI精听训练器]]（`D:\listenloop` 句读/ListenLoop） | **待安装确认**（2026-10-15 定稿） |
+
+---
+
+### 5. 能力型工具类 (Capability Tools)
+把**已存在的系统能力**封装成「按需调用、无常驻进程」的 skill —— 不改能力本身，只换承载形态：
+
+| skill 名 (Slug) | 用途一句话 | 来源 | 状态 | 当前生效位置 |
+|---|---|---|---|---|
+| **`ai-search-pool`** | 多引擎 AI 搜索聚合：并发问秘塔 / Perplexity / 元宝 / Grok 等 8 个已登录的 AI 搜索网页端，交叉验证后出带引用来源的 HTML 报告。把原 `:3000` 搜索网关的逻辑改为 skill 形态，**无进程 / 无端口 / 无开机自启** | `D:\项目\ai-hub\search_gateway\`（`engines.py` + `content_pool.py`） | **可用**（2026-10-11 实测 52.2s 出报告；网关对照 63.4s，产出等价） | `~/.workbuddy-ai/skills/` (Junction) |
+
+> **为什么不做成常驻网关**：`:3000` 只是把 `content_pool.run_search()` 包了一层 HTTP，而该函数**本就带 CLI**。
+> 反例即证据 —— 该网关 2026-09-25 → 10-11 **静默死掉 6 周无人发现**（日志停 09-25、健康记录停 09-28）。
+> 详见 `D:\记忆\调度大脑记忆\参考\reference_skill_ai_search_pool.md`。
+
+---
+
+### 6. 定时任务与巡检类 (Scheduled Ops & Patrol)
+让「已经跑起来的自动化」**不会静默过期**：契约声明期望 → 只读探针核对 → drift 分级报人。**只读，绝不执行被监对象。**
+
+| skill 名 (Slug) | 用途一句话 | 来源 | 状态 | 当前生效位置 |
+|---|---|---|---|---|
+| **`ops-task-fleet-watch`** | 本机定时任务舰队巡检：只读核对 38 个运维计划任务还在不在、有没有被停用、退出码对不对、有没有过期没跑 | [[../../20_自适应工作流引擎/README\|自适应工作流引擎]] | **已登记**（2026-10-15 首跑即报出 3 条真故障） | 真源在 `技能库\`，**不装宿主**（按需查阅）；巡检由计划任务 `MetaIntelligence_Workflow_Patrol` 每天 08:35 自动跑 |
+
+> **它为什么不归「能力型工具类」**：能力型工具是「把某个能力换个承载形态、无进程无端口」；
+> 本类恰恰相反 —— 它**监护的正是那些常驻/定时跑的东西**，且自带每日调度。
+> 分类按「管什么」切，不按「怎么实现」切：本类管的是**自动化的健康**。
+> 后续凡「让某条定时自动化不会悄悄停摆」的 skill 都归本类（例：渠道刷新、备份、看门狗）。
+
+---
+
+## 三、目录组织规范
+
+```
+D:\Work\元智能\10_AI自成长引擎\技能库\
+├── README.md                                  # [本页] 全局唯一技能资产大台账
+├── naming.yaml                                # 宿主名称转换规则映射
+├── _中枢\                                     # 技能体检器、普查与治理脚本
+├── _收存_宿主自产\                             # 伴跑自学 20 份资产只读收存
+│
+├── <业务与协议类>/
+│   ├── xhs-like-daily\                        # 小红书每日管线真源
+│   ├── multi-store-sync-delete\               # 多端真删真源
+│   ├── memory-router\                         # 记忆路由真源
+│   └── gpt-mirror-extended-review\            # 镜像站送审真源
+│
+└── <自沉淀工具类>/
+    ├── lark-cli-home-redirect-not-configured\ # 7 个成熟 L3 技能包
+    ├── node-exit-drops-piped-stdout\
+    ├── ...
+    └── zero-hit-census-is-scanner-failure-not-absence\
+│
+└── <工作流 SOP 类>/
+    └── 统编版语文教材篇目核对与同步\        # 教材篇目核对与同步 SOP（2026-10-15 晋升归口）
+
+└── <能力型工具类>/
+    └── ai-search-pool\                        # 多引擎 AI 搜索聚合真源（2026-10-11 入）
+│
+└── <定时任务与巡检类>/
+    └── ops-task-fleet-watch\                  # 定时任务舰队巡检真源（2026-10-15 入）
+```
+
+> **宿主投影**：`ai-search-pool` 在 `<HOME>\.workbuddy-ai\skills\ai-search-pool` 处为 **Junction**，
+> 直通本库真源（`LinkType=Junction`，已实测透过链接可正常运行）。**改动永远只改本库真源。**
+
+---
+
+## 四、自制 Skill 维护守则
+
+1. **改动只改真源**：任何自己造的 Skill 逻辑演进或修改，一律在 `D:\Work\元智能\10_AI自成长引擎\技能库\<skill-id>\` 下进行。
+2. **草稿归口流转**：新提炼的 L3 技能写完并通过验证后，从 `草稿区\L3_Skill\` **移动**至本目录，并在本 README 清单登记一行。
+3. **程序按需分发**：外部程序若需调用，通过 Junction 软链接或安装命令单向投影过去，绝不反向在外部散落修改。
+4. **调用后记台账（2026-10-15 补，落实 docs/03 §五 的"反馈"端）**：skill 被真正调用并完成一次任务后，按 R3 Q6 口径记一条 `kind=skill` 运行事件 ——
+   `node runners/run-event.mjs --record '<json>'`，必带 `skill_id`／`skill_version_sha`／`trigger_matched`／`invoked`；
+   `outcome=success` 还必须有**非自报**的 `acceptance_source` ＋ `acceptance_ref`（自报／退出码／模型自称一律不算）。
+   **为什么**：docs/03 §五 的「命中 +1／被推翻 ≥2 降级／90 天未命中标 stale」全部靠这条台账算，**没有记录就等于衰减规则无从计算**。
+   **算账入口（只读）**：`node runners/skill-decay-report.mjs --skills-dir 10_AI自成长引擎/技能库`，加 `--apply` 才落 `runtime/skill-decay-report.{md,json}`；
+   它把「命中 TOP5／被推翻清单／stale 清单／零记录 skill」摆出来，**降级与删除仍由人执行**（本件不删不改任何 skill）。
 ########## 文件结束：10_AI自成长引擎/技能库/README.md ##########
 
 ==========================================================================
@@ -3410,7 +3797,7 @@ powershell -ExecutionPolicy Bypass -File scripts\enumerate_broken_links.ps1 -Pre
 
 ## 三、铁律与退出码
 
-照搬 `D:\Work\自适应工作流引擎\probes\probe_gpt_mirror.ps1` 的同一套纪律，不另起：
+照搬 `D:\Work\元智能\20_自适应工作流引擎\probes\probe_gpt_mirror.ps1` 的同一套纪律，不另起：
 
 1. **只读** —— 只枚举目录、只读文件哈希。脚本无任何写/删/移动被检对象的能力，产物只落在 `runtime\`
 2. **零字面量** —— 扫描根、正则、阈值、哨兵全从配置读；脚本内不得出现硬编码外部常量
@@ -3451,7 +3838,7 @@ powershell -ExecutionPolicy Bypass -File scripts\enumerate_broken_links.ps1 -Pre
 # =====================================================================
 #  技能中枢 · P0 只读体检器配置（机器真源 · 声明态）
 # ---------------------------------------------------------------------
-#  对应方案 : D:\Work\AI自成长引擎\docs\04-方案_技能统一治理与浏览器能力域_20260924.md
+#  对应方案 : D:\Work\元智能\10_AI自成长引擎\docs\04-方案_技能统一治理与浏览器能力域_20260924.md
 #  消费脚本 : scripts\audit_skill_census.ps1
 #  铁律     : 脚本内不得出现任何硬编码的扫描根 / 正则 / 阈值 / 哨兵，
 #             全部从本文件读取（照搬自适应工作流引擎「零字面量」纪律）
@@ -3459,7 +3846,7 @@ powershell -ExecutionPolicy Bypass -File scripts\enumerate_broken_links.ps1 -Pre
 #  注意     : 本文件的值会随机器变化。**改判据前先跑 smoke 配置**。
 # =====================================================================
 config_version: 1
-owner_plan: D:\Work\AI自成长引擎\docs\04-方案_技能统一治理与浏览器能力域_20260924.md
+owner_plan: D:\Work\元智能\10_AI自成长引擎\docs\04-方案_技能统一治理与浏览器能力域_20260924.md
 output_prefix: skill-census
 
 # ---------------------------------------------------------------------
@@ -3470,8 +3857,8 @@ output_prefix: skill-census
 scan:
   roots:
     - D:\|9
-    - C:\Users\郭永涛\|10
-    - C:\Users\Public\Loomy\|8
+    - <HOME>\|10
+    - <HOME>\Loomy\|8
   exclude_path_regex: node_modules|\.git\\|\.pnpm-store|\$RECYCLE\.BIN|System Volume Information
   skill_file_name: SKILL.md
 
@@ -3490,34 +3877,34 @@ classify:
   b_class_known_dirs:
     - D:\OfficeAce\office-claw-skills
     - D:\游戏\08-AI配置与技能
-    - C:\Users\郭永涛\skills
+    - <HOME>\skills
   true_source_dirs:
-    - D:\Work\AI自成长引擎\技能库
+    - D:\Work\元智能\10_AI自成长引擎\技能库
 
 # ---------------------------------------------------------------------
 # 三、链接层宿主清单（体检器逐个枚举深度 1 的子项，判链接/实体与目标是否存在）
 #     source: 2026-09-24 实测 351 条断链
 # ---------------------------------------------------------------------
 link_hosts:
-  - C:\Users\郭永涛\.trae\skills
-  - C:\Users\郭永涛\.trae-cn\skills
-  - C:\Users\郭永涛\.trae-local\skills
-  - C:\Users\郭永涛\.codebuddy\skills
-  - C:\Users\郭永涛\.claude\skills
-  - C:\Users\郭永涛\.qoder-cn\skills
-  - C:\Users\郭永涛\.qoder\skills
-  - C:\Users\郭永涛\.qoderworkcn\skills
-  - C:\Users\郭永涛\.iflow\skills
-  - C:\Users\郭永涛\.kiro\skills
-  - C:\Users\郭永涛\.qwen\skills
-  - C:\Users\郭永涛\.codex\skills
-  - C:\Users\郭永涛\.box-agent\skills
-  - C:\Users\郭永涛\.agents\skills
-  - C:\Users\郭永涛\.cc-switch\skills
-  - C:\Users\郭永涛\.workbuddy\skills
-  - C:\Users\郭永涛\.workbuddy-ai\skills
-  - C:\Users\郭永涛\.config\agents\skills
-  - C:\Users\郭永涛\.config\opencode\skills
+  - <HOME>\.trae\skills
+  - <HOME>\.trae-cn\skills
+  - <HOME>\.trae-local\skills
+  - <HOME>\.codebuddy\skills
+  - <HOME>\.claude\skills
+  - <HOME>\.qoder-cn\skills
+  - <HOME>\.qoder\skills
+  - <HOME>\.qoderworkcn\skills
+  - <HOME>\.iflow\skills
+  - <HOME>\.kiro\skills
+  - <HOME>\.qwen\skills
+  - <HOME>\.codex\skills
+  - <HOME>\.box-agent\skills
+  - <HOME>\.agents\skills
+  - <HOME>\.cc-switch\skills
+  - <HOME>\.workbuddy\skills
+  - <HOME>\.workbuddy-ai\skills
+  - <HOME>\.config\agents\skills
+  - <HOME>\.config\opencode\skills
 
 # ---------------------------------------------------------------------
 # 四、自检哨兵 —— 用于区分「机器真变了」与「探针自己坏了」
@@ -3532,7 +3919,7 @@ self_test:
   min_hashed_files: 3000
   max_frontmatter_missing_rate: 0.35
   min_broken_links: 100
-  sentinel_broken_link: C:\Users\郭永涛\.trae\skills\ad-creative
+  sentinel_broken_link: <HOME>\.trae\skills\ad-creative
   sentinel_source: 2026-09-24 find -type l ! -exec test -e 实测样本
   sentinel_dup_name: none
   sentinel_dup_min_copies: 0
@@ -3585,23 +3972,23 @@ scope:
 
   # 4) 你主动装的 / 自己写的资产根（手工维护，越准越好）
   in_roots:
-    - C:\Users\郭永涛\.agents\skills
-    - C:\Users\郭永涛\skills
-    - C:\Users\郭永涛\skills_backup
-    - C:\Users\郭永涛\.claude\skills_backup_20260829
+    - <HOME>\.agents\skills
+    - <HOME>\skills
+    - <HOME>\skills_backup
+    - <HOME>\.claude\skills_backup_20260829
     - D:\OfficeAce\office-claw-skills
     - D:\游戏\08-AI配置与技能
-    - D:\Work\AI自成长引擎\技能库
+    - D:\Work\元智能\10_AI自成长引擎\技能库
 
   # 自检区间：偏离即说明判据写坏或环境大变 → exit 3 拒发结论
   self_test_min_in: 300
   self_test_min_out: 6000
   # 哨兵全部实测存在（2026-09-24），各自覆盖一条判定路径
-  sentinel_out_path: C:\Users\Public\Loomy\c3773183a592\opencode\skills\pdf
+  sentinel_out_path: <HOME>\Loomy\c3773183a592\opencode\skills\pdf
   sentinel_out_note: 走「出厂标记」判 out（Loomy 内置 pdf，sourceType=bundled）
-  sentinel_in_path: C:\Users\Public\Loomy\c3773183a592\opencode\skills\loomy-learned-agent-role-handover-doc
+  sentinel_in_path: <HOME>\Loomy\c3773183a592\opencode\skills\loomy-learned-agent-role-handover-doc
   sentinel_in_note: 走「自产前缀兜底」判 in（该目录漏写 .loomy-skill.json）
-  sentinel_in_path2: C:\Users\郭永涛\.agents\skills\agent-browser
+  sentinel_in_path2: <HOME>\.agents\skills\agent-browser
   sentinel_in2_note: 走「声明根」判 in
 
 # ---------------------------------------------------------------------
@@ -3631,10 +4018,10 @@ broken_links:
 ==========================================================================
 
 ########## 文件开始：10_AI自成长引擎/技能库/_中枢/conclusions/skill-census-00-summary.md ##########
-﻿# 技能普查体检摘要（P0 只读）
+# 技能普查体检摘要（P0 只读）
 
 - 探测时间：2026-09-24T10:29:41+08:00
-- 配置：`D:\Work\AI自成长引擎\技能库\_中枢\audit.config.yaml`
+- 配置：`D:\Work\元智能\10_AI自成长引擎\技能库\_中枢\audit.config.yaml`
 - probe_self_test：**pass**（枚举 / 分类 / 哈希 / 断链 四类判据均命中已知样本）
 - 访问目录数：211954
 
@@ -3694,25 +4081,25 @@ broken_links:
 
 | host | entities（实体） | links_alive（活链接） | broken（断链） |
 |---|---|---|---|
-| `C:\Users\郭永涛\.qoder\skills` | 25 | 38 | 149 |
-| `C:\Users\郭永涛\.kiro\skills` | 25 | 41 | 149 |
-| `C:\Users\郭永涛\.qwen\skills` | 25 | 41 | 149 |
-| `C:\Users\郭永涛\.trae\skills` | 25 | 41 | 149 |
-| `C:\Users\郭永涛\.iflow\skills` | 25 | 38 | 148 |
-| `C:\Users\郭永涛\.codebuddy\skills` | 26 | 38 | 148 |
-| `C:\Users\郭永涛\.trae-cn\skills` | 39 | 17 | 19 |
-| `C:\Users\郭永涛\.qoder-cn\skills` | 0 | 10 | 18 |
-| `C:\Users\郭永涛\.claude\skills` | 6 | 14 | 17 |
-| `C:\Users\郭永涛\.cc-switch\skills` | 20 | 0 | 0 |
-| `C:\Users\郭永涛\.workbuddy\skills` | 55 | 0 | 0 |
-| `C:\Users\郭永涛\.workbuddy-ai\skills` | 26 | 0 | 0 |
-| `C:\Users\郭永涛\.config\agents\skills` | 26 | 0 | 0 |
-| `C:\Users\郭永涛\.config\opencode\skills` | 25 | 0 | 0 |
-| `C:\Users\郭永涛\.qoderworkcn\skills` | 46 | 0 | 0 |
-| `C:\Users\郭永涛\.trae-local\skills` | 0 | 0 | 0 |
-| `C:\Users\郭永涛\.codex\skills` | 2 | 0 | 0 |
-| `C:\Users\郭永涛\.agents\skills` | 79 | 0 | 0 |
-| `C:\Users\郭永涛\.box-agent\skills` | 28 | 0 | 0 |
+| `<HOME>\.qoder\skills` | 25 | 38 | 149 |
+| `<HOME>\.kiro\skills` | 25 | 41 | 149 |
+| `<HOME>\.qwen\skills` | 25 | 41 | 149 |
+| `<HOME>\.trae\skills` | 25 | 41 | 149 |
+| `<HOME>\.iflow\skills` | 25 | 38 | 148 |
+| `<HOME>\.codebuddy\skills` | 26 | 38 | 148 |
+| `<HOME>\.trae-cn\skills` | 39 | 17 | 19 |
+| `<HOME>\.qoder-cn\skills` | 0 | 10 | 18 |
+| `<HOME>\.claude\skills` | 6 | 14 | 17 |
+| `<HOME>\.cc-switch\skills` | 20 | 0 | 0 |
+| `<HOME>\.workbuddy\skills` | 55 | 0 | 0 |
+| `<HOME>\.workbuddy-ai\skills` | 26 | 0 | 0 |
+| `<HOME>\.config\agents\skills` | 26 | 0 | 0 |
+| `<HOME>\.config\opencode\skills` | 25 | 0 | 0 |
+| `<HOME>\.qoderworkcn\skills` | 46 | 0 | 0 |
+| `<HOME>\.trae-local\skills` | 0 | 0 | 0 |
+| `<HOME>\.codex\skills` | 2 | 0 | 0 |
+| `<HOME>\.agents\skills` | 79 | 0 | 0 |
+| `<HOME>\.box-agent\skills` | 28 | 0 | 0 |
 
 ---
 
@@ -3743,7 +4130,7 @@ broken_links:
 
 | 目标父目录 | 条数 | 该目录现在存在吗 |
 |---|---|---|
-| `C:\Users\郭永涛\.agents\skills` | 946 | 存在（源目录还在，只是里面的技能被删了） |
+| `<HOME>\.agents\skills` | 946 | 存在（源目录还在，只是里面的技能被删了） |
 
 **根因判读**：全部死链的目标父目录只有 1 个，且该目录本身仍存在 —— 说明不是盘符迁移、也不是整片路径失效，而是**从这一个 hub 里删掉了 149 个技能目录，但散在 9 个宿主里的 946 条链接没有回收**。清理因此是单一动作，不需要逐宿主分别判断。
 
@@ -3758,25 +4145,25 @@ broken_links:
 
 | host | 链接数 | 断链 | 普查对照 | 备注 |
 |---|---|---|---|---|
-| `C:\Users\郭永涛\.qoder\skills` | 187 | 149 | 149 | ok |
-| `C:\Users\郭永涛\.kiro\skills` | 190 | 149 | 149 | ok |
-| `C:\Users\郭永涛\.qwen\skills` | 190 | 149 | 149 | ok |
-| `C:\Users\郭永涛\.trae\skills` | 190 | 149 | 149 | ok |
-| `C:\Users\郭永涛\.iflow\skills` | 186 | 148 | 148 | ok |
-| `C:\Users\郭永涛\.codebuddy\skills` | 186 | 148 | 148 | ok |
-| `C:\Users\郭永涛\.trae-cn\skills` | 36 | 19 | 19 | ok |
-| `C:\Users\郭永涛\.qoder-cn\skills` | 28 | 18 | 18 | ok |
-| `C:\Users\郭永涛\.claude\skills` | 31 | 17 | 17 | ok |
-| `C:\Users\郭永涛\.cc-switch\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.workbuddy\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.workbuddy-ai\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.config\agents\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.config\opencode\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.qoderworkcn\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.trae-local\skills` | 0 | 0 | 0 | host_not_found |
-| `C:\Users\郭永涛\.codex\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.agents\skills` | 0 | 0 | 0 | ok |
-| `C:\Users\郭永涛\.box-agent\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.qoder\skills` | 187 | 149 | 149 | ok |
+| `<HOME>\.kiro\skills` | 190 | 149 | 149 | ok |
+| `<HOME>\.qwen\skills` | 190 | 149 | 149 | ok |
+| `<HOME>\.trae\skills` | 190 | 149 | 149 | ok |
+| `<HOME>\.iflow\skills` | 186 | 148 | 148 | ok |
+| `<HOME>\.codebuddy\skills` | 186 | 148 | 148 | ok |
+| `<HOME>\.trae-cn\skills` | 36 | 19 | 19 | ok |
+| `<HOME>\.qoder-cn\skills` | 28 | 18 | 18 | ok |
+| `<HOME>\.claude\skills` | 31 | 17 | 17 | ok |
+| `<HOME>\.cc-switch\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.workbuddy\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.workbuddy-ai\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.config\agents\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.config\opencode\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.qoderworkcn\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.trae-local\skills` | 0 | 0 | 0 | host_not_found |
+| `<HOME>\.codex\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.agents\skills` | 0 | 0 | 0 | ok |
+| `<HOME>\.box-agent\skills` | 0 | 0 | 0 | ok |
 
 ## 三、清理动作的安全要求（执行前必读）
 
@@ -3810,13 +4197,13 @@ tags:
 
 > **一句话结论**：技能侧不需要"新建一套管理与定义"，需要的是**把规则侧已经验证成功的「一份真源 + N 份指针」范式照搬过来**，再补一个只读体检器。定义真源已经有了（本页同级 `技能库\`），缺的是分发与对账。
 >
-> 本文所有路径均已 `Test-Path` 核对（遵 [[00-项目总览|00-项目总览]] 与 `C:\Users\郭永涛\AGENTS.md` 负向硬约束 3「引用即校验」）。所有数字均可由 §八 的命令复现。
+> 本文所有路径均已 `Test-Path` 核对（遵 [[00-项目总览|00-项目总览]] 与 `<HOME>\AGENTS.md` 负向硬约束 3「引用即校验」）。所有数字均可由 §八 的命令复现。
 
 ---
 
 ## 一、盘面实测（2026-09-24 全盘普查）
 
-扫描范围：`D:\` 与 `C:\Users\郭永涛\`（`maxdepth 9/10`，排除 `node_modules`、`.git`、`.pnpm-store`）。**未含** `C:\Users\Public\Loomy\`，需另加 79 份。
+扫描范围：`D:\` 与 `<HOME>\`（`maxdepth 9/10`，排除 `node_modules`、`.git`、`.pnpm-store`）。**未含** `<HOME>\Loomy\`，需另加 79 份。
 
 | 指标 | 实测 |
 |---|---|
@@ -3830,20 +4217,20 @@ tags:
 
 | 宿主 | 份数 | 性质 |
 |---|---|---|
-| `C:\Users\郭永涛\.workbuddy` | 1900 | 程序自带 marketplace/plugins |
-| `C:\Users\郭永涛\.workbuddy-ai` | 1688 | **同上，疑似同产品第二份安装** |
-| `C:\Users\郭永涛\.codebuddy` | 978 | 程序自带 |
-| `C:\Users\郭永涛\.openclaw-autoclaw` | 768 | 程序自带 + **宿主内部自我嵌套** |
+| `<HOME>\.workbuddy` | 1900 | 程序自带 marketplace/plugins |
+| `<HOME>\.workbuddy-ai` | 1688 | **同上，疑似同产品第二份安装** |
+| `<HOME>\.codebuddy` | 978 | 程序自带 |
+| `<HOME>\.openclaw-autoclaw` | 768 | 程序自带 + **宿主内部自我嵌套** |
 | `D:\Open Design\resources` | 494 | 程序自带 |
-| `C:\Users\郭永涛\.claude` | 226 | 混合（含 `skills_backup_20260829` 41 份残留） |
+| `<HOME>\.claude` | 226 | 混合（含 `skills_backup_20260829` 41 份残留） |
 | `D:\OfficeAce\office-claw-skills` | 276+23 | 下载的第三方合集 |
 
 ### ★ 最关键的一个数字
 
 **你自己产出的 skill，全机只有 10 份**：
 
-- `D:\Work\AI自成长引擎\技能库\loomy-learned-gpt-mirror-extended-review\SKILL.md`（1 份，草稿未安装）
-- `C:\Users\Public\Loomy\c3773183a592\opencode\skills\loomy-learned-*`（9 份，Loomy 自学沉淀）
+- `D:\Work\元智能\10_AI自成长引擎\技能库\loomy-learned-gpt-mirror-extended-review\SKILL.md`（1 份，草稿未安装）
+- `<HOME>\Loomy\c3773183a592\opencode\skills\loomy-learned-*`（9 份，Loomy 自学沉淀）
 
 其余 **8600+ 份全是程序自带、市场下载、或链接层复制出来的**。
 
@@ -3860,7 +4247,7 @@ tags:
 | 分发器 | 痕迹 | 覆盖宿主 |
 |---|---|---|
 | `arkcli +connect` | `.arkcli-managed-skills.json`，实测 **≥10 处**（`.agents` `.claude` `.codebuddy` `.config/agents` `.config/opencode` `.iflow` `.kiro` `.qoder` `.qwen` `.trae`） | 批量向所有 Agent 装 |
-| 手工 symlink hub | `C:\Users\郭永涛\.agents\skills\`（**78 份实体**）被各宿主逐个链接 | Trae / CodeBuddy / Claude / Qoder |
+| 手工 symlink hub | `<HOME>\.agents\skills\`（**78 份实体**）被各宿主逐个链接 | Trae / CodeBuddy / Claude / Qoder |
 | 程序自带 marketplace | `.workbuddy` `.codebuddy` `.openclaw` 各自的 skills-marketplace | 各产品内部 |
 | 跨盘 symlink | `D:\记忆\_Skills` → Loomy 运行时目录 | Loomy |
 
@@ -3877,13 +4264,13 @@ tags:
 | `.trae-cn\skills` | 75 | 36 | 19 |
 | **合计** | | | **351** |
 
-断链样例：`.trae\skills\ad-creative` → `C:\Users\郭永涛\.agents\skills\ad-creative`（源已不存在）。**真源被删/改名时链接不清理**，于是宿主侧留下一堆指向虚空的死条目——这就是你感觉"很垃圾"的直接来源。另外还有 `.openclaw.pre-migration`(19)、`~/skills_backup`(25)、`.claude\skills_backup_20260829`(41) 三处历史残留。
+断链样例：`.trae\skills\ad-creative` → `<HOME>\.agents\skills\ad-creative`（源已不存在）。**真源被删/改名时链接不清理**，于是宿主侧留下一堆指向虚空的死条目——这就是你感觉"很垃圾"的直接来源。另外还有 `.openclaw.pre-migration`(19)、`~/skills_backup`(25)、`.claude\skills_backup_20260829`(41) 三处历史残留。
 
 ---
 
 ## 三、核心主张：照搬规则侧已验证的范式
 
-规则侧你已经治好过一模一样的病，而且写清了根因。`C:\Users\郭永涛\.claude\CLAUDE.md`（936 字节，最后核对 2026-09-20）原文：
+规则侧你已经治好过一模一样的病，而且写清了根因。`<HOME>\.claude\CLAUDE.md`（936 字节，最后核对 2026-09-20）原文：
 
 > **为什么不复制**：AGENTS.md 与本文件曾是两份逐字相同的全文副本（SHA256 一致）。任一侧单独修改都会让 Claude Code 与 Antigravity CLI 的行为**静默分叉**——不报错，只表现为"另一个工具不守规矩了"，排查成本极高。已按 handbook 单写真源法则收敛为「一份真源 + 一份指针」。
 >
@@ -3895,12 +4282,12 @@ tags:
 
 | | 规则侧（已落地） | 技能侧（本方案） |
 |---|---|---|
-| 真源 | `C:\Users\郭永涛\AGENTS.md` | `D:\Work\AI自成长引擎\技能库\<skill-id>\` |
+| 真源 | `<HOME>\AGENTS.md` | `D:\Work\元智能\10_AI自成长引擎\技能库\<skill-id>\` |
 | 指针 | `.claude\CLAUDE.md` 等指针文件 | 各宿主 `skills\<skill-id>` **symlink/junction** |
 | 对账 | 待办：周跑 hash 比对 | **体检器 `audit.ps1`（只读）** |
 | 索引 | AGENTS.md 路由表 | **注册表 `registry.yaml`（机器真源）** |
 
-> ★ **可行性已被现网验证**：`D:\记忆\_Skills` 本身就是一个**跨盘 symlink**，指向 `C:\Users\Public\Loomy\c3773183a592\opencode\skills\`，而 Loomy 正常加载了其中 79 个技能。说明"运行时目录放链接、真源在别处"这条路在你的机器上已经跑通，不是纸面设想。
+> ★ **可行性已被现网验证**：`D:\记忆\_Skills` 本身就是一个**跨盘 symlink**，指向 `<HOME>\Loomy\c3773183a592\opencode\skills\`，而 Loomy 正常加载了其中 79 个技能。说明"运行时目录放链接、真源在别处"这条路在你的机器上已经跑通，不是纸面设想。
 
 ---
 
@@ -3910,8 +4297,8 @@ tags:
 
 ```
 ┌─ 定义层（唯一真源，已有，不新建）─────────────────────────┐
-│ D:\Work\AI自成长引擎\草稿区\L3_Skill\   ← 写入缓冲          │
-│ D:\Work\AI自成长引擎\技能库\<skill-id>\ ← L3 唯一归口       │
+│ D:\Work\元智能\10_AI自成长引擎\草稿区\L3_Skill\   ← 写入缓冲          │
+│ D:\Work\元智能\10_AI自成长引擎\技能库\<skill-id>\ ← L3 唯一归口       │
 │   命名铁律不变：loomy-learned-<kebab>；SKILL.md 四段必含     │
 └──────────────────────────────────────────────────────────┘
               ↓ 登记（单向生成，禁双写）
@@ -3951,7 +4338,7 @@ tags:
 | 类 | 判据（路径正则） | 实测份数 | 处置 |
 |---|---|---|---|
 | **A 程序自带** | 路径含 `resources` `marketplace` `skills-marketplace` `plugins` `external_plugins` `node_modules` `connectors-marketplace` `template-backups` `_official` `design-templates` `builtin` `cache` `web-template`；或目录内有 `.loomy-skill.json`(`sourceType: bundled`) / `.arkcli-managed-skills.json` | **6065** | **只登记，不碰** |
-| **C 链接层** | `C:\Users\<user>\.{trae,trae-cn,trae-local,codebuddy,claude,qoder,qoder-cn,qoderworkcn,iflow,kiro,qwen,codex,box-agent,agents,config}\skills\` 下的条目 | **594** | 体检 → 清断链（先 dry-run + 备份清单）→ 按 registry 重建 |
+| **C 链接层** | `<HOME>\.{trae,trae-cn,trae-local,codebuddy,claude,qoder,qoder-cn,qoderworkcn,iflow,kiro,qwen,codex,box-agent,agents,config}\skills\` 下的条目 | **594** | 体检 → 清断链（先 dry-run + 备份清单）→ 按 registry 重建 |
 | **B 待判** | 其余 | **1935** | 逐个定性，其中大头见下 |
 
 B 类里已识别的确定性处置：
@@ -3964,7 +4351,7 @@ B 类里已识别的确定性处置：
 | `.workbuddy` + `.workbuddy-ai` | 211 | 同产品两份安装 | **先确认哪个在跑**，另一个整体归档（省 1688 份） |
 | `~\skills`(68) + `~\skills_backup`(25) + `.claude\skills_backup_20260829`(41) + `.openclaw.pre-migration`(19) | 153 | 历史残留 | 归档，不删（遵你的"归档只复制不剪切"） |
 | `D:\游戏\08-AI配置与技能\claude-skills`(29) 与 `D:\游戏\.agents\skills`(27)、`D:\游戏\.claude\skills`(27) | 83 | 同一批三处复制 | 收敛为 1 真源 + 2 链接 |
-| **`D:\Work\AI自成长引擎\技能库`** | **1** | **你的真源** | 唯一定义处 |
+| **`D:\Work\元智能\10_AI自成长引擎\技能库`** | **1** | **你的真源** | 唯一定义处 |
 | **Loomy `loomy-learned-*`** | **9** | **你的真源（散在运行时目录）** | **建议迁入技能库**（见决策 S2） |
 
 ---
@@ -3973,7 +4360,7 @@ B 类里已识别的确定性处置：
 
 | # | 决策 | 选项 | 我的推荐与理由 |
 |---|---|---|---|
-| **S1** | 技能中枢是否独立成仓 | A. `D:\Work\技能中枢\` 新目录<br>B. 并入上游仓 `技能库\_中枢\`<br>C. 并入 `D:\Work\通用规范\` | **B**。理由：真源在同仓，避免第二个 SSOT；上游仓已有每日 23:30 快照兜底（`scripts\快照草稿区.ps1`，保留 14 份）；独立成仓要额外裁定 git 归属（上游现无 git，D5 裁定不进 git）。若你更看重"专门做一个"，选 A，代价是多一套快照/看板 |
+| **S1** | 技能中枢是否独立成仓 | A. `D:\Work\技能中枢\` 新目录<br>B. 并入上游仓 `技能库\_中枢\`<br>C. 并入 `D:\记忆\通用规范\` | **B**。理由：真源在同仓，避免第二个 SSOT；上游仓已有每日 23:30 快照兜底（`scripts\快照草稿区.ps1`，保留 14 份）；独立成仓要额外裁定 git 归属（上游现无 git，D5 裁定不进 git）。若你更看重"专门做一个"，选 A，代价是多一套快照/看板 |
 | **S2** | Loomy 那 9 个 `loomy-learned-*` 怎么办 | A. 迁入技能库，Loomy 侧改链接<br>B. 原地不动，registry 只登记<br>C. 挑有价值的迁，其余标 `已废弃` | **C**。理由：其中 4 个明显串台（Android 字幕重制 / ASR 专有名词 / Flutter 偏好开关 / 磁盘迁移衰减检查），与本体系无关；迁全部会让技能库变成 Loomy 的垃圾场。但**注意**：Loomy 会自动重新生成 learned skill，迁走等于跟程序抢目录 → 需先确认 Loomy 是否容忍 symlink（现网 `D:\记忆\_Skills` 已证明容忍） |
 | **S3** | 安装动作：复制 → 链接 | A. 全改链接<br>B. 保持复制<br>C. 链接为主，逐宿主实测，不支持的 fallback 复制+hash 对账 | **C**。理由：链接是唯一能根治重复的方案，但 Windows 非管理员建 symlink 需开发者模式，且各宿主对 junction/symlink 容忍度未知（Loomy 已验证，其余 13 个宿主未验证）。所以必须逐宿主实测，不能一刀切。<br>★ **若选 A/C，须连带改两处"复制"字样**（否则文档与实现分叉）：① `技能库\README.md` §四 第 4 步"复制整个 skill 文件夹"；② 下游 `docs\03-方案构想.md` §六 末段"安装 = 复制到 `D:\记忆\_Skills\`"。AGENTS.md 负向硬约束 1「严禁写入 `D:\记忆\_Skills\`」**继续有效**，链接由点头后的安装步骤建立，不由 Agent 直接写 |
 | **S4** | 351 条断链怎么清 | A. 直接删<br>B. 先出清单+dry-run+备份，你点头再删<br>C. 不删，只在宿主矩阵里标红 | **B**。理由：断链的"源"可能只是被临时移走；且删除是不可逆操作。清单+备份符合你的安全红线 |
@@ -3986,7 +4373,7 @@ B 类里已识别的确定性处置：
 
 ### 7.1 现状（已核，非推测）
 
-- **通道**：下游仓用 **opencli**，共享日常 Chrome，`profile: LOCAL_BROWSER_PROFILE`，`daemon_port: <LOCAL_DAEMON_PORT>`，探针方式 `process_alive`。**无 Playwright、无 CDP**（下游仓已裁定）
+- **通道**：下游仓用 **opencli**，共享日常 Chrome，`profile: LOCAL_BROWSER_PROFILE`（**2026-10-10 现取**；本行原写 `LOCAL_BROWSER_PROFILE`，该码已失效——`opencli profile list` 是唯一真源，注意 `tab list` 对失效码也返回 `[]` 而不报错），`daemon_port: <LOCAL_DAEMON_PORT>`，探针方式 `process_alive`。**无 Playwright、无 CDP**（下游仓已裁定）
 - **标签策略**：契约 `tab_policy` = `reuse_first: true`（先 `tab list`，有镜像站页就 `tab select` 复用）、`never_close_others: true`（绝不占用/关闭别人的标签）、`probe_uses_own_tab: true`
 - **已认定的硬事实**：`docs\02-镜像站试点盘点.md` §九 —— 池页对无浏览器指纹的纯 GET 返回 200 / **1 字节**（SPA 壳），`card_id_discovery.primary.method: html_regex` 对该页**永久无效**，"将来契约应把它标注为 `requires_browser: true`"
 - **缺口**：P2 UI 探针 `probes\probe_gpt_mirror_ui.js` 属 A2/T10，**尚未创建**；`runners\` 目录也待 A2 建
@@ -4008,7 +4395,7 @@ contract_version: 1
 channels:
   opencli:                       # 现网主通道
     probe: process_alive
-    profile: LOCAL_BROWSER_PROFILE            # source: 下游仓契约 L142
+    profile: LOCAL_BROWSER_PROFILE            # source: 下游仓契约 L142（本块为 A5 设计预案留档，未启用；2026-10-10 现值为 LOCAL_BROWSER_PROFILE）
     daemon_port: <LOCAL_DAEMON_PORT>           # source: 下游仓契约 L143
     tab_policy: {reuse_first: true, never_close_others: true, probe_uses_own_tab: true}
     requires_human_for: [captcha]
@@ -4093,19 +4480,19 @@ find /c/Users/郭永涛 -maxdepth 10 -name SKILL.md -not -path "*/node_modules/*
 
 | 现有物件 | 路径 | 本方案的动作 |
 |---|---|---|
-| 技能清单表 | `D:\Work\AI自成长引擎\技能库\README.md` §二 | 改为由 registry 单向生成（列名不变，保证兼容） |
+| 技能清单表 | `D:\Work\元智能\10_AI自成长引擎\技能库\README.md` §二 | 改为由 registry 单向生成（列名不变，保证兼容） |
 | 安装五步闸门 | 同上 §四 | 第 4 步"复制"→"建链接"；其余不动 |
 | 撞车检查三真源 | 同上 §五★ | **加第四真源 `registry.yaml`**（可脚本查，比翻目录快） |
 | 契约 skill 三字段 | `D:\Work\自适应工作流引擎\contracts\gpt-mirror-extended-review.yaml` L19-21（`skill_home` / `skill_install_to` / `skill_index`） | `skill_install_to` 由**单值改多值**（当前只指 `D:\记忆\_Skills\`，即 14 个宿主里只覆盖 1 个） |
 | 浏览器通道段 | 同上 L140-149（`opencli_session` / `tab_policy`） | 抽出为 `contracts\browser-channel.yaml`，与 A5 四件套骨架合并做 |
 | `requires_browser` 标注 | `docs\02-镜像站试点盘点.md` §九 遗留观察 | 落成契约字段，registry 同步该标记 |
-| 全局路由 | `C:\Users\郭永涛\AGENTS.md`（P1/P2/P3 + 3 条负向硬约束） | **新增 P4：技能装配/体检信号**（如用户提"技能重复/装个技能/清断链"→ 加载本方案） |
+| 全局路由 | `<HOME>\AGENTS.md`（P1/P2/P3 + 3 条负向硬约束） | **新增 P4：技能装配/体检信号**（如用户提"技能重复/装个技能/清断链"→ 加载本方案） |
 | 台账 | `docs\01-任务看板.md`（列：`# \| 要求 \| 验收标准 \| 状态`；T/D/M 编号） | 批准后按 handbook `30-台账格式` 登记 T 序列；S1~S6 登记进 §五 决策项 |
 | 周报 | 每周一 09:00 复盘报表（上游 D4=A） | 加一栏技能体检摘要（新增/断链/stale/副本漂移） |
 
 ---
 
-**关联**：[[00-项目总览]]（五段流水线与三级产物）· [[01-任务看板]]（T/D/M 台账）· [[03-方案构想]]（既有方案）· [[经验沉淀SOP]]（L1/L2/L3 闸门）· `D:\Work\自适应工作流引擎\docs\02-镜像站试点盘点.md` §九（浏览器硬事实）· `C:\Users\郭永涛\AGENTS.md`（全局路由真源）
+**关联**：[[00-项目总览]]（五段流水线与三级产物）· [[01-任务看板]]（T/D/M 台账）· [[03-方案构想]]（既有方案）· [[经验沉淀SOP]]（L1/L2/L3 闸门）· `D:\Work\自适应工作流引擎\docs\02-镜像站试点盘点.md` §九（浏览器硬事实）· `<HOME>\AGENTS.md`（全局路由真源）
 
 ---
 
@@ -4113,7 +4500,7 @@ find /c/Users/郭永涛 -maxdepth 10 -name SKILL.md -not -path "*/node_modules/*
 
 体检器已落地并跑通两轮，**本文 §一、§二、§五 中由 bash 粗估得来的数字已全部被机器实测取代**。原数字保留不删，以下为作废对照。
 
-工具真源：`D:\Work\AI自成长引擎\技能库\_中枢\`（含 `README.md` 用法与坑位记录）
+工具真源：`D:\Work\元智能\10_AI自成长引擎\技能库\_中枢\`（含 `README.md` 用法与坑位记录）
 产物：`_中枢\runtime\skill-census-00-summary.md` 等 7 份，两轮跑结果逐项一致（可复现）
 
 ### 作废对照
@@ -4340,7 +4727,7 @@ Loomy learned 已从 9 个涨到 **10 个**，新增 `loomy-learned-health-probe
 | UNREACHABLE 路径不可达 | 0 | 无 |
 | SUSPECT 探针矛盾 | 0 | 无 |
 
-原本我准备处理"分不清是源删了还是盘迁移了"这个复杂度 —— 实测下来不存在。**946 条的目标父目录只有 1 个**：`C:\Users\郭永涛\.agents\skills`，而它本身还在。所以根因是**从这个 hub 里删掉了 149 个技能目录，散在 9 个宿主的 946 条链接没人回收**。
+原本我准备处理"分不清是源删了还是盘迁移了"这个复杂度 —— 实测下来不存在。**946 条的目标父目录只有 1 个**：`<HOME>\.agents\skills`，而它本身还在。所以根因是**从这个 hub 里删掉了 149 个技能目录，散在 9 个宿主的 946 条链接没人回收**。
 
 被删的 149 个按家族：Anthropic 系／社区合集技能名 132 个（`artifacts-builder`、`ad-creative`、`8-bit-orbit-video-template`、`brand-guidelines` 这类），`lark-*` 飞书公有云 17 个。
 
@@ -4441,4 +4828,4 @@ Loomy learned 已从 9 个涨到 **10 个**，新增 `loomy-learned-health-probe
 ########## 文件结束：REDACTION.md ##########
 
 
-【本包尾凭证】SPEC-TAIL-8F1BAC78
+【本包尾凭证】SPEC-TAIL-C5C94A0B
