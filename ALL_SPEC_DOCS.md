@@ -2291,6 +2291,420 @@ status: verified    # 2026-09-24 复探（exit 0）：break 已解除——expli
 
 ==========================================================================
 
+########## 文件开始：20_自适应工作流引擎/contracts/ops-task-fleet.yaml ##########
+# ============================================================
+# 契约（声明态真源 · 唯一）：本机定时任务舰队巡检（只读 · 绝不执行任何任务）
+# ------------------------------------------------------------
+# 铁律（照搬 ai-platform 三件套 + 本仓 docs/00-项目总览.md §二）：
+#   1. 声明态与运行态分离：本文件只写「期望」，绝不写当前 State / LastRunTime / 退出码
+#   2. 探针只读：runtime/*.json 与 drift 投影只由 probe 产出，禁止手改；
+#      探针**只查不跑** —— 绝不 Start-ScheduledTask，绝不改任何任务定义
+#   3. 执行体不硬编码：任务名 / 期望周期 / 允许的退出码一律读自本文件 conditions.*，
+#      探针内出现第二个任务名字面量即算违规
+#   4. 载体中立：本契约不绑定任何宿主，执行壳可替换
+#
+# 为什么要有这份契约（立项证据）：
+#   本机有 ~45 个计划任务，除元智能自己 3 个外，其余全是各自为政的运维自动化。
+#   它们「跑没跑、多久没跑、失败了谁知道」无人统一管 —— 网关 2026-09-25 静默死掉
+#   6 周无人发现（日志停 09-25、健康记录停 09-28）就是实例。
+#   本契约把「我方运维任务」逐个声明为 condition，由只读探针每天核对，
+#   让「悄悄停摆」变成看得见的 drift。
+#
+# 创建：2026-10-15（首次登记 38 条）
+# ============================================================
+
+contract_version: 1
+workflow_id: ops-task-fleet
+display_name: 本机定时任务舰队巡检（只读）
+
+owner_skill: ops-task-fleet-watch          # 真源身份；技能库同名目录，无宿主前缀
+skill_home: skill://ops-task-fleet-watch   # 真源 = 10_AI自成长引擎/技能库/ops-task-fleet-watch/SKILL.md
+skill_install_to: none                     # 本 skill 不装进任何宿主程序，按需查阅；故无宿主形态映射
+skill_index: D:\Work\元智能\10_AI自成长引擎\技能库\README.md
+
+source_assets:
+  operations_truth: D:\Work\元智能\10_AI自成长引擎\技能库\ops-task-fleet-watch\SKILL.md
+  machine_truth: Windows 任务计划程序（Get-ScheduledTask / Get-ScheduledTaskInfo，只读）
+
+baseline:
+  metric: 受监任务数
+  value: 38
+  tolerance: "0"                # 只许增不许减：数量掉了说明有任务被摘掉而契约没同步，属漂移
+
+# ------------------------------------------------------------
+# conditions：外部依赖条件（探针核对对象）
+#   每项 = 一个受监计划任务。字段含义：
+#     probe          固定 scheduled_task（探针据此判定「这是要测的」）
+#     task_name      任务计划程序里的**精确**名称（大小写敏感）
+#     task_path      任务所在文件夹，缺省 \（根目录）
+#     max_age_minutes 允许的最大「距上次运行」分钟数；0 = 不判新鲜度
+#                    （长驻任务 / 手动任务 / 已禁用的任务不适用新鲜度）
+#     allow_disabled 是否允许处于 Disabled；false 时被禁用即判 break
+#     ok_results     视为成功的 LastTaskResult 集合（0=成功；1/2/3 等由任务自己定义）
+#     result_notes   可选，逐码解释非零退出码含义（只作人读，探针原样回显进 drift）
+#     on_fail        测不过时的处置级别
+#   会漂的（任务名改名、退出码语义变化）请改本文件，不要改探针。
+# ------------------------------------------------------------
+conditions:
+
+  # ---- 网关 / 渠道（白嫖与路由自动化的主链） ----
+  task_gateway3100_scheduledreload:
+    probe: scheduled_task
+    task_name: Gateway3100_ScheduledReload
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+
+  task_gatewayshadowpick:
+    probe: scheduled_task
+    task_name: GatewayShadowPick
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+
+  task_gatewayspeedtestdaily:
+    probe: scheduled_task
+    task_name: GatewaySpeedTestDaily
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+
+  task_channeldailyrefresh:
+    probe: scheduled_task
+    task_name: ChannelDailyRefresh
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+
+  task_channelfreeaudit:
+    probe: scheduled_task
+    task_name: ChannelFreeAudit
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+
+  task_channelselsync:
+    probe: scheduled_task
+    task_name: ChannelSelSync
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+
+  task_freecandidaterefresh:
+    probe: scheduled_task
+    task_name: FreeCandidateRefresh
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+
+  task_openrouterfreerefresh:
+    probe: scheduled_task
+    task_name: OpenRouterFreeRefresh
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+
+  task_zenchannelrefresh:
+    probe: scheduled_task
+    task_name: ZenChannelRefresh
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+
+  task_autoseatorchestrate:
+    probe: scheduled_task
+    task_name: AutoSeatOrchestrate
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+    result_notes: "非零码语义未在脚本里显式声明（auto_orchestrate.py 仅在错误路径 return 2，1 疑为未捕获异常）；2026-10-15 实测 1，待人工定性"
+
+  # ---- 账号 / 额度 ----
+  task_aaleaderboardrefresh:
+    probe: scheduled_task
+    task_name: AALeaderboardRefresh
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+
+  task_balancewatch:
+    probe: scheduled_task
+    task_name: BalanceWatch
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+
+  task_buddy2api_dailyautoclaim:
+    probe: scheduled_task
+    task_name: Buddy2API_DailyAutoClaim
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: warn
+
+  task_buddy2api_gateway:
+    probe: scheduled_task
+    task_name: Buddy2API_Gateway
+    max_age_minutes: 0
+    allow_disabled: false
+    ok_results: [0, 267009]
+    on_fail: break
+    result_notes: "267009=任务正在运行（长驻），属正常"
+
+  task_buddy2api_gateway_watchdog:
+    probe: scheduled_task
+    task_name: Buddy2API_Gateway_Watchdog
+    max_age_minutes: 60
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+    result_notes: "约每 5 分钟一跳；60 分钟无运行即视为看门狗自己死了"
+
+  task_baiwelfarecheck:
+    probe: scheduled_task
+    task_name: BaiWelfareCheck
+    max_age_minutes: 11520
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: warn
+
+  # ---- 模型站守护 ----
+  task_modelscope_daily_guard:
+    probe: scheduled_task
+    task_name: ModelScope每日魔粒守护
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+    result_notes: "1=已连通但部分项未到账；2=opencli 桥接不可用（Chrome 未开/扩展离线）；3=登录态失效（需人工在本地 Chrome 登录一次魔搭）"
+
+  # ---- 元智能自身 ----
+  task_metaintelligence_workflow_patrol:
+    probe: scheduled_task
+    task_name: MetaIntelligence_Workflow_Patrol
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0, 1]
+    on_fail: warn
+    result_notes: "1=巡检有红项，属设计内（发现即红是它的职责）"
+
+  task_metaintelligence_sessionlint:
+    probe: scheduled_task
+    task_name: MetaIntelligence_SessionLint
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0, 1]
+    on_fail: warn
+    result_notes: "1=会话体检有发现，属设计内"
+
+  task_metaintelligence_draftsnapshot:
+    probe: scheduled_task
+    task_name: MetaIntelligence_DraftSnapshot
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: warn
+
+  # ---- 备份 ----
+  task_work_backup_packdaily:
+    probe: scheduled_task
+    task_name: Work_Backup_PackDaily
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+
+  task_work_backup_packweekly:
+    probe: scheduled_task
+    task_name: Work_Backup_PackWeekly
+    max_age_minutes: 11520
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+    result_notes: "2026-10-15 首次登记时从未运行过（Next 10-18 01:30）；从未运行且下次在未来属正常，探针不判红"
+
+  task_work_dailyreport_0800:
+    probe: scheduled_task
+    task_name: Work_DailyReport_0800
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: warn
+
+  # ---- 小红书管线 ----
+  task_xhs_likemanager_daily:
+    probe: scheduled_task
+    task_name: XHS_LikeManager_Daily
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+
+  task_xhs_unlike_resume_0200:
+    probe: scheduled_task
+    task_name: XHS_Unlike_Resume_0200
+    max_age_minutes: 1560
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: break
+    result_notes: "2026-10-15 实测 1：入口 unlike_resume.bat 内含未替换的占位符 <USER_NAME>/<PROJECT_DIR>，python 路径解析失败"
+
+  task_xhs_likemanager_retryb:
+    probe: scheduled_task
+    task_name: XHS_LikeManager_RetryB_0926
+    max_age_minutes: 0
+    allow_disabled: false
+    ok_results: [0, 267014]
+    on_fail: warn
+    result_notes: "267014=被用户终止；一次性补跑任务，已跑完不再有 Next"
+
+  # ---- 代理 / 远程 / 常驻 ----
+  task_sparkle_proxy_guard_hourly:
+    probe: scheduled_task
+    task_name: Sparkle_Proxy_Guard_Hourly
+    max_age_minutes: 120
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: warn
+
+  task_codemotefrpc:
+    probe: scheduled_task
+    task_name: CodemoteFrpc
+    max_age_minutes: 0
+    allow_disabled: false
+    ok_results: [0, 267009]
+    on_fail: break
+
+  task_remotecodingcontrol:
+    probe: scheduled_task
+    task_name: RemoteCodingControl
+    max_age_minutes: 0
+    allow_disabled: false
+    ok_results: [0, 267009]
+    on_fail: break
+
+  task_autoclaw_launch_at_login:
+    probe: scheduled_task
+    task_name: AutoClaw Launch At Login
+    max_age_minutes: 0
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: warn
+
+  task_sparkle_run:
+    probe: scheduled_task
+    task_name: sparkle-run
+    max_age_minutes: 0
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: warn
+
+  task_dsh_cdp_chrome:
+    probe: scheduled_task
+    task_name: DSH_CDP_Chrome
+    max_age_minutes: 0
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: warn
+    result_notes: "无触发器的手动任务（带 remote-debugging 的 Chrome），只登记存在性"
+
+  task_cherrystudio_log_cleanup:
+    probe: scheduled_task
+    task_name: CherryStudio日志自动清理
+    max_age_minutes: 11520
+    allow_disabled: false
+    ok_results: [0]
+    on_fail: warn
+
+  # ---- 已知有意停用（登记在此是为了「它们不该自己复活」，也不该被误删） ----
+  task_arkquotascan:
+    probe: scheduled_task
+    task_name: ArkQuotaScan
+    max_age_minutes: 0
+    allow_disabled: true
+    ok_results: [0]
+    on_fail: warn
+    result_notes: "2026-10-08 郭老师裁决删除方舟渠道时一并停用，属有意为之"
+
+  task_searchgateway:
+    probe: scheduled_task
+    task_name: SearchGateway
+    max_age_minutes: 0
+    allow_disabled: true
+    ok_results: [0]
+    on_fail: warn
+    result_notes: "已停用；网关现以 nssm 服务 ai-gateway-3100 常驻，本计划任务是遗留入口"
+
+  task_searchgatewaywatchdog:
+    probe: scheduled_task
+    task_name: SearchGatewayWatchdog
+    max_age_minutes: 0
+    allow_disabled: true
+    ok_results: [0]
+    on_fail: warn
+    result_notes: "已停用；同上，属遗留入口"
+
+  task_xhs_quarkuploadwatchdog:
+    probe: scheduled_task
+    task_name: XHS_QuarkUploadWatchdog
+    max_age_minutes: 0
+    allow_disabled: true
+    ok_results: [0]
+    on_fail: warn
+    result_notes: "旧备份方案遗留，已被 D:\Work\工具\备份 取代"
+
+  task_xhs_workbackup_daily:
+    probe: scheduled_task
+    task_name: XHS_WorkBackup_Daily
+    max_age_minutes: 0
+    allow_disabled: true
+    ok_results: [0]
+    on_fail: warn
+    result_notes: "同上，旧备份方案遗留"
+
+# ------------------------------------------------------------
+# self_heal：分级自愈
+# ------------------------------------------------------------
+self_heal:
+  L1_param: false          # 本契约没有「候选集内可自动换」的参数，不存在 L1 自动回填
+  L2_relocate: dry_run     # 任务改名 / 退出码语义变化 → 出草稿叫人，不自动改契约
+  L3_restructure: false    # 任务本身的重构一律人工（A4 明确排除）
+  escalate_after: 3        # 同一 condition 30 天内自愈 ≥3 次 → 强制升 warn（防自愈掩盖真问题）
+  circuit_break_policy:
+    no_retry_on: [task_missing, task_disabled, task_stale]
+    reason: 任务缺失 / 被禁 / 过期都不是靠重试能解决的；重试只会把真问题掩盖成「重试后好了」
+
+# ------------------------------------------------------------
+# probe：调度与产物
+# ------------------------------------------------------------
+probe:
+  layers:
+    P1: {script: probes/probe_ops_tasks.ps1, channel: local_task_scheduler, schedule: daily_0830, opens_browser: false}
+  self_test_required: true      # 每次运行记录 probe_self_test：区分「任务真变了」与「探针自己查不动任务计划程序」
+  readonly: true                # 探针只读：只 Get-ScheduledTask*，绝不 Start/Stop/Register/Unregister
+  output:
+    runtime: runtime/ops-task-fleet.runtime.json
+    drift: runtime/ops-task-fleet.drift.json
+    manual_edit: forbidden
+
+updated_at: 2026-10-15
+status: verified    # 2026-10-15 首建：38 条受监任务，P1 只读探针已跑通
+########## 文件结束：20_自适应工作流引擎/contracts/ops-task-fleet.yaml ##########
+
+==========================================================================
+
 ########## 文件开始：20_自适应工作流引擎/docs/03-方案构想.md ##########
 ---
 类型: 方案构想 / 实施骨架
@@ -4027,4 +4441,4 @@ Loomy learned 已从 9 个涨到 **10 个**，新增 `loomy-learned-health-probe
 ########## 文件结束：REDACTION.md ##########
 
 
-【本包尾凭证】SPEC-TAIL-A593518C
+【本包尾凭证】SPEC-TAIL-8F1BAC78
